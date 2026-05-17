@@ -33,18 +33,22 @@ const robots = readText('public/robots.txt');
 const manifestPath = requireFile('public/manifest.webmanifest');
 
 requireFile('public/mono.webp');
+requireFile('public/icon-192.png');
 requireFile('public/icon-512.png');
 requireFile('public/apple-touch-icon.png');
+requireFile('public/sw.js');
 
 requireText('index.html', indexHtml, /<html\s+lang="ko"/);
 requireText('index.html', indexHtml, /<meta\s+name="description"/);
 requireText('index.html', indexHtml, /property="og:image"/);
 requireText('index.html', indexHtml, /rel="manifest"/);
+requireText('index.tsx', readText('index.tsx'), /serviceWorker/);
 requireText('public/_headers', headers, /Cache-Control:\s*public,\s*max-age=31536000,\s*immutable/i);
 requireText('public/_headers', headers, /X-Content-Type-Options:\s*nosniff/i);
 requireText('public/_headers', headers, /Referrer-Policy:\s*strict-origin-when-cross-origin/i);
 requireText('public/_headers', headers, /Content-Security-Policy:/i);
 requireText('public/_headers', headers, /Permissions-Policy:/i);
+requireText('public/_headers sw.js cache policy', headers, /\/sw\.js[\s\S]*Cache-Control:\s*public,\s*max-age=0,\s*must-revalidate/i);
 requireText('public/robots.txt', robots, /User-agent:\s*\*/i);
 
 if (existsSync(manifestPath)) {
@@ -52,6 +56,19 @@ if (existsSync(manifestPath)) {
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
     if (!manifest.name || !manifest.short_name || !manifest.icons?.length) {
       failures.push('manifest.webmanifest is missing name, short_name, or icons');
+    }
+    if (!manifest.start_url) {
+      failures.push('manifest.webmanifest is missing start_url');
+    }
+    if (!manifest.display && !manifest.display_override) {
+      failures.push('manifest.webmanifest is missing display or display_override');
+    }
+
+    const iconSizes = new Set((manifest.icons ?? []).flatMap((icon) => String(icon.sizes ?? '').split(/\s+/)));
+    for (const requiredSize of ['192x192', '512x512']) {
+      if (!iconSizes.has(requiredSize)) {
+        failures.push(`manifest.webmanifest is missing ${requiredSize} icon`);
+      }
     }
 
     for (const icon of manifest.icons ?? []) {

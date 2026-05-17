@@ -1,12 +1,22 @@
 {
   "name": "Monochrome: The Eclipse Prototype",
   "short_name": "Monochrome",
-  "description": "1-2층 공개 범위에서 동전 패턴과 기억 조각으로 빌드를 완성하는 턴제 로그라이트 RPG 프로토타입.",
+  "id": ".",
+  "description": "1-2층 공개 범위에서 동전 패턴과 기억 조각으로 빌드를 완성하는 턴제 로그라이트 RPG 프로토타입(Prototype).",
   "start_url": ".",
+  "scope": ".",
   "display": "standalone",
   "background_color": "#020617",
   "theme_color": "#020617",
+  "lang": "ko",
+  "categories": ["games", "entertainment"],
   "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
