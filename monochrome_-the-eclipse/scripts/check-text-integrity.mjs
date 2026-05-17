@@ -49,6 +49,7 @@ const mojibakePatterns = [
     ].join('|')),
   },
   { label: 'C1 control character', pattern: /[\u0080-\u009f]/ },
+  { label: 'Korean mojibake CJK marker', pattern: /[\u3400-\u4dbf\u4e00-\u9fff]/ },
 ];
 
 const walk = (dir) => {

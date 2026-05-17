@@ -63,6 +63,8 @@ const normalizeHydratedState = (state: GameStore): GameStore => {
     ...state,
     testMode: false,
     encounteredEventIds: state.encounteredEventIds ?? [],
+    routeSeed: state.routeSeed ?? null,
+    routeGenerationLog: state.routeGenerationLog ?? [],
     gameOptions: { ...initialGameOptions, ...(state.gameOptions ?? {}) },
     tutorialFlags: { ...initialTutorialFlags, ...(state.tutorialFlags ?? {}) },
     swapState: state.swapState ?? { phase: 'idle', reserveCoinIndex: null, revealedFace: null },
@@ -178,6 +180,8 @@ export const useGameStore = create<GameStore>()(
                 draft.currentStage = 1;
                 draft.currentTurn = 1;
                 draft.stageNodes = [];
+                draft.routeSeed = null;
+                draft.routeGenerationLog = [];
                 draft.path = [];
 
                 // combatSlice reset
@@ -227,6 +231,8 @@ export const useGameStore = create<GameStore>()(
           ...persistedState,
           testMode: false,
           encounteredEventIds: persistedState?.encounteredEventIds ?? [],
+          routeSeed: persistedState?.routeSeed ?? null,
+          routeGenerationLog: persistedState?.routeGenerationLog ?? [],
           gameOptions: { ...initialGameOptions, ...(persistedState?.gameOptions ?? {}) },
           tutorialFlags: { ...initialTutorialFlags, ...(persistedState?.tutorialFlags ?? {}) },
         }),
@@ -247,6 +253,8 @@ export const useGameStore = create<GameStore>()(
           currentStage: state.currentStage,
           currentTurn: state.currentTurn,
           stageNodes: state.stageNodes,
+          routeSeed: state.routeSeed,
+          routeGenerationLog: state.routeGenerationLog,
           path: state.path,
           enemy: state.enemy,
           playerCoins: state.playerCoins,

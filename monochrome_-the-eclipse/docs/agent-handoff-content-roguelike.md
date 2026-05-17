@@ -17,6 +17,8 @@
 - 전투 보상은 자원 보상 + 기존 `playerSkillUnlocks` 기반 기술 드래프트를 제공한다. 경험치/레벨업 곡선이 없어서 임시 직접 드래프트다. 추후 대체/변경 필요.
 - 엘리트/보스 보상은 `dataUpgrades.ts`의 미보유 패시브 드래프트도 제공한다. 문서의 패시브 성장 방향을 직접 반영한 부분이다.
 - 신규 런은 문서 기준대로 행운 동전 1개를 들고 시작하며, 최대 보유량은 7개다. 내부 변수명은 기존 `reserveCoins`를 유지한다.
+- 탐험 경로는 `routeSeed`와 `routeGenerationLog`를 런 상태에 저장한다. 같은 시드를 `generateLoggedStageNodes()`에 넣으면 같은 15턴 x 3선택지 경로가 재현된다.
+- 경로 카드는 선택 캐릭터의 감각 축과 노드 타입을 조합한 힌트를 표시한다. 캐릭터별 원천 감각은 `dataCharacters.ts`의 `signature` 값을 기준으로 한다.
 - Stage 2 전투/탐험 BGM은 실제 파일 대신 절차적 프리셋으로 분리되어 있다. 최종 음원 파일 확보 시 `utils/audioManifest.ts` 키를 유지하고 교체한다.
 - Stage 2 몬스터 5종은 생성 에셋이 연결되어 있다. `shadowWraith`, `doppelganger`, `unpleasantCube`, `subject162`, `chimera`가 `public/assets/monsters` 아래 파일을 참조한다.
 - 키메라는 HP 50%/30% 이하에서 페이즈 라벨과 패턴셋이 바뀐다.
@@ -35,5 +37,6 @@
 ## 검증 루틴
 
 - `npm run check`
+- `npm run check:exploration-route`
 - Store 시뮬레이션: 상점 `증폭 수정`, 300회 경로 생성, 전투 기술 보상 claim.
 - 브라우저: `http://127.0.0.1:5173/monocrome-eclips/` 로드 후 console error 확인.

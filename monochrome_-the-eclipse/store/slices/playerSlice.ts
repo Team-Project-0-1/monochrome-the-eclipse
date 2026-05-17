@@ -4,7 +4,7 @@ import { GameStore } from '../gameStore';
 import { PlayerCharacter, CharacterClass, ShopItem, PatternUpgradeDefinition, SkillUpgradeDefinition, MemoryUpgradeType, GameState, CoinFace, Coin } from '../../types';
 import { characterData } from '../../dataCharacters';
 import { MAX_RESERVE_COINS, MAX_SKILLS, MEMORY_UPGRADE_DATA } from '../../constants';
-import { generateStageNodes, flipCoin, generateCoins } from '../../utils/gameLogic';
+import { generateLoggedStageNodes } from '../../utils/gameLogic';
 
 export interface PlayerSlice {
   player: PlayerCharacter | null;
@@ -60,7 +60,10 @@ export const createPlayerSlice: StateCreator<GameStore, [], [], PlayerSlice> = (
 
         draft.currentStage = 1;
         draft.currentTurn = 1;
-        draft.stageNodes = generateStageNodes(1);
+        const generatedRoute = generateLoggedStageNodes(1);
+        draft.stageNodes = generatedRoute.stageNodes;
+        draft.routeSeed = generatedRoute.routeSeed;
+        draft.routeGenerationLog = generatedRoute.routeGenerationLog;
         draft.path = [];
 
         // Reset ALL combat-related states for a completely clean slate.

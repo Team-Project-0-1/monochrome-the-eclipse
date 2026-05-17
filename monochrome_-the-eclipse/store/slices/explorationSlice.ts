@@ -2,7 +2,8 @@ import { StateCreator } from 'zustand';
 import { produce } from 'immer';
 import { GameStore } from '../gameStore';
 import { StageNode, NodeType, EventDefinition, GameState, EnemyCharacter, CombatLogMessage, CharacterClass, CoinFace } from '../../types';
-import { generateStageNodes, detectPatterns, generateCoins } from '../../utils/gameLogic';
+import { detectPatterns, generateCoins, generateLoggedStageNodes } from '../../utils/gameLogic';
+import type { RouteGenerationLogEntry } from '../../utils/gameLogic';
 import { stageData } from '../../dataStages';
 import { eventData } from '../../dataEvents';
 import { STAGE_TURNS } from '../../constants';
@@ -15,6 +16,8 @@ export interface ExplorationSlice {
   currentStage: number;
   currentTurn: number;
   stageNodes: StageNode[][];
+  routeSeed: string | null;
+  routeGenerationLog: RouteGenerationLogEntry[];
   path: { turn: number; nodeIndex: number; nodeId: string; }[];
   startStage: (stageNumber: number) => void;
   selectNode: (node: StageNode, nodeIndex: number) => void;
@@ -26,6 +29,8 @@ export const createExplorationSlice: StateCreator<GameStore, [], [], Exploration
   currentStage: 1,
   currentTurn: 1,
   stageNodes: [],
+  routeSeed: null,
+  routeGenerationLog: [],
   path: [],
   startStage: (stageNumber) => {
     set(produce((draft: GameStore) => {
@@ -36,7 +41,10 @@ export const createExplorationSlice: StateCreator<GameStore, [], [], Exploration
 
         draft.currentStage = stageNumber;
         draft.currentTurn = 1;
-        draft.stageNodes = generateStageNodes(stageNumber);
+        const generatedRoute = generateLoggedStageNodes(stageNumber);
+        draft.stageNodes = generatedRoute.stageNodes;
+        draft.routeSeed = generatedRoute.routeSeed;
+        draft.routeGenerationLog = generatedRoute.routeGenerationLog;
         draft.path = [];
         draft.gameState = GameState.EXPLORATION;
         draft.metaProgress.highestStage = Math.max(draft.metaProgress.highestStage, stageNumber);

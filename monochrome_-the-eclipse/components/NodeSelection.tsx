@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { AlertTriangle, ArrowRight, RadioTower, Sparkles } from 'lucide-react';
 import { StageNode, NodeType } from '../types';
+import type { PlayerCharacter } from '../types';
 import NodeIcon from './NodeIcon';
 import { getNodePresentation } from '../utils/nodePresentation';
 import { useGameStore } from '../store/gameStore';
@@ -11,9 +12,10 @@ interface NodeSelectionProps {
   nodes: StageNode[];
   onSelect: (node: StageNode, index: number) => void;
   currentTurn: number;
+  player?: PlayerCharacter | null;
 }
 
-const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, onSelect, currentTurn }) => {
+const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, onSelect, currentTurn, player }) => {
   const [selectedNode, setSelectedNode] = useState<StageNode | null>(null);
   const gameOptions = useGameStore(state => state.gameOptions);
 
@@ -52,7 +54,7 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, onSelect, currentT
 
       <div className="relative z-10 grid gap-3 md:grid-cols-3">
         {nodes.map((node, index) => {
-          const meta = getNodePresentation(node, index);
+          const meta = getNodePresentation(node, index, player);
           const isSelected = selectedNode?.id === node.id;
           const isDanger = [NodeType.COMBAT, NodeType.MINIBOSS, NodeType.BOSS].includes(node.type);
 
@@ -66,7 +68,7 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, onSelect, currentT
               animate={isSelected ? { scale: 1.05, opacity: 0, y: -12 } : { scale: 1, opacity: 1, y: 0 }}
               transition={{ duration: 0.42, ease: 'easeInOut' }}
               whileHover={selectedNode ? undefined : { y: -3 }}
-              className={`route-node-card group relative min-h-[190px] overflow-hidden rounded-lg border p-4 text-left shadow-lg transition-all duration-200 disabled:cursor-wait ${meta.className}`}
+              className={`route-node-card group relative min-h-[230px] overflow-hidden rounded-lg border p-4 text-left shadow-lg transition-all duration-200 disabled:cursor-wait ${meta.className}`}
             >
               <div className={`absolute inset-x-4 top-0 h-px bg-gradient-to-r ${meta.lineClassName}`} />
               <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-white/10 blur-2xl transition-opacity group-hover:opacity-80" />
@@ -93,6 +95,9 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, onSelect, currentT
 
                 <h3 className="text-xl font-black text-white">{meta.label}</h3>
                 <p className="route-node-description mt-2 flex-1 text-sm leading-relaxed text-white/75">{meta.description}</p>
+                <p className="mt-3 rounded-md border border-white/10 bg-black/20 px-2.5 py-2 text-xs font-semibold leading-relaxed text-white/70">
+                  {meta.senseHint}
+                </p>
 
                 <div className="route-node-meta mt-4 grid grid-cols-2 gap-2 text-xs">
                   <div className="rounded-md border border-white/10 bg-black/25 px-2.5 py-2">

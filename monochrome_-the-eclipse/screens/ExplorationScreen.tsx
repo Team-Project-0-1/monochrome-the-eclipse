@@ -27,6 +27,8 @@ export const ExplorationScreen = () => {
   const stageNodes = useGameStore(state => state.stageNodes);
   const currentStage = useGameStore(state => state.currentStage);
   const currentTurn = useGameStore(state => state.currentTurn);
+  const routeSeed = useGameStore(state => state.routeSeed);
+  const routeGenerationLog = useGameStore(state => state.routeGenerationLog);
   const path = useGameStore(state => state.path);
   const setInventoryOpen = useGameStore(state => state.setInventoryOpen);
   const setGameState = useGameStore(state => state.setGameState);
@@ -121,6 +123,10 @@ export const ExplorationScreen = () => {
                 <div className="h-2 overflow-hidden rounded-full bg-white/10">
                   <div className="h-full rounded-full bg-cyan-200" style={{ width: `${progressPercent}%` }} />
                 </div>
+                <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-500">
+                  <span>Seed: {routeSeed ?? '미기록'}</span>
+                  <span>생성 로그 {routeGenerationLog.length}건</span>
+                </div>
               </div>
               <div className="route-pressure-card rounded-md border border-yellow-200/20 bg-yellow-950/18 px-3 py-2 text-yellow-50">
                 <div className="mb-1 flex items-center gap-2 font-bold">
@@ -133,7 +139,7 @@ export const ExplorationScreen = () => {
           </Panel>
 
           <div className="flex flex-1 items-center">
-            <NodeSelection nodes={currentNodes} onSelect={(node, index) => selectNode(node, index)} currentTurn={currentTurn} />
+            <NodeSelection nodes={currentNodes} onSelect={(node, index) => selectNode(node, index)} currentTurn={currentTurn} player={player} />
           </div>
 
           <div className="exploration-footer grid gap-3 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
