@@ -18,7 +18,7 @@
 | 탐험 시스템 설계서 | https://docs.google.com/document/d/1B0nOpgPBXfZ4u5lndkgzagJXLBSA7yeXMNCugJKd3w4/edit | 스테이지당 15턴, 총 3스테이지, 노드 타입, 스테이지 테마 |
 | 몬스터 AI 시스템 | https://docs.google.com/document/d/1WRq8mGZEnvvga1LcEk2CRKrxXypFhq0ljx3mh9TryxI/edit | 몬스터 등급, 의도 표시, 동전 패턴 기반 행동 |
 | 이벤트 시스템 | https://docs.google.com/document/d/1Zf9UHAYPtLlNXlIfLef0IT7uNI3M2i850aCjRPp0YkY/edit | 이벤트 선택지 구조, 조건/결과 방향 |
-| 몬스터 컨셉 | https://docs.google.com/document/d/1xqQ_aFtUzEnwangtwOhpGUdFg83zhx3M4G0c-Kcj9XI/edit | Stage 2 몬스터 이름, HP, 공격/방어, 스킬, 패시브 |
+| 몬스터 컨셉 | https://docs.google.com/document/d/1xqQ_aFtUzEnwangtwOhpGUdFg83zhx3M4G0c-Kcj9XI/edit | Stage 2-3 몬스터 이름, HP, 공격/방어, 스킬, 패시브 |
 | 코인 전투 시스템 | https://docs.google.com/document/d/1HZoTdgt_IU3rZe4WW2Ki-wAcjwBGNoqhSu64KC0pbUs/edit | 전투 보상으로 보조 효과/족보 성장 획득, 능동 스킬 개입, 패시브 성장 |
 | 자원 및 상점 시스템 컨셉 | https://docs.google.com/document/d/1kzWlSKYkDiEcUGooKI4uVmsaS6m0al9bXy56Ei4aAlw/edit | 에코/감각/기억 자원, 상점 소비, 성장 자원 흐름 |
 
@@ -28,7 +28,7 @@
 | --- | --- | --- |
 | Stage 1: 벙커 외곽 | 전투 그룹과 기본 루프 구현 가능 | 기존 빌드 유지 |
 | Stage 2: 중립 지대 | `몬스터 컨셉` 문서에 일반 몬스터 3종, 미니보스 1종, 보스 1종 상세 기재 | 문서 수치 기반으로 몬스터/패턴 추가 |
-| Stage 3: 최종 심층 | `기획서` 기준 관문 루프, 3관문 적 수/필드 최대치, 보스 후 `비기` 보상 구조만 확인됨 | 구조 문서만 추가하고 플레이 불가 잠금 처리. 몬스터/보스/이벤트 상세는 추후 대체/변경 필요 |
+| Stage 3: 최종 심층 | `몬스터 컨셉`에 일반 몬스터 3종, 미니보스 1종, 보스 1종 상세 기재. `기획서`에서 3관문 적 수/필드 최대치와 보스 후 `비기` 보상 구조 확인 | 문서 수치 기반으로 몬스터/패턴/패시브 추가. 기존 단일 적 전투 엔진 안에서 플레이 가능 |
 
 ## 임시 적용 항목
 
@@ -37,8 +37,9 @@
 | Stage 2 이벤트 풀 | 기존 공통 이벤트 `event_coin_pouch`, `event_wishing_well`, `event_supplies` 재사용. 추후 대체/변경 필요 | 문서에는 이벤트 시스템 구조와 테마가 있으나 Stage 2 전용 이벤트 ID/본문이 아직 부족함 |
 | Stage 2 상점 | `basic` 상점 유지. 추후 대체/변경 필요 | 문서에는 상점/구매 방향이 있으나 Stage 2 전용 상품 테이블이 없음 |
 | Stage 2 몬스터 에셋 | `assetKey`만 연결하고 실제 이미지/스프라이트가 없으면 기존 전투 실루엣 폴백 사용. 추후 대체/변경 필요 | 몬스터 컨셉 문서에는 비주얼 상세와 일부 에셋 기준이 있으나 적용 가능한 최종 파일이 아직 없음 |
-| Stage 3 진입 | Stage 2 클리어 후 승리 처리하지 않고 “다음 층 준비 중”으로 잠금. 추후 대체/변경 필요 | 문서상 3스테이지 게임이지만 Stage 3 상세 콘텐츠가 부족함 |
-| Stage 3 구현 입력값 | `content/stage3/stage3-content-template.json`에 일반 몬스터/보스/`비기` 보상 템플릿과 TBD 표시 규칙을 분리. 추후 실제 콘텐츠 테이블로 대체 필요 | `기획서`에서 관문 구조, 8마리/필드 최대 3, 보스 후 `비기` 3택1은 확인됐지만 이름/수치/효과표는 아직 없음 |
+| Stage 3 전용 이벤트 풀 | `event_stage3_resonance_relay`, `event_stage3_flesh_vat`, `event_stage3_eclipse_sanctuary`를 Stage 3 전용 풀로 연결 | Drive의 Stage 3 몬스터/테마 압력을 기반으로 프로토타입용 이벤트 본문과 선택지를 작성했으며, 각 이벤트는 전용 생성 배경을 사용 |
+| Stage 3 생성 몬스터 에셋 | `public/assets/monsters/stage3-generated/` 아래 5종 전용 포트레이트/스프라이트시트 연결 | 신규 몬스터 기획을 기반으로 이미지 생성 후 크로마키 제거/스프라이트시트 파생 처리. 상업 사용권 및 최종 아트 승인 여부는 오너 검토 필요 |
+| Stage 3 전투/이벤트 배경 | `combat-stage-3-eclipse-sanctum`, `event-stage3-resonance-relay`, `event-stage3-flesh-vat`, `event-stage3-eclipse-sanctuary` 연결 | Stage 3 전용 분위기를 위해 이미지 생성 기능으로 제작한 배경을 사용. 기존 Stage 1-2 배경을 재사용하지 않음 |
 | 전투 후 기술 드래프트 | 기존 `playerSkillUnlocks` 데이터에서 미보유 기술 1~2개를 전투 보상 선택지로 제시. 추후 대체/변경 필요 | 전투 시스템 문서에는 전투 경험치/레벨업 후 2~3개 중 선택 구조가 있으나 경험치 수치와 레벨업 곡선 상세가 아직 없음 |
 | 저주 거래 | 구현 보류. 추후 대체/변경 필요 | Drive에서 `저주 거래` 키워드로 검색했지만 구체 규칙/보상 테이블이 확인되지 않음 |
 | Stage 2 이벤트/배경 | 기존 이벤트 풀 유지, 전투 배경과 BGM만 Stage 2 테마에 맞춰 분리. 추후 대체/변경 필요 | Stage 2 몬스터/테마는 문서에 있으나 전용 이벤트 본문, 전용 배경 파일, 음원 파일 목록은 상세 부재 |
@@ -69,6 +70,9 @@
 | Stage 2 전용 사운드 프리셋 | 실제 음원 파일이 없으므로 Web Audio 절차적 BGM 프리셋을 `explorationStage2`, `combatStage2`, `combatEliteStage2`, `combatBossStage2`로 분리. 추후 대체/변경 필요 |
 | Stage 2 몬스터 에셋 | 서브에이전트 이미지 생성 산출물로 그림자 망령, 도플갱어, 불쾌한 큐브, 개체번호 162, 키메라의 portrait/spritesheet 연결 |
 | 보스 페이즈 | 몬스터 AI 문서의 보스 페이즈 전환 원칙에 따라 키메라 HP 50%/30% 이하 패턴셋을 분리 |
+| Stage 3 플레이어블 관문 | `괴멸 증폭기`, `장의 사육자`, `심연 관측체`, `성육의 사도`, `월식의 성가대`를 `dataStages.ts`와 `dataMonsters.ts`에 연결 |
+| Stage 3 패시브 | 신규 몬스터 기획의 증폭/공명, 표식/출혈, 저주/봉인, 반격/재생, 월식 보스 패시브를 전투 처리 단계에 연결 |
+| Gate 3 `비기` 보상 | `월식의 성가대` 처치 후 `섬광 절단`, `무채 장막`, `공명핵` 3개 중 1개를 선택하는 보상 화면 연결 |
 | 핵심 임시효과 연결 | 추가 공격/방어, 다음 턴 증폭/피해/반격/회복, 동전 고정/확률 보정, 탱커 준비/도적 아드레날린 등 기존 데이터에 있던 효과를 전투 계산과 예측에 연결 |
 | 상점 패시브 연결 범위 | `dataUpgrades.ts`의 60개 패시브가 전투 엔진, 보상 처리, 또는 문서화된 임시 판정 경로에서 참조되도록 확장 |
 | 공명 상태 발동 | `StatusEffectType.RESONANCE`가 2턴 카운트다운 후 누적 수치만큼 방어 무시 고정 피해를 주도록 연결 |

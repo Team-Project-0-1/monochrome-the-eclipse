@@ -19,7 +19,7 @@ export const StageClearScreen = () => {
       title="층 돌파"
       subtitle={nextStagePlayable
         ? `다음 구역은 ${nextStageInfo?.name ?? `Stage ${nextStage}`}입니다. 지금 얻은 자원과 체력으로 다음 층의 리스크를 감당해야 합니다.`
-        : `${nextStageInfo?.name ?? `Stage ${nextStage}`}은 문서상 존재하지만 현재 빌드에는 세부 몬스터, 이벤트, 보스 데이터가 부족해 잠겨 있습니다.`}
+        : `${nextStageInfo?.name ?? `Stage ${nextStage}`}은 현재 프로토타입 범위 밖입니다. 지금 런은 여기서 정산하세요.`}
       primaryLabel={nextStagePlayable ? `${nextStageInfo?.name ?? '다음 층'}으로` : '다음 층 준비 중'}
       primaryDisabled={!nextStagePlayable}
       onPrimary={() => startStage(nextStage)}

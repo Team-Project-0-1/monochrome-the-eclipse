@@ -4,7 +4,7 @@ React/Vite game client for the Monochrome roguelike combat prototype.
 
 Current public label: **Prototype v0.1**.
 
-This build is suitable for a prototype/portfolio release, not a paid 1.0 commercial launch. Stage 1 and Stage 2 are the playable public scope; Stage 3 is still a planned/locked content area.
+This build is suitable for a prototype/portfolio release, not a paid 1.0 commercial launch. Stage 1 through Stage 3 are the playable public scope, ending in a Stage 3 boss and `비기` reward draft.
 
 ## Commands
 
@@ -27,14 +27,14 @@ npm run build
 
 Use `npm run release:check` before publishing. It also runs asset optimization and `npm audit --audit-level=moderate`.
 
-Use `npm run prototype:check` before a portfolio/prototype deployment. It runs the release gate and then verifies prototype-facing metadata, scope labeling, Stage 3 lock status, and operations documentation.
+Use `npm run prototype:check` before a portfolio/prototype deployment. It runs the release gate and then verifies prototype-facing metadata, scope labeling, Stage 3 playable content, and operations documentation.
 
 ## Product and Operations Docs
 
 - `docs/prototype-product-brief.md` - portfolio positioning, scope, demo script, and product gates.
 - `docs/prototype-operations-playbook.md` - deployment, smoke testing, monitoring, incident triage, rollback, and patch cadence.
-- `docs/stage-3-prd.md` - locked Stage 3 gate, boss, and reward planning scope.
-- `docs/stage-3-content-brief.md` - Stage 3 content contract and public-copy guardrails.
+- `docs/stage-3-prd.md` - implemented Stage 3 gate, boss, and reward scope.
+- `docs/stage-3-content-brief.md` - Stage 3 content contract and source trace.
 - `../docs/release-direction-criteria.md` - criteria separating prototype, paid Early Access, and paid 1.0.
 - `../docs/user-required-release-actions.md` - owner decisions that Codex should not make alone.
 

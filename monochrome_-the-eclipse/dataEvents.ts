@@ -187,4 +187,132 @@ export const eventData: { [key: string]: EventDefinition } = {
       },
     ],
   },
+  event_stage3_resonance_relay: {
+    id: "event_stage3_resonance_relay",
+    title: "공명 중계탑",
+    description:
+      "월식 아래 무너진 중계탑이 아직도 낮은 음으로 진동합니다. 동전 모양의 공명판이 허공에서 맞물리고, 그 틈마다 괴멸 증폭기의 신호가 새어 나옵니다.",
+    choices: [
+      {
+        text: "공명판의 박자를 끊는다",
+        baseSuccessRate: 55,
+        senseBonus: { [CharacterClass.MAGE]: 25, [CharacterClass.WARRIOR]: 10 },
+        success: {
+          senseFragments: 2,
+          message: "중계탑의 박자가 무너지고 남은 파동이 감각 조각으로 굳었습니다.",
+        },
+        failure: {
+          curse: 2,
+          message: "끊어낸 박자가 되돌아와 몸 안쪽에서 울립니다. 저주가 따라붙었습니다.",
+        },
+      },
+      {
+        text: "송신핵을 뜯어낸다",
+        baseSuccessRate: 45,
+        senseBonus: { [CharacterClass.TANK]: 25 },
+        success: {
+          echoRemnants: 35,
+          reserveCoinsGained: 1,
+          message: "송신핵은 아직 따뜻했습니다. 에코 잔재와 뒤틀린 행운 동전 하나를 확보했습니다.",
+        },
+        failure: {
+          combat: "annihilationAmplifier",
+          message: "송신핵을 건드리는 순간, 중계탑 뒤에서 괴멸 증폭기의 잔향이 실체를 얻습니다.",
+        },
+      },
+      {
+        text: "간섭 범위 밖으로 빠져나간다",
+        guaranteed: true,
+        result: {
+          message: "탑은 계속 울리지만, 지금은 그 신호를 등지고 지나갑니다.",
+        },
+      },
+    ],
+  },
+  event_stage3_flesh_vat: {
+    id: "event_stage3_flesh_vat",
+    title: "장의 배양조",
+    description:
+      "성당 지하의 배양조 안에서 살점과 갈고리가 느리게 호흡합니다. 아직 깨어나지 않은 조직 사이로 기억 조각 같은 하얀 결정이 박혀 있습니다.",
+    choices: [
+      {
+        text: "결정을 조심스럽게 도려낸다",
+        baseSuccessRate: 50,
+        senseBonus: { [CharacterClass.ROGUE]: 30 },
+        success: {
+          memoryPieces: 2,
+          message: "갈고리의 움직임보다 빠르게 손을 빼냈습니다. 기억 조각이 손바닥에 남았습니다.",
+        },
+        failure: {
+          damage: 12,
+          message: "잠들어 있던 갈고리가 팔을 스쳤습니다. 상처가 늦게 벌어집니다.",
+        },
+      },
+      {
+        text: "배양액을 태워 흔적을 지운다",
+        baseSuccessRate: 60,
+        senseBonus: { [CharacterClass.WARRIOR]: 15, [CharacterClass.MAGE]: 15 },
+        success: {
+          echoRemnants: 28,
+          message: "배양조가 꺼지며 남은 에코가 재처럼 흩어졌습니다.",
+        },
+        failure: {
+          combat: "fleshCultivator",
+          message: "불꽃 속에서 사육자의 갈고리가 먼저 움직였습니다.",
+        },
+      },
+      {
+        text: "살아 있는 장치를 건드리지 않는다",
+        guaranteed: true,
+        result: {
+          message: "배양조는 계속 호흡합니다. 지금은 그 리듬에 이름을 붙이지 않기로 합니다.",
+        },
+      },
+    ],
+  },
+  event_stage3_eclipse_sanctuary: {
+    id: "event_stage3_eclipse_sanctuary",
+    title: "침묵 성역",
+    description:
+      "검은 제단 위로 월식의 코로나가 떨어집니다. 합창은 들리지 않지만, 봉인된 동전들이 제단 둘레를 돌며 선택을 재촉합니다.",
+    choices: [
+      {
+        text: "봉인 동전의 궤도를 읽는다",
+        baseSuccessRate: 50,
+        senseBonus: { [CharacterClass.MAGE]: 25 },
+        success: {
+          senseFragments: 1,
+          memoryPieces: 1,
+          message: "동전의 궤도가 잠깐 멈추고, 감각과 기억이 같은 문양으로 겹쳤습니다.",
+        },
+        failure: {
+          curse: 1,
+          damage: 8,
+          message: "읽는 순간 제단이 당신의 박자를 먼저 읽었습니다.",
+        },
+      },
+      {
+        text: "검은 제단에 에코를 바친다",
+        requiredResources: { echoRemnants: 15 },
+        baseSuccessRate: 70,
+        success: {
+          echoRemnants: -15,
+          reserveCoinsGained: 1,
+          message: "에코가 사라진 자리에 무채색 행운 동전 하나가 남았습니다.",
+        },
+        failure: {
+          echoRemnants: -15,
+          combat: "abyssObserver",
+          message: "성역은 대가만 삼키고, 심연 관측체의 눈을 열었습니다.",
+        },
+      },
+      {
+        text: "기도가 시작되기 전에 떠난다",
+        guaranteed: true,
+        result: {
+          message: "침묵은 깨지지 않았습니다. 그 사실만으로도 충분한 보상일 수 있습니다.",
+        },
+      },
+    ],
+  },
 };

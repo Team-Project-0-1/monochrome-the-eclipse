@@ -1,7 +1,7 @@
 # Prototype Product Brief
 
 Version: Prototype v0.1
-Last updated: 2026-05-09
+Last updated: 2026-05-18
 
 ## Positioning
 
@@ -14,21 +14,22 @@ The player should understand this within the first few minutes:
 - Select matching patterns.
 - Compare expected damage, defense, and enemy intent.
 - Choose route nodes and rewards that change the next fight.
-- Finish the available prototype scope and see that deeper content is still planned.
+- Finish the available 1-3 stage prototype scope and see a complete run conclusion.
 
 ## Release Scope
 
 Included:
 - Playable lobby, character select, exploration, combat, reward, event, shop, rest, game over, and stage clear flows.
-- Stage 1 and Stage 2 combat content connected through the current route system.
+- Stage 1, Stage 2, and Stage 3 combat content connected through the current route system.
+- Stage 3 boss reward flow with 3 `비기` choices before victory.
 - Character-specific combat tools and passive validation coverage.
 - Responsive desktop and mobile portrait smoke-tested layout.
 - Release metadata, web app manifest, icons, cache/security headers, and dist budget checks.
 
 Explicitly not included:
-- Finished Stage 3 content.
-- Playable Stage 3 route nodes, boss data, or ending flow.
-- Final paid-release asset provenance approval.
+- Final Stage 3 balance certification.
+- Final Stage 3 event/balance certification from external playtests.
+- Final paid-release provenance approval for generated monster/background assets.
 - Production analytics dashboard.
 - Full automated browser E2E suite.
 
@@ -36,7 +37,7 @@ Explicitly not included:
 
 Use this when presenting the project:
 
-> I built a React/Vite browser game prototype with a custom coin-pattern combat system, Zustand state slices, data-driven monsters/events, persistent run recovery, asset optimization, release checks, and a documented operations path. The current build is positioned as Prototype v0.1 because the planned third stage is still in design.
+> I built a React/Vite browser game prototype with a custom coin-pattern combat system, Zustand state slices, data-driven monsters/events, a playable 1-3 stage run, Stage 3 boss reward choices, persistent run recovery, asset optimization, release checks, and a documented operations path.
 
 ## Quality Bar
 
@@ -44,7 +45,7 @@ The prototype is shippable when:
 - `npm run prototype:check` passes.
 - The first screen clearly labels the build as `Prototype v0.1`.
 - The public copy does not imply a finished paid game.
-- Stage 3 stays locked in code; its current repo docs describe only the next design target.
+- Stage 3 playable content, strict content checks, and source-trace docs are current.
 - A reviewer can find the product brief, release criteria, user-required actions, and operations playbook without asking the developer.
 
 ## Demo Script
@@ -60,7 +61,7 @@ Recommended 3-5 minute portfolio walkthrough:
 ## Next Product Gates
 
 Before calling it Early Access:
-- Stage 3 monster table, boss identity, event table, and reward pressure expand beyond the structural PRD.
+- Stage 3 balance, event text, and generated monster/background assets are validated by external playtests and owner approval.
 - At least 10 external playtest notes exist.
 - Two or more characters have clear replay appeal.
 - Asset/audio commercial rights are approved.
@@ -68,5 +69,5 @@ Before calling it Early Access:
 
 ## Stage 3 Planning Docs
 
-- [stage-3-prd.md](./stage-3-prd.md) records the source-derived gate, boss, and reward requirements.
-- [stage-3-content-brief.md](./stage-3-content-brief.md) keeps public wording inside the Stage 1-2 playable prototype scope.
+- [stage-3-prd.md](./stage-3-prd.md) records the source-derived implemented gate, boss, and reward requirements.
+- [stage-3-content-brief.md](./stage-3-content-brief.md) tracks runtime keys, monster patterns, and remaining prototype caveats.

@@ -23,6 +23,11 @@
     "doppelganger": "./007_doppelganger-spritesheet.png",
     "unpleasantCube": "../stage2-generated/unpleasant_cube_spritesheet.png",
     "subject162": "../stage2-generated/subject_162_spritesheet.png",
-    "chimera": "./010_chimera-spritesheet.png"
+    "chimera": "./010_chimera-spritesheet.png",
+    "annihilationAmplifier": "../stage3-generated/stage3_annihilation_amplifier_spritesheet.png",
+    "fleshCultivator": "../stage3-generated/stage3_flesh_cultivator_spritesheet.png",
+    "abyssObserver": "../stage3-generated/stage3_abyss_observer_spritesheet.png",
+    "apostleOfFlesh": "../stage3-generated/stage3_apostle_of_flesh_spritesheet.png",
+    "eclipseChoir": "../stage3-generated/stage3_eclipse_choir_spritesheet.png"
   }
 }

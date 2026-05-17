@@ -52,7 +52,10 @@ export const CombatStage: React.FC<CombatStageProps> = ({
   const playerMotionToken = getSkillMotionToken(playerSkillEffect);
   const enemyMotionToken = getSkillMotionToken(enemySkillEffect);
   const backgroundStage = Math.min(Math.max(currentStage, 1), 3);
-  const combatBackgroundImage = `url("${assetPath(`assets/backgrounds/combat-stage-${backgroundStage}.webp`)}")`;
+  const backgroundPath = backgroundStage === 3
+    ? 'assets/backgrounds/combat-stage-3-eclipse-sanctum.png'
+    : `assets/backgrounds/combat-stage-${backgroundStage}.webp`;
+  const combatBackgroundImage = `url("${assetPath(backgroundPath)}")`;
   const stageClassName = [
     'combat-stage',
     `stage-${currentStage}`,

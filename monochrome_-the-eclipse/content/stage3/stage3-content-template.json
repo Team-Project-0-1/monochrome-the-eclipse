@@ -1,16 +1,23 @@
 {
   "schemaVersion": "stage3-content-input-v1",
   "stage": 3,
-  "status": "locked",
+  "status": "ready",
   "source": {
-    "title": "\uae30\ud68d\uc11c",
-    "documentId": "1Ta50Zudk34_6qBi4sP3TjQVoPq7Su8cnQpqUBsXRbf8",
-    "verifiedAt": "2026-05-13"
-  },
-  "tbdRule": {
-    "marker": "__STAGE3_TBD__",
-    "rule": "Unknown Stage 3 content must use a __stage3_tbd__ object instead of empty strings, zeroes, or invented placeholder names.",
-    "strictCheck": "Run npm run check:stage3-content -- --strict after final source tables replace every TBD marker."
+    "title": "몬스터 컨셉",
+    "documentId": "1xqQ_aFtUzEnwangtwOhpGUdFg83zhx3M4G0c-Kcj9XI",
+    "verifiedAt": "2026-05-18",
+    "relatedDocuments": [
+      {
+        "title": "기획서",
+        "documentId": "1Ta50Zudk34_6qBi4sP3TjQVoPq7Su8cnQpqUBsXRbf8",
+        "scope": "Gate 3 loop, enemy count, intent UI, and 3-choice secret technique reward contract"
+      },
+      {
+        "title": "몬스터 AI 시스템",
+        "documentId": "1WRq8mGZEnvvga1LcEk2CRKrxXypFhq0ljx3mh9TryxI",
+        "scope": "Coin-pattern AI, enemy tier rules, and intent preview categories"
+      }
+    ]
   },
   "gate": {
     "normalCombatsBeforeBoss": 2,
@@ -20,423 +27,474 @@
     "rewardOfferCount": 3,
     "rewardChooseCount": 1
   },
+  "assetSet": {
+    "generationMode": "built-in image generation plus local chroma-key removal",
+    "combatBackground": "assets/backgrounds/combat-stage-3-eclipse-sanctum.png",
+    "eventBackgrounds": [
+      "assets/backgrounds/event-stage3-resonance-relay.png",
+      "assets/backgrounds/event-stage3-flesh-vat.png",
+      "assets/backgrounds/event-stage3-eclipse-sanctuary.png"
+    ],
+    "monsterDirectory": "assets/monsters/stage3-generated"
+  },
+  "stage3EventTemplates": [
+    {
+      "id": "event_stage3_resonance_relay",
+      "status": "ready",
+      "title": "공명 중계탑",
+      "backgroundPath": "assets/backgrounds/event-stage3-resonance-relay.png",
+      "role": "공명/증폭 위험과 행운 동전 보상 압박"
+    },
+    {
+      "id": "event_stage3_flesh_vat",
+      "status": "ready",
+      "title": "장의 배양조",
+      "backgroundPath": "assets/backgrounds/event-stage3-flesh-vat.png",
+      "role": "표식/출혈 테마의 자원 회수와 전투 리스크"
+    },
+    {
+      "id": "event_stage3_eclipse_sanctuary",
+      "status": "ready",
+      "title": "침묵 성역",
+      "backgroundPath": "assets/backgrounds/event-stage3-eclipse-sanctuary.png",
+      "role": "봉인/저주 테마의 비기 직전 성역 압박"
+    }
+  ],
   "normalMonsterTemplates": [
     {
-      "id": "stage3_normal_tbd_01",
-      "status": "tbd",
+      "id": "stage3_annihilation_amplifier",
+      "runtimeKey": "annihilationAmplifier",
+      "status": "ready",
       "tier": "normal",
-      "name": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Stage 3 normal monster name",
-        "owner": "content"
-      },
-      "role": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "enum",
-        "sourceNeeded": "Monster role: warrior, assassin, mage, utility, or hybrid",
-        "owner": "combat"
-      },
-      "hp": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "number",
-        "sourceNeeded": "Stage 3 normal monster HP target",
-        "owner": "balance"
-      },
-      "baseAtk": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "number",
-        "sourceNeeded": "Stage 3 normal monster base attack",
-        "owner": "balance"
-      },
-      "baseDef": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "number",
-        "sourceNeeded": "Stage 3 normal monster base defense",
-        "owner": "balance"
-      },
+      "name": "괴멸 증폭기",
+      "role": "mage",
+      "hp": 110,
+      "baseAtk": 6,
+      "baseDef": 2,
+      "coreLoop": "뒷면으로 증폭을 누적하고 앞면 고족보로 공명을 폭발 직전까지 밀어붙인다.",
       "patterns": [
         {
-          "id": "stage3_normal_tbd_01_pattern_01",
-          "name": {
-            "__stage3_tbd__": "__STAGE3_TBD__",
-            "expectedType": "string",
-            "sourceNeeded": "Monster action name",
-            "owner": "content"
-          },
-          "trigger": {
-            "__stage3_tbd__": "__STAGE3_TBD__",
-            "expectedType": "string",
-            "sourceNeeded": "Intent preview trigger condition",
-            "owner": "combat"
-          },
-          "role": {
-            "__stage3_tbd__": "__STAGE3_TBD__",
-            "expectedType": "enum",
-            "sourceNeeded": "Action module role",
-            "owner": "combat"
-          },
-          "effect": {
-            "__stage3_tbd__": "__STAGE3_TBD__",
-            "expectedType": "effect",
-            "sourceNeeded": "Damage, defense, status, or movement effect",
-            "owner": "implementation"
-          },
+          "id": "stage3_amplifier_distortion_broadcast",
+          "runtimeKey": "AMPLIFIER_DISTORTION_BROADCAST",
+          "name": "왜곡 송출",
+          "trigger": "앞면 2개",
+          "role": "hybrid",
+          "effect": "피해 5, 자신에게 증폭 +1",
           "intent": {
-            "category": {
-              "__stage3_tbd__": "__STAGE3_TBD__",
-              "expectedType": "enum",
-              "sourceNeeded": "attack, buff, debuff, move, or idle",
-              "owner": "combat"
-            },
+            "category": "attack",
             "dangerLevel": "normal",
-            "rangeLabel": {
-              "__stage3_tbd__": "__STAGE3_TBD__",
-              "expectedType": "string",
-              "sourceNeeded": "Player-facing range or target cue",
-              "owner": "combat"
-            },
-            "playerCue": {
-              "__stage3_tbd__": "__STAGE3_TBD__",
-              "expectedType": "string",
-              "sourceNeeded": "Short response cue shown to the player",
-              "owner": "content"
-            }
+            "rangeLabel": "플레이어 1명",
+            "playerCue": "증폭이 쌓이기 전 짧게 막거나 끊는다."
+          }
+        },
+        {
+          "id": "stage3_amplifier_doom_resonance",
+          "runtimeKey": "AMPLIFIER_DOOM_RESONANCE",
+          "name": "멸망 공명",
+          "trigger": "앞면 5개",
+          "role": "mage",
+          "effect": "피해 8, 현재 증폭만큼 공명 부여",
+          "intent": {
+            "category": "attack",
+            "dangerLevel": "high",
+            "rangeLabel": "플레이어 상태",
+            "playerCue": "공명 폭발 전에 방어와 정화를 준비한다."
+          }
+        },
+        {
+          "id": "stage3_amplifier_amplification_broadcast",
+          "runtimeKey": "AMPLIFIER_AMPLIFICATION_BROADCAST",
+          "name": "증폭 방송",
+          "trigger": "뒷면 3개",
+          "role": "buff",
+          "effect": "방어 5, 자신에게 증폭 +3",
+          "intent": {
+            "category": "buff",
+            "dangerLevel": "normal",
+            "rangeLabel": "자신",
+            "playerCue": "다음 고족보 공격을 예상하고 선제 피해를 넣는다."
           }
         }
       ],
-      "passives": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "array",
-        "sourceNeeded": "Monster passive IDs, or an empty array if none",
-        "owner": "combat"
-      }
+      "passives": [
+        "파열 음파: 증폭 5 이상이면 공격에 공명 +2",
+        "광역 간섭: 공명 폭발 시 방어 -3",
+        "붕괴 진동: 최대 증폭 상태의 공격 피해 +5"
+      ]
     },
     {
-      "id": "stage3_normal_tbd_02",
-      "status": "tbd",
+      "id": "stage3_flesh_cultivator",
+      "runtimeKey": "fleshCultivator",
+      "status": "ready",
       "tier": "normal",
-      "name": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Second Stage 3 normal monster name",
-        "owner": "content"
-      },
-      "role": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "enum",
-        "sourceNeeded": "Second normal monster AI role",
-        "owner": "combat"
-      },
-      "hp": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "number",
-        "sourceNeeded": "Second normal monster HP",
-        "owner": "balance"
-      },
-      "baseAtk": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "number",
-        "sourceNeeded": "Second normal monster base attack",
-        "owner": "balance"
-      },
-      "baseDef": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "number",
-        "sourceNeeded": "Second normal monster base defense",
-        "owner": "balance"
-      },
-      "patterns": [],
-      "passives": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "array",
-        "sourceNeeded": "Passive IDs, or an empty array if none",
-        "owner": "combat"
-      }
+      "name": "장의 사육자",
+      "role": "assassin",
+      "hp": 120,
+      "baseAtk": 7,
+      "baseDef": 3,
+      "coreLoop": "표식을 누적한 뒤 출혈과 연속 공격으로 피해를 터뜨린다.",
+      "patterns": [
+        {
+          "id": "stage3_cultivator_butcher_hook",
+          "runtimeKey": "CULTIVATOR_BUTCHER_HOOK",
+          "name": "도축 갈고리",
+          "trigger": "앞면 3개",
+          "role": "hybrid",
+          "effect": "피해 5, 표식 +2",
+          "intent": {
+            "category": "attack",
+            "dangerLevel": "normal",
+            "rangeLabel": "플레이어 상태",
+            "playerCue": "표식 4 이상이 되기 전에 피해를 줄인다."
+          }
+        },
+        {
+          "id": "stage3_cultivator_tear_flesh",
+          "runtimeKey": "CULTIVATOR_TEAR_FLESH",
+          "name": "살점 뜯기",
+          "trigger": "앞면 4개",
+          "role": "assassin",
+          "effect": "2회 공격, 출혈 중이면 4회 공격",
+          "intent": {
+            "category": "attack",
+            "dangerLevel": "high",
+            "rangeLabel": "플레이어 2-4회",
+            "playerCue": "출혈이 있으면 방어를 크게 올린다."
+          }
+        },
+        {
+          "id": "stage3_cultivator_feeding_prep",
+          "runtimeKey": "CULTIVATOR_FEEDING_PREP",
+          "name": "사육 준비",
+          "trigger": "고유 뒷면",
+          "role": "buff",
+          "effect": "방어 8, 다음 턴 첫 동전 앞면 확정",
+          "intent": {
+            "category": "buff",
+            "dangerLevel": "normal",
+            "rangeLabel": "자신",
+            "playerCue": "다음 턴 공격 고족보를 예상한다."
+          }
+        }
+      ],
+      "passives": [
+        "도축 본능: 표식 4 이상인 대상 공격 시 출혈 +2",
+        "신선한 고기: 출혈 대상 피해 +2",
+        "갈고리 회수: 연속 공격 후 표식 +1"
+      ]
     },
     {
-      "id": "stage3_normal_tbd_03",
-      "status": "tbd",
+      "id": "stage3_abyss_observer",
+      "runtimeKey": "abyssObserver",
+      "status": "ready",
       "tier": "normal",
-      "name": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Third Stage 3 normal monster name",
-        "owner": "content"
-      },
-      "role": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "enum",
-        "sourceNeeded": "Third normal monster AI role",
-        "owner": "combat"
-      },
-      "hp": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "number",
-        "sourceNeeded": "Third normal monster HP",
-        "owner": "balance"
-      },
-      "baseAtk": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "number",
-        "sourceNeeded": "Third normal monster base attack",
-        "owner": "balance"
-      },
-      "baseDef": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "number",
-        "sourceNeeded": "Third normal monster base defense",
-        "owner": "balance"
-      },
-      "patterns": [],
-      "passives": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "array",
-        "sourceNeeded": "Passive IDs, or an empty array if none",
-        "owner": "combat"
-      }
+      "name": "심연 관측체",
+      "role": "utility",
+      "hp": 95,
+      "baseAtk": 3,
+      "baseDef": 7,
+      "coreLoop": "저주와 봉인으로 동전 선택을 압박하고 장기전을 만든다.",
+      "patterns": [
+        {
+          "id": "stage3_observer_gaze",
+          "runtimeKey": "OBSERVER_GAZE",
+          "name": "응시",
+          "trigger": "앞면 2개",
+          "role": "mage",
+          "effect": "피해 4, 저주 +2",
+          "intent": {
+            "category": "attack",
+            "dangerLevel": "normal",
+            "rangeLabel": "플레이어 상태",
+            "playerCue": "저주 누적을 낮게 유지한다."
+          }
+        },
+        {
+          "id": "stage3_observer_mental_erosion",
+          "runtimeKey": "OBSERVER_MENTAL_EROSION",
+          "name": "정신 침식",
+          "trigger": "앞면 4개",
+          "role": "mage",
+          "effect": "피해 6, 저주 5 이상이면 봉인 +2",
+          "intent": {
+            "category": "attack",
+            "dangerLevel": "high",
+            "rangeLabel": "플레이어 상태",
+            "playerCue": "저주 5 이상에서는 봉인 연계를 경계한다."
+          }
+        },
+        {
+          "id": "stage3_observer_closed_eye",
+          "runtimeKey": "OBSERVER_CLOSED_EYE",
+          "name": "닫힌 눈",
+          "trigger": "뒷면 3개",
+          "role": "utility",
+          "effect": "방어 6, 저주 +3",
+          "intent": {
+            "category": "debuff",
+            "dangerLevel": "normal",
+            "rangeLabel": "플레이어 상태",
+            "playerCue": "공격이 없어도 저주 누적을 확인한다."
+          }
+        }
+      ],
+      "passives": [
+        "공허 주시: 저주 4 이상이면 봉인 +1",
+        "정신 붕괴: 봉인 대상 피해 +4",
+        "심연 메아리: 봉인 수치 일부만큼 저주 추가"
+      ]
+    }
+  ],
+  "minibossTemplates": [
+    {
+      "id": "stage3_apostle_of_flesh",
+      "runtimeKey": "apostleOfFlesh",
+      "status": "ready",
+      "tier": "miniboss",
+      "name": "성육의 사도",
+      "role": "warrior",
+      "hp": 180,
+      "baseAtk": 8,
+      "baseDef": 6,
+      "coreLoop": "피해를 받을수록 증폭하고 반격을 증폭으로 전환해 중반 관문을 막는다.",
+      "patterns": [
+        {
+          "id": "stage3_apostle_flesh_pounding",
+          "runtimeKey": "APOSTLE_FLESH_POUNDING",
+          "name": "육편 난타",
+          "trigger": "앞면 3개",
+          "role": "warrior",
+          "effect": "피해 7, 반격 +2",
+          "intent": {
+            "category": "attack",
+            "dangerLevel": "normal",
+            "rangeLabel": "플레이어 1명",
+            "playerCue": "반격이 쌓이면 작은 다단 공격을 피한다."
+          }
+        },
+        {
+          "id": "stage3_apostle_evolution_crush",
+          "runtimeKey": "APOSTLE_EVOLUTION_CRUSH",
+          "name": "진화 압살",
+          "trigger": "앞면 5개",
+          "role": "warrior",
+          "effect": "기본 피해 + 현재 증폭의 2배",
+          "intent": {
+            "category": "attack",
+            "dangerLevel": "high",
+            "rangeLabel": "플레이어 1명",
+            "playerCue": "증폭이 높으면 고위험 공격으로 본다."
+          }
+        },
+        {
+          "id": "stage3_apostle_regenerative_tissue",
+          "runtimeKey": "APOSTLE_REGENERATIVE_TISSUE",
+          "name": "재생 조직",
+          "trigger": "뒷면 2개",
+          "role": "buff",
+          "effect": "방어 6, 증폭 +2",
+          "intent": {
+            "category": "buff",
+            "dangerLevel": "normal",
+            "rangeLabel": "자신",
+            "playerCue": "증폭을 방치하지 않는다."
+          }
+        },
+        {
+          "id": "stage3_apostle_imperfect_molt",
+          "runtimeKey": "APOSTLE_IMPERFECT_MOLT",
+          "name": "불완전 탈피",
+          "trigger": "고유 뒷면",
+          "role": "utility",
+          "effect": "체력 10 회복, 반격을 모두 제거하고 제거량만큼 증폭",
+          "intent": {
+            "category": "buff",
+            "dangerLevel": "high",
+            "rangeLabel": "자신",
+            "playerCue": "반격이 증폭으로 바뀌는 턴을 경계한다."
+          }
+        }
+      ],
+      "passives": [
+        "적응 진화: 피해를 받으면 턴당 최대 3회 증폭 +1",
+        "육체 반사: 반격 5 이상이면 공격 피해 +5",
+        "비틀린 재생: 체력 50% 이하에서 턴 종료 시 체력 5 회복"
+      ]
     }
   ],
   "bossTemplates": [
     {
-      "id": "stage3_boss_tbd_01",
-      "status": "tbd",
+      "id": "stage3_eclipse_choir",
+      "runtimeKey": "eclipseChoir",
+      "status": "ready",
       "tier": "boss",
-      "name": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Stage 3 boss name",
-        "owner": "content"
-      },
-      "hp": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "number",
-        "sourceNeeded": "Stage 3 boss HP",
-        "owner": "balance"
-      },
-      "baseAtk": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "number",
-        "sourceNeeded": "Stage 3 boss base attack",
-        "owner": "balance"
-      },
-      "baseDef": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "number",
-        "sourceNeeded": "Stage 3 boss base defense",
-        "owner": "balance"
-      },
+      "name": "월식의 성가대",
+      "role": "hybrid",
+      "hp": 320,
+      "baseAtk": 9,
+      "baseDef": 10,
+      "coreLoop": "공명 폭발, 봉인, 저주를 결합해 플레이어의 동전 선택을 무너뜨린다.",
       "patterns": [
         {
-          "id": "stage3_boss_tbd_01_pattern_01",
-          "name": {
-            "__stage3_tbd__": "__STAGE3_TBD__",
-            "expectedType": "string",
-            "sourceNeeded": "Boss action name",
-            "owner": "content"
-          },
-          "trigger": {
-            "__stage3_tbd__": "__STAGE3_TBD__",
-            "expectedType": "string",
-            "sourceNeeded": "Boss action preview condition",
-            "owner": "combat"
-          },
-          "role": "hybrid",
-          "effect": {
-            "__stage3_tbd__": "__STAGE3_TBD__",
-            "expectedType": "effect",
-            "sourceNeeded": "Boss action effect",
-            "owner": "implementation"
-          },
+          "id": "stage3_choir_dissonant_chord",
+          "runtimeKey": "CHOIR_DISSONANT_CHORD",
+          "name": "불협 화음",
+          "trigger": "앞면 2개",
+          "role": "mage",
+          "effect": "피해 5, 저주 +2",
           "intent": {
-            "category": {
-              "__stage3_tbd__": "__STAGE3_TBD__",
-              "expectedType": "enum",
-              "sourceNeeded": "Boss intent category",
-              "owner": "combat"
-            },
-            "dangerLevel": {
-              "__stage3_tbd__": "__STAGE3_TBD__",
-              "expectedType": "enum",
-              "sourceNeeded": "Use high for dangerous boss intent",
-              "owner": "combat"
-            },
-            "rangeLabel": {
-              "__stage3_tbd__": "__STAGE3_TBD__",
-              "expectedType": "string",
-              "sourceNeeded": "Boss action range label",
-              "owner": "combat"
-            },
-            "playerCue": {
-              "__stage3_tbd__": "__STAGE3_TBD__",
-              "expectedType": "string",
-              "sourceNeeded": "Short response cue shown to the player",
-              "owner": "content"
-            }
+            "category": "attack",
+            "dangerLevel": "high",
+            "rangeLabel": "플레이어 상태",
+            "playerCue": "보스 공격은 저주 시작점도 위험으로 본다."
+          }
+        },
+        {
+          "id": "stage3_choir_erosion_chorus",
+          "runtimeKey": "CHOIR_EROSION_CHORUS",
+          "name": "침식 합장",
+          "trigger": "앞면 4개",
+          "role": "mage",
+          "effect": "피해 7, 공명 +4",
+          "intent": {
+            "category": "attack",
+            "dangerLevel": "high",
+            "rangeLabel": "플레이어 상태",
+            "playerCue": "공명 카운트다운을 즉시 확인한다."
+          }
+        },
+        {
+          "id": "stage3_choir_collapse_canticle",
+          "runtimeKey": "CHOIR_COLLAPSE_CANTICLE",
+          "name": "붕괴 성가",
+          "trigger": "앞면 5개",
+          "role": "warrior",
+          "effect": "기본 피해 + 대상 공명",
+          "intent": {
+            "category": "attack",
+            "dangerLevel": "high",
+            "rangeLabel": "플레이어 1명",
+            "playerCue": "공명 누적 상태에서 최우선 방어한다."
+          }
+        },
+        {
+          "id": "stage3_choir_eclipse_opening",
+          "runtimeKey": "CHOIR_ECLIPSE_OPENING",
+          "name": "월식 개막",
+          "trigger": "고유 앞면",
+          "role": "hybrid",
+          "effect": "총 디버프 스택만큼 피해, 봉인 +3",
+          "intent": {
+            "category": "attack",
+            "dangerLevel": "high",
+            "rangeLabel": "플레이어 상태",
+            "playerCue": "디버프 10 이상이면 즉시 위기 턴으로 본다."
+          }
+        },
+        {
+          "id": "stage3_choir_silent_prayer",
+          "runtimeKey": "CHOIR_SILENT_PRAYER",
+          "name": "침묵의 기도",
+          "trigger": "뒷면 3개",
+          "role": "utility",
+          "effect": "방어 8, 봉인 +2",
+          "intent": {
+            "category": "debuff",
+            "dangerLevel": "high",
+            "rangeLabel": "플레이어 상태",
+            "playerCue": "방어 턴에도 봉인이 들어온다."
+          }
+        },
+        {
+          "id": "stage3_choir_black_sanctuary",
+          "runtimeKey": "CHOIR_BLACK_SANCTUARY",
+          "name": "검은 성역",
+          "trigger": "뒷면 4개",
+          "role": "utility",
+          "effect": "방어 12, 저주 +3",
+          "intent": {
+            "category": "debuff",
+            "dangerLevel": "high",
+            "rangeLabel": "플레이어 상태",
+            "playerCue": "보스가 단단해지는 동안 저주도 누적된다."
           }
         }
       ],
       "phases": [
         {
-          "id": "stage3_boss_tbd_01_phase_01",
-          "label": {
-            "__stage3_tbd__": "__STAGE3_TBD__",
-            "expectedType": "string",
-            "sourceNeeded": "Boss phase label",
-            "owner": "content"
-          },
-          "hpBelow": {
-            "__stage3_tbd__": "__STAGE3_TBD__",
-            "expectedType": "number",
-            "sourceNeeded": "Phase transition HP ratio, or remove this field if unused",
-            "owner": "balance"
-          },
-          "patternIds": {
-            "__stage3_tbd__": "__STAGE3_TBD__",
-            "expectedType": "array",
-            "sourceNeeded": "Boss pattern IDs prioritized in this phase",
-            "owner": "combat"
-          },
-          "playerCue": {
-            "__stage3_tbd__": "__STAGE3_TBD__",
-            "expectedType": "string",
-            "sourceNeeded": "Phase entry cue shown to the player",
-            "owner": "content"
-          }
+          "id": "stage3_eclipse_choir_crescendo",
+          "runtimeKey": "eclipse_choir_crescendo",
+          "label": "월식 2악장",
+          "hpBelow": 0.5,
+          "patternIds": [
+            "stage3_choir_erosion_chorus",
+            "stage3_choir_collapse_canticle",
+            "stage3_choir_eclipse_opening",
+            "stage3_choir_silent_prayer"
+          ],
+          "playerCue": "체력 절반 아래에서는 공명과 봉인 연계가 우선된다."
+        },
+        {
+          "id": "stage3_eclipse_choir_finale",
+          "runtimeKey": "eclipse_choir_finale",
+          "label": "종말 합창",
+          "hpBelow": 0.3,
+          "turnFrom": 6,
+          "patternIds": [
+            "stage3_choir_collapse_canticle",
+            "stage3_choir_eclipse_opening",
+            "stage3_choir_black_sanctuary"
+          ],
+          "playerCue": "막판에는 고위험 공격과 검은 성역만 보고 대응한다."
         }
       ],
-      "dangerIntentThreshold": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Rule for marking boss intent as high danger",
-        "owner": "combat"
-      }
+      "passives": [
+        "메아리 증식: 공명 폭발 시 저주 +2",
+        "부정 찬가: 봉인 대상 피해 +5",
+        "종말 예고: 총 디버프 10 이상이면 다음 공격 1.5배",
+        "월식 현상: 체력 50% 이하에서 모든 공격에 공명 +2"
+      ],
+      "dangerIntentThreshold": "보스 공격, 고유/5개 족보, 피해 10 이상, 또는 피해+디버프 동시 적용은 high"
     }
   ],
   "secretTechniqueRewardTemplates": [
     {
-      "id": "stage3_secret_technique_tbd_01",
-      "status": "tbd",
-      "kind": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "enum",
-        "sourceNeeded": "active or passive",
-        "owner": "combat"
-      },
-      "name": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Secret technique name",
-        "owner": "content"
-      },
-      "role": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Secret technique combat role",
-        "owner": "content"
-      },
-      "usageRule": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Per-combat, passive, or other usage rule",
-        "owner": "combat"
-      },
-      "effect": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "effect",
-        "sourceNeeded": "Secret technique effect",
-        "owner": "implementation"
-      },
-      "playerCue": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Short reason for choosing this technique",
-        "owner": "content"
-      }
+      "id": "stage3_secret_technique_flash",
+      "runtimeKey": "stage3_secret_technique_flash",
+      "status": "ready",
+      "kind": "active",
+      "name": "섬광 절단",
+      "role": "attack recovery",
+      "usageRule": "월식의 성가대 처치 후 3개 중 1개 선택",
+      "effect": "에코 42, 감각 조각 2, 행운 동전 1개",
+      "playerCue": "다음 빌드 실험을 위한 즉시 자원과 안전장치"
     },
     {
-      "id": "stage3_secret_technique_tbd_02",
-      "status": "tbd",
-      "kind": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "enum",
-        "sourceNeeded": "active or passive",
-        "owner": "combat"
-      },
-      "name": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Secret technique name",
-        "owner": "content"
-      },
-      "role": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Secret technique combat role",
-        "owner": "content"
-      },
-      "usageRule": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Usage rule",
-        "owner": "combat"
-      },
-      "effect": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "effect",
-        "sourceNeeded": "Effect",
-        "owner": "implementation"
-      },
-      "playerCue": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Short player cue",
-        "owner": "content"
-      }
+      "id": "stage3_secret_technique_veil",
+      "runtimeKey": "stage3_secret_technique_veil",
+      "status": "ready",
+      "kind": "passive",
+      "name": "무채 장막",
+      "role": "defense research",
+      "usageRule": "월식의 성가대 처치 후 3개 중 1개 선택",
+      "effect": "에코 28, 기억 조각 5, 행운 동전 1개",
+      "playerCue": "방어형 성장과 다음 런 연구 자원 확보"
     },
     {
-      "id": "stage3_secret_technique_tbd_03",
-      "status": "tbd",
-      "kind": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "enum",
-        "sourceNeeded": "active or passive",
-        "owner": "combat"
-      },
-      "name": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Secret technique name",
-        "owner": "content"
-      },
-      "role": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Secret technique combat role",
-        "owner": "content"
-      },
-      "usageRule": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Usage rule",
-        "owner": "combat"
-      },
-      "effect": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "effect",
-        "sourceNeeded": "Effect",
-        "owner": "implementation"
-      },
-      "playerCue": {
-        "__stage3_tbd__": "__STAGE3_TBD__",
-        "expectedType": "string",
-        "sourceNeeded": "Short player cue",
-        "owner": "content"
-      }
+      "id": "stage3_secret_technique_resonance_core",
+      "runtimeKey": "stage3_secret_technique_resonance_core",
+      "status": "ready",
+      "kind": "passive",
+      "name": "공명핵",
+      "role": "balanced growth",
+      "usageRule": "월식의 성가대 처치 후 3개 중 1개 선택",
+      "effect": "에코 34, 감각 조각 4, 기억 조각 3",
+      "playerCue": "감각과 기억을 함께 챙기는 균형 보상"
     }
   ],
-  "lockGuard": {
-    "stageDataRule": "dataStages.ts Stage 3 combatPool, miniboss, boss, and eventPool stay empty until final content tables are ready.",
-    "publicCopyRule": "Public copy must keep Stage 3 framed as planned or locked, not playable."
-  }
+  "implementationNotes": [
+    "현재 엔진은 다중 적 전장을 지원하지 않아 Gate 3의 targetTotalEnemyCount와 maxEnemiesOnField는 콘텐츠 압박 기준으로 보존하고, 런타임은 기존 단일 적 전투 루프에 맞춰 구현한다.",
+    "Stage 3 전용 몬스터, 전투 배경, 이벤트 배경은 이미지 생성 결과물을 프로젝트 에셋으로 저장해 연결한다. 상업 사용권 검토는 출시 전 별도 owner decision으로 남긴다.",
+    "비기 선택은 엔딩 직전 보상 화면에서 3개 중 1개를 선택하는 완전한 프로토타입 흐름으로 구현한다."
+  ]
 }

@@ -14,6 +14,7 @@ import { summarizeDescription } from '../utils/effectSummary';
 import type { CombatRewardChoice } from '../utils/combatRewards';
 
 const getRewardChoiceCue = (choice: CombatRewardChoice) => {
+  if (choice.secretTechniqueId) return '월식 보스 보상: 비기 3개 중 1개를 확정';
   if (choice.skillId) return '기술 슬롯을 바꿔 전투 선택지 확장';
   if (choice.passiveId) return '자동 효과를 추가해 빌드 강화';
   if (choice.rewards.reserveCoin) return '다음 전투의 동전 사고를 줄이기';

@@ -18,7 +18,7 @@ Still release-sensitive:
 - Final production domain is not fixed.
 - Cloudflare, canonical redirects, analytics, sitemap, and operator dashboard need external account/domain access.
 - Generated art/audio provenance needs final owner approval before a broader public push.
-- Stage 3 remains intentionally locked or incomplete in the content ledger.
+- Stage 3 is playable in prototype scope, but generated Stage 3 assets still need owner provenance approval before a broader public push.
 - There is no committed browser E2E regression suite yet; current verification is build checks plus targeted browser smoke inspection.
 - PC install/PWA behavior has not been validated on a deployed public URL yet.
 - Prototype/portfolio operations are now documented in `monochrome_-the-eclipse/docs/prototype-product-brief.md` and `monochrome_-the-eclipse/docs/prototype-operations-playbook.md`.
@@ -84,7 +84,7 @@ For a prototype/portfolio handoff, run:
 npm run prototype:check
 ```
 
-This runs the release gate and verifies prototype-facing metadata, Stage 3 lock status, and operations documentation.
+This runs the release gate and verifies prototype-facing metadata, Stage 3 playable content status, and operations documentation.
 
 ## Plan To Reach Public Release
 
@@ -98,7 +98,7 @@ Acceptance criteria:
 
 Work:
 - Keep using GitHub Pages as the fallback deploy target.
-- Keep Stage 3 locked if content is not ready, and label the first release as `Prototype v0.1`.
+- Keep Stage 3 labeled as prototype content unless balance, generated assets, and owner approvals are ready, and label the first release as `Prototype v0.1`.
 - Before calling the build complete, do one manual owner review of the content ledger and release label.
 
 ### Phase 2 - First Hosted Public Build

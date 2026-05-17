@@ -16,6 +16,9 @@ const anomalyDeviceBackground = 'assets/backgrounds/event-anomaly-device.png';
 const blackWellBackground = 'assets/backgrounds/event-black-well.png';
 const coinPouchBackground = 'assets/backgrounds/event-coin-pouch-alley.png';
 const survivorShelterBackground = 'assets/backgrounds/event-survivor-shelter.png';
+const stage3ResonanceRelayBackground = 'assets/backgrounds/event-stage3-resonance-relay.png';
+const stage3FleshVatBackground = 'assets/backgrounds/event-stage3-flesh-vat.png';
+const stage3EclipseSanctuaryBackground = 'assets/backgrounds/event-stage3-eclipse-sanctuary.png';
 
 const defaultScene: EventScenePresentation = {
   className: 'scene-signal',
@@ -81,6 +84,33 @@ const scenes: Record<string, EventScenePresentation> = {
     speaker: '오래된 우물',
     line: '깊은 물 아래에서 백색 반점이 일식처럼 깜빡입니다.',
     propLabel: '오래된 우물',
+  },
+  event_stage3_resonance_relay: {
+    className: 'scene-stage3-relay',
+    backgroundPath: stage3ResonanceRelayBackground,
+    kicker: 'Resonance Relay',
+    location: '월식 중계교',
+    speaker: '공명 중계탑',
+    line: '동전형 공명판이 서로 맞물릴 때마다 탑 안쪽의 신호가 낮게 떨립니다.',
+    propLabel: '송신핵',
+  },
+  event_stage3_flesh_vat: {
+    className: 'scene-stage3-vat',
+    backgroundPath: stage3FleshVatBackground,
+    kicker: 'Flesh Cultivation',
+    location: '성당 지하 배양실',
+    speaker: '장의 배양조',
+    line: '갈고리와 배양액 사이에서 아직 이름 없는 조직이 느리게 호흡합니다.',
+    propLabel: '배양 결정',
+  },
+  event_stage3_eclipse_sanctuary: {
+    className: 'scene-stage3-sanctuary',
+    backgroundPath: stage3EclipseSanctuaryBackground,
+    kicker: 'Silent Sanctuary',
+    location: '검은 성역',
+    speaker: '봉인된 제단',
+    line: '합창은 멈췄지만 제단을 도는 동전들은 아직 선택을 요구합니다.',
+    propLabel: '봉인 동전',
   },
 };
 

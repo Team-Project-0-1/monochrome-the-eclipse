@@ -9,7 +9,7 @@
   - 가장 빠른 공개: GitHub Pages.
   - 실제 트래픽과 장기 운영 권장: Cloudflare Pages + 커스텀 도메인.
   - 보안/캐시 헤더 적용 필요 시 GitHub Pages 단독은 부족하다. `public/_headers`를 적용할 수 있는 Cloudflare Pages/Netlify 또는 CDN 프록시를 선택한다.
-- 3스테이지가 잠겨 있거나 미구현인 상태를 첫 공개 빌드에서 허용할지 결정한다.
+- 3스테이지가 플레이 가능한 프로토타입 범위로 충분한지 첫 공개 빌드 기준을 결정한다.
 - 생성 이미지/오디오의 출처와 사용권을 검토하고, 현재 에셋을 프로토타입 공개 범위에서 허용할지 결정한다.
 - 호스팅 결정 후 GitHub Pages 워크플로를 실행하거나 Cloudflare/domain 접근 권한을 제공한다.
 
@@ -19,7 +19,7 @@
   - 옵션 A: GitHub Pages fallback, 예상 URL `https://team-project-0-1.github.io/monocrome-eclips/`.
   - 옵션 B: Cloudflare Pages/custom domain, 실제 공개 트래픽에는 권장.
 - 첫 공개 라벨: prototype, alpha, early access, full release 중 하나.
-- 3스테이지 잠금/미구현을 공개 빌드의 알려진 제한으로 표기할지 여부.
+- 3스테이지 밸런스와 생성 몬스터/배경 에셋의 상업 사용권/최종 승인 미완료를 공개 빌드의 알려진 제한으로 표기할지 여부.
 
 ## Cloudflare 설정 전 필요한 것
 

@@ -39,7 +39,23 @@ type MonsterPassiveId =
     | 'PASSIVE_DOPPELGANGER_AFTERIMAGE'
     | 'PASSIVE_UNPLEASANTCUBE_BIND'
     | 'PASSIVE_SUBJECT162_DISGUST'
-    | 'PASSIVE_CHIMERA_SAW_TEETH';
+    | 'PASSIVE_CHIMERA_SAW_TEETH'
+    | 'PASSIVE_AMPLIFIER_RUPTURE_SOUND'
+    | 'PASSIVE_AMPLIFIER_BROAD_INTERFERENCE'
+    | 'PASSIVE_AMPLIFIER_COLLAPSE_VIBRATION'
+    | 'PASSIVE_CULTIVATOR_BUTCHER_INSTINCT'
+    | 'PASSIVE_CULTIVATOR_FRESH_MEAT'
+    | 'PASSIVE_CULTIVATOR_HOOK_RETRIEVAL'
+    | 'PASSIVE_OBSERVER_VOID_GAZE'
+    | 'PASSIVE_OBSERVER_MENTAL_COLLAPSE'
+    | 'PASSIVE_OBSERVER_ABYSS_ECHO'
+    | 'PASSIVE_APOSTLE_ADAPTIVE_EVOLUTION'
+    | 'PASSIVE_APOSTLE_FLESH_REFLECTION'
+    | 'PASSIVE_APOSTLE_TWISTED_REGENERATION'
+    | 'PASSIVE_CHOIR_ECHO_MULTIPLICATION'
+    | 'PASSIVE_CHOIR_UNHOLY_HYMN'
+    | 'PASSIVE_CHOIR_DOOM_FORETELLING'
+    | 'PASSIVE_CHOIR_ECLIPSE_PHENOMENON';
 
 
 // --- HELPER FUNCTIONS ---
@@ -57,6 +73,18 @@ const hasUnlockedPassive = (state: GameStoreDraft | undefined, passiveId: string
 
 const getStatusValue = (character: Character, type: StatusEffectType): number => (
     character.statusEffects[type] || 0
+);
+
+const getTotalDebuffStacks = (character: Character): number => (
+    [
+        StatusEffectType.CURSE,
+        StatusEffectType.SEAL,
+        StatusEffectType.RESONANCE,
+        StatusEffectType.MARK,
+        StatusEffectType.BLEED,
+        StatusEffectType.SHATTER,
+        StatusEffectType.PURSUIT,
+    ].reduce((total, type) => total + getStatusValue(character, type), 0)
 );
 
 const getAmplifyLimit = (state: GameStoreDraft | undefined, target: Character): number => (
@@ -288,6 +316,36 @@ const applyDamage = (caster: Character, target: Character, damage: number, log: 
           log(`${caster.name}의 증폭 효과로 피해량이 ${ampBonus} 증가!`, 'status');
       }
 
+      if (hasMonsterPassive(caster, 'PASSIVE_CULTIVATOR_FRESH_MEAT') && getStatusValue(target, StatusEffectType.BLEED) > 0) {
+          totalDamage += 2;
+          log(`[신선한 고기] ${caster.name}이(가) 출혈 중인 대상을 더 깊게 가릅니다.`, 'status');
+      }
+
+      if (hasMonsterPassive(caster, 'PASSIVE_OBSERVER_MENTAL_COLLAPSE') && getStatusValue(target, StatusEffectType.SEAL) > 0) {
+          totalDamage += 4;
+          log(`[정신 붕괴] ${caster.name}이(가) 봉인된 정신을 파고듭니다.`, 'status');
+      }
+
+      if (hasMonsterPassive(caster, 'PASSIVE_APOSTLE_FLESH_REFLECTION') && getStatusValue(caster, StatusEffectType.COUNTER) >= 5) {
+          totalDamage += 5;
+          log(`[육체 반사] ${caster.name}의 반격 태세가 공격을 강화합니다.`, 'status');
+      }
+
+      if (hasMonsterPassive(caster, 'PASSIVE_CHOIR_UNHOLY_HYMN') && getStatusValue(target, StatusEffectType.SEAL) > 0) {
+          totalDamage += 5;
+          log(`[부정 찬가] ${caster.name}이(가) 봉인된 대상을 찢습니다.`, 'status');
+      }
+
+      if (hasMonsterPassive(caster, 'PASSIVE_CHOIR_DOOM_FORETELLING') && getTotalDebuffStacks(target) >= 10) {
+          totalDamage = Math.ceil(totalDamage * 1.5);
+          log(`[종말 예고] 누적 디버프가 한계에 닿아 피해가 증폭됩니다.`, 'status');
+      }
+
+      if (hasMonsterPassive(caster, 'PASSIVE_AMPLIFIER_COLLAPSE_VIBRATION') && getStatusValue(caster, StatusEffectType.AMPLIFY) >= getAmplifyLimit(state, caster)) {
+          totalDamage += 5;
+          log(`[붕괴 진동] 최대 증폭이 공격에 추가 충격을 싣습니다.`, 'status');
+      }
+
       const sealStacks = caster.statusEffects.SEAL || 0;
       if (sealStacks > 0) {
           const reduction = Math.floor(totalDamage * (sealStacks * 0.15));
@@ -349,6 +407,16 @@ const applyDamage = (caster: Character, target: Character, damage: number, log: 
         const brokeDefense = !options.isFixed && originalTargetDefense > 0 && totalDamage > targetDefense;
         if ('class' in caster && target === state.enemy && brokeDefense && hasUnlockedPassive(state, 'TANK_P_ABSORB_DEFENSE')) {
             pushDefenseGain(caster, 3, log, allEffects, `[방어 흡수] 상대 방어를 뚫고 방어 3을 얻습니다.`);
+        }
+
+        if (hasMonsterPassive(target, 'PASSIVE_APOSTLE_ADAPTIVE_EVOLUTION')) {
+            target.temporaryEffects = target.temporaryEffects || {};
+            const triggerCount = Number(target.temporaryEffects.adaptiveEvolutionTriggers?.value ?? 0);
+            if (triggerCount < 3) {
+                target.temporaryEffects.adaptiveEvolutionTriggers = { value: triggerCount + 1, duration: 999 };
+                allEffects.push(...applyAndLogStatus(target, StatusEffectType.AMPLIFY, 1, log, state, caster));
+                log(`[적응 진화] ${target.name}이(가) 피해에 적응해 증폭을 얻습니다.`, 'status');
+            }
         }
 
         // 3. On Damage Taken effects
@@ -451,6 +519,37 @@ const applyMonsterStatePassives = (caster: Character, target: Character, effect:
         allEffects.push(...applyAndLogStatus(target, StatusEffectType.CURSE, -curseAmount, log, state, caster));
         allEffects.push(...applyAndLogStatus(target, StatusEffectType.SEAL, 5, log, state, caster));
         log(`[혐오 유발] ${caster.name}의 저주가 봉인으로 전환됩니다.`, 'status');
+    }
+
+    if (effectHasAttack && hasMonsterPassive(caster, 'PASSIVE_AMPLIFIER_RUPTURE_SOUND') && getStatusValue(caster, StatusEffectType.AMPLIFY) >= 5) {
+        allEffects.push(...applyAndLogStatus(target, StatusEffectType.RESONANCE, 2, log, state, caster));
+        log(`[파열 음파] ${caster.name}의 증폭음이 공명으로 남습니다.`, 'status');
+    }
+
+    if (effectHasAttack && hasMonsterPassive(caster, 'PASSIVE_CULTIVATOR_BUTCHER_INSTINCT') && getStatusValue(target, StatusEffectType.MARK) >= 4) {
+        allEffects.push(...applyAndLogStatus(target, StatusEffectType.BLEED, 2, log, state, caster));
+        log(`[도축 본능] ${caster.name}이(가) 깊은 표식을 출혈로 벌립니다.`, 'status');
+    }
+
+    if (effect.multiHit && effect.multiHit.count >= 2 && hasMonsterPassive(caster, 'PASSIVE_CULTIVATOR_HOOK_RETRIEVAL')) {
+        allEffects.push(...applyAndLogStatus(target, StatusEffectType.MARK, 1, log, state, caster));
+        log(`[갈고리 회수] ${caster.name}의 연속 공격이 표식을 남깁니다.`, 'status');
+    }
+
+    if (hasMonsterPassive(caster, 'PASSIVE_OBSERVER_VOID_GAZE') && getStatusValue(target, StatusEffectType.CURSE) >= 4) {
+        allEffects.push(...applyAndLogStatus(target, StatusEffectType.SEAL, 1, log, state, caster));
+        log(`[공허 주시] ${caster.name}의 시선이 저주를 봉인으로 조입니다.`, 'status');
+    }
+
+    if (hasMonsterPassive(caster, 'PASSIVE_OBSERVER_ABYSS_ECHO') && getStatusValue(target, StatusEffectType.SEAL) > 0) {
+        const curseEcho = Math.min(3, getStatusValue(target, StatusEffectType.SEAL));
+        allEffects.push(...applyAndLogStatus(target, StatusEffectType.CURSE, curseEcho, log, state, caster));
+        log(`[심연 메아리] 봉인된 감각만큼 저주가 되돌아옵니다.`, 'status');
+    }
+
+    if (effectHasAttack && hasMonsterPassive(caster, 'PASSIVE_CHOIR_ECLIPSE_PHENOMENON') && caster.currentHp <= caster.maxHp * 0.5) {
+        allEffects.push(...applyAndLogStatus(target, StatusEffectType.RESONANCE, 2, log, state, caster));
+        log(`[월식 현상] ${caster.name}의 합창이 모든 공격에 공명을 싣습니다.`, 'status');
     }
 
     return allEffects;
@@ -922,6 +1021,18 @@ export const processStartOfTurn = (character: Character, opponent: Character, lo
             log(`[공명] ${character.name}에게 누적 공명 ${resonance}이(가) 폭발합니다.`, 'status');
             const { damageDealt, effects } = applyDamage(character, character, resonance, log, state, { isFixed: true, ignoreDefense: true, isCurse: true });
             allEffects.push(...effects);
+            if (character === state.player && state.enemy && hasMonsterPassive(state.enemy, 'PASSIVE_AMPLIFIER_BROAD_INTERFERENCE')) {
+                const defenseBreak = Math.min(3, character.temporaryDefense);
+                if (defenseBreak > 0) {
+                    character.temporaryDefense -= defenseBreak;
+                    log(`[광역 간섭] 공명 폭발이 방어 ${defenseBreak}을 무너뜨립니다.`, 'status');
+                    allEffects.push({ type: 'defense', target: 'player', data: { amount: -defenseBreak } });
+                }
+            }
+            if (character === state.player && state.enemy && hasMonsterPassive(state.enemy, 'PASSIVE_CHOIR_ECHO_MULTIPLICATION')) {
+                allEffects.push(...applyAndLogStatus(character, StatusEffectType.CURSE, 2, log, state, state.enemy));
+                log(`[메아리 증식] 공명 폭발 뒤에 저주가 따라붙습니다.`, 'status');
+            }
             if (character === state.enemy && state.player && state.unlockedPatterns.includes('WARRIOR_PASSIVE_RESONANCE_HEAL')) {
                 allEffects.push(...applyHeal(state.player, Math.floor(damageDealt * 0.2), log));
             }
@@ -1036,6 +1147,11 @@ const processCharacterEndOfTurn = (character: Character, opponent: Character, lo
         allEffects.push(...applyAndLogStatus(character, StatusEffectType.SEAL, -1, log, state, character));
     }
 
+    if (hasMonsterPassive(character, 'PASSIVE_APOSTLE_TWISTED_REGENERATION') && character.currentHp > 0 && character.currentHp <= character.maxHp * 0.5) {
+        allEffects.push(...applyHeal(character, 5, log));
+        log(`[비틀린 재생] ${character.name}의 조직이 다시 붙습니다.`, 'heal');
+    }
+
     if (character.temporaryEffects) {
         for (const key in character.temporaryEffects) {
             const effect = character.temporaryEffects[key];
@@ -1089,6 +1205,7 @@ export const setupNextTurn = (state: GameStoreDraft) => {
     if (enemy.temporaryEffects) {
         enemy.temporaryEffects.damageDealtThisTurn = 0;
         enemy.temporaryEffects.damageTakenThisTurn = 0;
+        delete enemy.temporaryEffects.adaptiveEvolutionTriggers;
     }
 
     enemy.coins = generateCoins();

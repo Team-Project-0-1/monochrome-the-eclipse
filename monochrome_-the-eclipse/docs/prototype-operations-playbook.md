@@ -1,6 +1,6 @@
 # Prototype Operations Playbook
 
-Last updated: 2026-05-01
+Last updated: 2026-05-18
 
 This playbook defines how to publish and operate `Monochrome: The Eclipse` as a prototype/portfolio release.
 
@@ -13,12 +13,12 @@ Keep the public build stable, honest, and easy to review. The release should sho
 Use:
 - `Prototype v0.1`
 - `무료 공개 프로토타입`
-- `1-2층 공개 / 3층 기획 중`
+- `1-3층 공개 프로토타입`
 
 Avoid:
 - `full release`
 - `complete game`
-- paid-store language that implies all 3 stages and ending content are finished
+- paid-store language that implies final balance, final art, commercial rights, or 1.0 completion
 
 ## Pre-Release Checklist
 
@@ -31,7 +31,7 @@ npm run prototype:check
 Before publishing, confirm:
 - The build label is visible on the menu.
 - The metadata and manifest describe the project as a prototype.
-- Stage 3 is locked, not silently broken.
+- Stage 3 playable content and strict content checks are current.
 - `docs/prototype-product-brief.md` is current.
 - `docs/prototype-operations-playbook.md` is current.
 - `../docs/release-direction-criteria.md` is current.
@@ -85,14 +85,14 @@ Minimum flow:
 - Select a pattern and execute a turn.
 - Claim a reward after combat.
 - Visit at least one event, shop, or rest state.
-- Confirm Stage 3 is not presented as completed content.
+- Reach or shortcut-test Stage 3 and confirm the boss reward/victory path works.
 
 Record:
 - URL tested.
 - Date and browser.
 - Viewport size.
 - Any console errors.
-- Screenshot of menu, combat, reward, and stage clear/locked state if reached.
+- Screenshot of menu, combat, reward, Stage 3 boss reward, and victory state if reached.
 
 ## Monitoring
 
@@ -165,4 +165,4 @@ Codex should not decide these alone:
 - analytics provider and privacy copy
 - commercial asset approval
 - whether to charge money
-- whether Stage 3 can remain locked in the public build
+- whether Stage 3 prototype scope is sufficient for the public build

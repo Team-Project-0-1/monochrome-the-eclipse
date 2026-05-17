@@ -1,83 +1,65 @@
 # Stage 3 Content Brief
 
-Last updated: 2026-05-13
-Source: Google Drive `기획서` (`1Ta50Zudk34_6qBi4sP3TjQVoPq7Su8cnQpqUBsXRbf8`, viewed 2026-05-13)
+Last updated: 2026-05-18
+Primary source: Google Drive `몬스터 컨셉` (`1xqQ_aFtUzEnwangtwOhpGUdFg83zhx3M4G0c-Kcj9XI`, viewed 2026-05-18)
 
-## Current Prototype Boundary
+## Prototype Boundary
 
-Prototype v0.1 publicly covers Stage 1 and Stage 2. Stage 3 content is documented for planning only and remains locked until concrete encounter data exists.
-
-Approved public copy:
+Prototype v0.1 now publicly covers Stage 1 through Stage 3. The correct public framing is:
 
 ```text
-1-2층 공개 / 3층 기획 중
+1-3층 공개 프로토타입 / 최종 밸런스와 상업 권리 검토는 별도
 ```
 
-Avoid public copy that says or implies:
+Avoid copy that says or implies:
 
 ```text
-3스테이지 플레이 가능
-완성된 3막
-최종 보스 구현
-엔딩 포함
+상업판 1.0 완성
+모든 최종 에셋 확정
+밸런스 검증 완료
+유료 출시 준비 완료
 ```
 
 ## Gate Contract
 
 | Beat | Content contract | Current repo action |
 | --- | --- | --- |
-| Normal combat 1 | Introduce Stage 3 enemy pressure. | Not implemented. Requires monster table. |
-| Normal combat 2 | Increase pressure before boss. | Not implemented. Requires encounter table. |
-| Boss combat | Validate build and survival plan. | Not implemented. Requires boss identity and action table. |
-| Altar/reward | Offer growth or rest after boss. | Existing reward/rest systems can host this later. |
+| Normal combat | Stage 3 enemy pressure starts with 공명, 표식/출혈, 저주/봉인 archetypes. | `annihilationAmplifier`, `fleshCultivator`, `abyssObserver` added to `stageData[3].combatPool`. |
+| Miniboss | Mid-stage check combines 반격 and 증폭. | `apostleOfFlesh` added as Stage 3 miniboss. |
+| Boss combat | Final stage check combines 공명, 봉인, 저주, and total debuff punishment. | `eclipseChoir` added as Stage 3 boss with two phase priority sets. |
+| Exclusive events | Stage 3 route events should express 공명 중계, 장의 배양, 월식 성역 pressure without reusing common event scenes. | `event_stage3_resonance_relay`, `event_stage3_flesh_vat`, `event_stage3_eclipse_sanctuary` added to the Stage 3 event pool with generated backgrounds. |
+| Generated assets | Stage 3 monsters and backgrounds should not reuse Stage 1-2 visual assets. | Five monster portrait/spritesheet pairs and four Stage 3 backgrounds are connected under `public/assets/monsters/stage3-generated/` and `public/assets/backgrounds/`. |
+| Reward | Offer 3 `비기` options and let the player choose 1. | Boss reward screen returns `섬광 절단`, `무채 장막`, `공명핵`. |
+| Victory | The prototype run can conclude after Stage 3 boss reward. | Existing final-stage victory flow now triggers after `eclipseChoir`. |
 
-Gate 3 should target 8 total enemies and a field maximum of 3 when encounter data is authored.
+The source still lists Gate 3 pressure as 8 total enemies and field maximum 3. The current prototype engine supports one enemy at a time, so those values are tracked in the content template as pressure targets rather than simultaneous combat implementation.
 
-## Boss Contract
+## Monster Implementation Notes
 
-The Stage 3 boss needs a concrete identity before implementation. Until then, the only locked requirements are structural:
+| Monster | Runtime patterns | Passives implemented |
+| --- | --- | --- |
+| 괴멸 증폭기 | `왜곡 송출`, `멸망 공명`, `증폭 방송` | `파열 음파`, `광역 간섭`, `붕괴 진동` |
+| 장의 사육자 | `도축 갈고리`, `살점 뜯기`, `사육 준비` | `도축 본능`, `신선한 고기`, `갈고리 회수` |
+| 심연 관측체 | `응시`, `정신 침식`, `닫힌 눈` | `공허 주시`, `정신 붕괴`, `심연 메아리` |
+| 성육의 사도 | `육편 난타`, `진화 압살`, `재생 조직`, `불완전 탈피` | `적응 진화`, `육체 반사`, `비틀린 재생` |
+| 월식의 성가대 | `불협 화음`, `침식 합장`, `붕괴 성가`, `월식 개막`, `침묵의 기도`, `검은 성역` | `메아리 증식`, `부정 찬가`, `종말 예고`, `월식 현상` |
 
-- It appears after two normal combat beats in the gate.
-- It uses the same one-turn, one-action-bundle enemy rule.
-- Its next action must be readable before the player commits.
-- Its HUD presentation must expose action icon, action color, target/range label, and danger emphasis.
-- It should be strong enough to justify the `비기` reward, but not described publicly as implemented.
+## Validation
 
-## Reward Contract
+The Stage 3 input surface is `content/stage3/stage3-content-template.json`.
 
-The source document assigns Gate 3 boss victory to `비기` selection.
+Validation rules:
 
-| Reward | Rule |
-| --- | --- |
-| `비기` draft | Show 3 options and let the player choose 1. |
-| Role | Utility tool that helps solve crisis turns. |
-| Timing | Granted after boss victory at the altar/growth step. |
-| Prototype status | Documented only. Do not show as a current public Stage 3 feature. |
+- No `__STAGE3_TBD__` marker may remain.
+- Source document must be `몬스터 컨셉`.
+- Stage 3 runtime keys must be present in `dataMonsters.ts`.
+- Stage 3 runtime pools must be present in `dataStages.ts`.
+- Stage 3 event IDs and generated background paths must be present in `dataEvents.ts` and `utils/eventScenes.ts`.
+- Stage 3 generated monster/background PNG files must exist in `public/assets`.
+- `secretTechniqueRewardTemplates` must contain exactly 3 ready options.
 
-## Data Needed Before Implementation
+Run:
 
-- Stage 3 normal monster IDs, stats, patterns, and passives.
-- Stage 3 boss ID, phase rules, patterns, passives, and danger intent thresholds.
-- Stage 3 event pool if the route system continues to use event nodes.
-- `비기` option IDs, effects, one-per-combat or passive usage rules, and reward copy.
-- Balance targets for enemy HP/attack growth from Stage 2 into Stage 3.
-
-## Implementation Input Scaffold
-
-The repo now carries a locked input template at `content/stage3/stage3-content-template.json`.
-
-TBD marking rule:
-
-- Do not use empty strings, zeroes, or placeholder names for unknown content.
-- Use a `__stage3_tbd__` object with `expectedType`, `sourceNeeded`, and `owner`.
-- Replace the whole TBD object with the final value when the source table arrives.
-- Keep Stage 3 runtime pools empty until `npm run check:stage3-content -- --strict` passes.
-
-Validation:
-
-```bash
-npm run check:stage3-content
+```powershell
 npm run check:stage3-content -- --strict
 ```
-
-The non-strict check confirms the scaffold shape, Gate 3 numbers, 3-option `비기` reward contract, locked `dataStages.ts` state, and public-copy guardrails. Strict mode additionally fails on any remaining TBD marker.

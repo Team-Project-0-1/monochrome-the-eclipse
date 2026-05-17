@@ -46,7 +46,7 @@ requireText('index.html title/metadata', indexHtml, /Prototype v0\.1|프로토�
 requireText('manifest description', manifest, /Prototype|프로토타입/i);
 requireText('public/_headers security policy', headers, /Content-Security-Policy:/i);
 requireText('public/_headers immutable cache', headers, /Cache-Control:\s*public,\s*max-age=31536000,\s*immutable/i);
-requireText('dataStages Stage 3 lock', dataStages, /3:\s*\{[\s\S]*combatPool:\s*\[\][\s\S]*boss:\s*''/);
+requireText('dataStages Stage 3 playable pool', dataStages, /3:\s*\{[\s\S]*combatPool:\s*\[[\s\S]*annihilationAmplifier[\s\S]*fleshCultivator[\s\S]*abyssObserver[\s\S]*\][\s\S]*miniboss:\s*'apostleOfFlesh'[\s\S]*boss:\s*'eclipseChoir'/);
 requireText('prototype product brief', productBrief, /Prototype v0\.1|포트폴리오/i);
 requireText('prototype operations playbook', opsPlaybook, /운영|rollback|롤백/i);
 requireText('release direction criteria', directionCriteria, /무료 공개 프로토타입/);

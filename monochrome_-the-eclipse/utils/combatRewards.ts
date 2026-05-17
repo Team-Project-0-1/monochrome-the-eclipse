@@ -16,6 +16,7 @@ export interface CombatRewardChoice {
   };
   skillId?: string;
   passiveId?: string;
+  secretTechniqueId?: string;
 }
 
 const getSkillDraftChoices = (
@@ -65,11 +66,39 @@ const getPassiveDraftChoices = (
     }));
 };
 
+const createStage3SecretTechniqueChoices = (): CombatRewardChoice[] => [
+  {
+    id: 'stage3_secret_technique_flash',
+    label: '비기: 섬광 절단',
+    description: '월식의 합창을 끊어내는 공격형 비기입니다. 최종 보상 선택에서 에코와 행운 동전을 확보합니다.',
+    rewards: { echoRemnants: 42, senseFragments: 2, reserveCoin: true },
+    secretTechniqueId: 'stage3_secret_technique_flash',
+  },
+  {
+    id: 'stage3_secret_technique_veil',
+    label: '비기: 무채 장막',
+    description: '봉인과 저주 압박을 버틴 방어형 비기입니다. 다음 빌드 연구에 필요한 기억 조각을 더 많이 확보합니다.',
+    rewards: { echoRemnants: 28, memoryPieces: 5, reserveCoin: true },
+    secretTechniqueId: 'stage3_secret_technique_veil',
+  },
+  {
+    id: 'stage3_secret_technique_resonance_core',
+    label: '비기: 공명핵',
+    description: '공명 폭발을 역이용한 성장형 비기입니다. 감각과 기억 자원을 균형 있게 확보합니다.',
+    rewards: { echoRemnants: 34, senseFragments: 4, memoryPieces: 3 },
+    secretTechniqueId: 'stage3_secret_technique_resonance_core',
+  },
+];
+
 export const createCombatRewardChoices = (
   enemy: EnemyCharacter,
   player: PlayerCharacter | null,
   unlockedPatterns: string[] = [],
 ): CombatRewardChoice[] => {
+  if (enemy.key === 'eclipseChoir') {
+    return createStage3SecretTechniqueChoices();
+  }
+
   const isElite = enemy.tier === 'miniboss';
   const isBoss = enemy.tier === 'boss';
 

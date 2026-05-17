@@ -11,7 +11,7 @@ export const BOSS_TURN = 15;
 export const MAX_SKILLS = 12;
 export const MAX_RESERVE_COINS = 7;
 export const APP_RELEASE_LABEL = 'Prototype v0.1';
-export const APP_RELEASE_SCOPE = '1-2층 공개 / 3층 기획 중';
+export const APP_RELEASE_SCOPE = '1-3층 공개 프로토타입';
 
 export const MEMORY_UPGRADE_DATA: { [key in MemoryUpgradeType]: MemoryUpgradeDataDefinition } = {
   maxHp: {
