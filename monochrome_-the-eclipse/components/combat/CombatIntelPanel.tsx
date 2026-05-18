@@ -153,6 +153,12 @@ export const CombatIntelBar: React.FC<CombatIntelBarProps> = ({
   const damageToPlayer = prediction?.damageToPlayer ?? 0;
   const currentIntent = intent?.description ?? '대기';
   const nextCue = getCombatNextCue(player, enemy, selectedPatterns, prediction);
+  const selectedAbilityNames = selectedPatterns
+    .slice(0, 2)
+    .map(pattern => getPlayerAbility(player.class, player.acquiredSkills, pattern.type, pattern.face).name);
+  const playerStatusRows = getStatusRows(player).slice(0, 3);
+  const enemyStatusRows = getStatusRows(enemy).slice(0, 2);
+  const passiveCount = (characterData[player.class]?.innatePassives?.length ?? 0) + unlockedPatterns.length;
 
   const toggleView = (view: CombatIntelView) => {
     if (activeView === view) {
@@ -177,6 +183,25 @@ export const CombatIntelBar: React.FC<CombatIntelBarProps> = ({
         <div className="combat-intel-snapshot is-wide">
           <span>적 예고</span>
           <b>{enemyPatternLabel ?? currentIntent}</b>
+        </div>
+        <div className="combat-synergy-strip" aria-label="active status and pattern synergy">
+          <span className="combat-synergy-passive">
+            <b>패시브</b>
+            <em>{passiveCount}</em>
+          </span>
+          {playerStatusRows.map(row => (
+            <span key={`player-${row.key}`} className="combat-synergy-token player">
+              <b>{statusLabels[row.key] ?? row.key}</b>
+              <em>{row.value}</em>
+            </span>
+          ))}
+          {enemyStatusRows.map(row => (
+            <span key={`enemy-${row.key}`} className="combat-synergy-token enemy">
+              <b>{statusLabels[row.key] ?? row.key}</b>
+              <em>{row.value}</em>
+            </span>
+          ))}
+          <strong>{selectedAbilityNames.length > 0 ? selectedAbilityNames.join(' + ') : `사용 가능 족보 ${detectedPatterns.length}`}</strong>
         </div>
         <div className="combat-intel-buttons">
           <button type="button" className={activeView === 'player' ? 'is-active' : ''} onClick={() => toggleView('player')}>

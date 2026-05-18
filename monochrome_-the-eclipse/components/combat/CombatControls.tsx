@@ -78,6 +78,16 @@ export const PatternRail: React.FC<PatternRailProps> = ({
   const groups = usePatternGroups(patterns);
   const selectedIds = useMemo(() => new Set(selectedPatterns.map(pattern => pattern.id)), [selectedPatterns]);
   const selectedUsedIndices = useMemo(() => new Set(selectedPatterns.flatMap(pattern => pattern.indices)), [selectedPatterns]);
+  const [inspectedPatternKey, setInspectedPatternKey] = React.useState<string | null>(null);
+  const inspectionTimer = React.useRef<number | null>(null);
+  const suppressNextClick = React.useRef(false);
+
+  const clearInspectionTimer = () => {
+    if (inspectionTimer.current !== null) {
+      window.clearTimeout(inspectionTimer.current);
+      inspectionTimer.current = null;
+    }
+  };
 
   if (groups.length === 0) {
     return (
@@ -90,6 +100,7 @@ export const PatternRail: React.FC<PatternRailProps> = ({
   return (
     <div className="combat-pattern-rail" aria-label="available patterns">
       {groups.map(group => {
+        const groupKey = `${group.type}-${group.face ?? 'none'}`;
         const selectedCount = selectedPatterns.filter(pattern => pattern.type === group.type && pattern.face === group.face).length;
         const isAvailable = group.patterns.some(pattern => (
           !selectedIds.has(pattern.id) &&
@@ -100,15 +111,41 @@ export const PatternRail: React.FC<PatternRailProps> = ({
         const summary = summarizeAbility(ability);
         const selectedClass = selectedCount > 0 ? 'is-selected' : '';
         const cappedClass = selectedCount >= 2 || (selectedCount > 0 && !isAvailable) ? 'is-capped' : '';
+        const detailId = `combat-pattern-detail-${groupKey}`;
+        const isInspecting = inspectedPatternKey === groupKey;
 
         return (
           <button
-            key={`${group.type}-${group.face ?? 'none'}`}
+            key={groupKey}
             type="button"
             className={`combat-pattern-chip ${faceClass(group.face)} ${selectedClass} ${cappedClass}`}
             disabled={disabled}
             aria-pressed={selectedCount > 0}
-            onClick={() => onToggle(group.type, group.face)}
+            aria-describedby={detailId}
+            onClick={(event) => {
+              if (suppressNextClick.current) {
+                event.preventDefault();
+                suppressNextClick.current = false;
+                return;
+              }
+
+              onToggle(group.type, group.face);
+            }}
+            onMouseEnter={() => setInspectedPatternKey(groupKey)}
+            onMouseLeave={() => setInspectedPatternKey(current => current === groupKey ? null : current)}
+            onFocus={() => setInspectedPatternKey(groupKey)}
+            onBlur={() => setInspectedPatternKey(current => current === groupKey ? null : current)}
+            onPointerDown={(event) => {
+              if (event.pointerType === 'mouse') return;
+              clearInspectionTimer();
+              suppressNextClick.current = false;
+              inspectionTimer.current = window.setTimeout(() => {
+                suppressNextClick.current = true;
+                setInspectedPatternKey(groupKey);
+              }, 420);
+            }}
+            onPointerUp={clearInspectionTimer}
+            onPointerCancel={clearInspectionTimer}
             title={ability.description}
             data-testid={`combat-pattern-${group.type.toLowerCase()}-${group.face?.toLowerCase() ?? 'mixed'}`}
           >
@@ -133,6 +170,11 @@ export const PatternRail: React.FC<PatternRailProps> = ({
               <strong>{ability.name}</strong>
               <span>{selectedCount > 0 ? `선택 ${selectedCount}` : `후보 ${group.patterns.length}`}</span>
             </span>
+            <span id={detailId} className={`combat-pattern-detail ${isInspecting ? 'is-open' : ''}`} role="tooltip">
+              <span>상세 효과</span>
+              <strong>{ability.name}</strong>
+              <em>{summary.detail}</em>
+            </span>
           </button>
         );
       })}
@@ -149,17 +191,51 @@ interface ActiveSkillPillProps {
 
 export const ActiveSkillPill: React.FC<ActiveSkillPillProps> = ({ player, disabled, onClick }) => {
   const skill = characterActiveSkills[player.class];
+  const [showDetail, setShowDetail] = React.useState(false);
+  const detailTimer = React.useRef<number | null>(null);
+  const suppressNextClick = React.useRef(false);
   if (!skill) return null;
 
   const onCooldown = player.activeSkillCooldown > 0;
   const isDisabled = disabled || onCooldown;
+  const summary = summarizeAbility(skill);
+
+  const clearDetailTimer = () => {
+    if (detailTimer.current !== null) {
+      window.clearTimeout(detailTimer.current);
+      detailTimer.current = null;
+    }
+  };
 
   return (
     <button
       type="button"
       className="combat-active-skill"
       disabled={isDisabled}
-      onClick={onClick}
+      onClick={(event) => {
+        if (suppressNextClick.current) {
+          event.preventDefault();
+          suppressNextClick.current = false;
+          return;
+        }
+
+        onClick();
+      }}
+      onMouseEnter={() => setShowDetail(true)}
+      onMouseLeave={() => setShowDetail(false)}
+      onFocus={() => setShowDetail(true)}
+      onBlur={() => setShowDetail(false)}
+      onPointerDown={(event) => {
+        if (event.pointerType === 'mouse') return;
+        clearDetailTimer();
+        suppressNextClick.current = false;
+        detailTimer.current = window.setTimeout(() => {
+          suppressNextClick.current = true;
+          setShowDetail(true);
+        }, 420);
+      }}
+      onPointerUp={clearDetailTimer}
+      onPointerCancel={clearDetailTimer}
       title={skill.description}
     >
       <img
@@ -174,6 +250,11 @@ export const ActiveSkillPill: React.FC<ActiveSkillPillProps> = ({ player, disabl
         <EffectSummary text={skill.description} compact hideHeadline chipLimit={2} showCue cueLabel="용도" />
       </span>
       <b>{onCooldown ? `쿨 ${player.activeSkillCooldown}` : 'OK'}</b>
+      <span className={`combat-active-skill-detail ${showDetail ? 'is-open' : ''}`} role="tooltip">
+        <span>액티브 상세</span>
+        <strong>{skill.name}</strong>
+        <em>{summary.detail}</em>
+      </span>
     </button>
   );
 };

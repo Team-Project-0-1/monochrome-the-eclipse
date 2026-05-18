@@ -2,7 +2,7 @@ import { StateCreator } from 'zustand';
 import { produce } from 'immer';
 import { GameStore } from '../gameStore';
 import { StageNode, NodeType, EventDefinition, GameState, EnemyCharacter, CombatLogMessage, CharacterClass, CoinFace } from '../../types';
-import { detectPatterns, generateCoins, generateLoggedStageNodes } from '../../utils/gameLogic';
+import { detectPatterns, generateCoins, generateLoggedStageNodes, isRouteNodeAvailable } from '../../utils/gameLogic';
 import type { RouteGenerationLogEntry } from '../../utils/gameLogic';
 import { stageData } from '../../dataStages';
 import { eventData } from '../../dataEvents';
@@ -61,6 +61,11 @@ export const createExplorationSlice: StateCreator<GameStore, [], [], Exploration
   },
   selectNode: (node, nodeIndex) => {
     set(produce((draft: GameStore) => {
+        const currentNodes = draft.stageNodes[draft.currentTurn - 1] ?? [];
+        if (!isRouteNodeAvailable(draft.currentTurn, nodeIndex, draft.path, currentNodes.length)) {
+            return;
+        }
+
         draft.path.push({ turn: draft.currentTurn, nodeIndex, nodeId: node.id });
 
         switch (node.type) {

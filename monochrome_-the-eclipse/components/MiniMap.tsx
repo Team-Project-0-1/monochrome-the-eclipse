@@ -8,6 +8,7 @@ interface MiniMapProps {
   nodes: StageNode[][];
   currentTurn: number;
   path: { turn: number; nodeIndex: number; nodeId: string; }[];
+  availableNodeIndices?: number[];
 }
 
 const nodeTypeNames: { [key in NodeType]: string } = {
@@ -28,7 +29,7 @@ const MINI_MAP_VIEW = {
   nodeRowHeight: 9,
 };
 
-const MiniMap: React.FC<MiniMapProps> = ({ nodes, currentTurn, path }) => {
+const MiniMap: React.FC<MiniMapProps> = ({ nodes, currentTurn, path, availableNodeIndices = [] }) => {
   const turnCount = Math.max(1, nodes.length);
   const maxNodeRows = Math.max(1, ...nodes.map(turnNodes => turnNodes.length));
   const mapWidth = turnCount * MINI_MAP_VIEW.turnWidth;
@@ -127,6 +128,7 @@ const MiniMap: React.FC<MiniMapProps> = ({ nodes, currentTurn, path }) => {
                 </div>
                 {turnNodes.map((node, nodeIndex) => {
                   const visited = isVisited(path, node.id);
+                  const isAvailable = turnNumber !== currentTurn || availableNodeIndices.includes(nodeIndex);
                   const tooltipText = nodeTypeNames[node.type];
                   const point = getPoint(turnNumber, nodeIndex);
 
@@ -138,7 +140,9 @@ const MiniMap: React.FC<MiniMapProps> = ({ nodes, currentTurn, path }) => {
                         visited
                           ? 'border-green-500 bg-green-700'
                           : isCurrentTurn
-                            ? 'animate-pulse border-gray-500 bg-gray-700'
+                            ? isAvailable
+                              ? 'animate-pulse border-gray-500 bg-gray-700'
+                              : 'border-gray-700 bg-gray-950 opacity-35'
                             : 'border-gray-600 bg-gray-700'
                       }`}
                       style={{

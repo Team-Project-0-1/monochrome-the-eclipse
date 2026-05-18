@@ -10,17 +10,24 @@ import { playGameSfx, playUiSound } from '../utils/sound';
 
 interface NodeSelectionProps {
   nodes: StageNode[];
+  availableNodeIndices: number[];
   onSelect: (node: StageNode, index: number) => void;
   currentTurn: number;
   player?: PlayerCharacter | null;
 }
 
-const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, onSelect, currentTurn, player }) => {
+const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndices, onSelect, currentTurn, player }) => {
   const [selectedNode, setSelectedNode] = useState<StageNode | null>(null);
   const gameOptions = useGameStore(state => state.gameOptions);
+  const availableNodeSet = new Set(availableNodeIndices);
 
   const handleSelect = (node: StageNode, index: number) => {
     if (selectedNode) return;
+    if (!availableNodeSet.has(index)) {
+      playUiSound(gameOptions.soundEnabled, 'deny');
+      return;
+    }
+
     playUiSound(gameOptions.soundEnabled, 'confirm');
     playGameSfx(gameOptions.soundEnabled, [NodeType.COMBAT, NodeType.MINIBOSS, NodeType.BOSS].includes(node.type) ? 'combatStart' : 'eventChoice');
     setSelectedNode(node);
@@ -56,6 +63,7 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, onSelect, currentT
         {nodes.map((node, index) => {
           const meta = getNodePresentation(node, index, player);
           const isSelected = selectedNode?.id === node.id;
+          const isAvailable = availableNodeSet.has(index);
           const isDanger = [NodeType.COMBAT, NodeType.MINIBOSS, NodeType.BOSS].includes(node.type);
 
           return (
@@ -63,15 +71,18 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, onSelect, currentT
               key={node.id}
               type="button"
               onClick={() => handleSelect(node, index)}
-              disabled={selectedNode !== null}
+              disabled={selectedNode !== null || !isAvailable}
+              aria-disabled={!isAvailable}
+              data-route-available={isAvailable ? 'true' : 'false'}
               data-testid={`route-node-${index + 1}`}
               animate={isSelected ? { scale: 1.05, opacity: 0, y: -12 } : { scale: 1, opacity: 1, y: 0 }}
               transition={{ duration: 0.42, ease: 'easeInOut' }}
-              whileHover={selectedNode ? undefined : { y: -3 }}
-              className={`route-node-card group relative min-h-[230px] overflow-hidden rounded-lg border p-4 text-left shadow-lg transition-all duration-200 disabled:cursor-wait ${meta.className}`}
+              whileHover={selectedNode || !isAvailable ? undefined : { y: -3 }}
+              className={`route-node-card group relative min-h-[230px] overflow-hidden rounded-lg border p-4 text-left shadow-lg transition-all duration-200 ${!isAvailable ? 'is-route-locked' : ''} disabled:cursor-wait ${meta.className}`}
             >
               <div className={`absolute inset-x-4 top-0 h-px bg-gradient-to-r ${meta.lineClassName}`} />
               <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-white/10 blur-2xl transition-opacity group-hover:opacity-80" />
+              {!isAvailable ? <div className="route-node-lock-badge">경로 잠김</div> : null}
 
               <div className="relative flex h-full flex-col">
                 <div className="mb-4 flex items-start justify-between gap-3">

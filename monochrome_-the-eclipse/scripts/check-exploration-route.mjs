@@ -16,7 +16,7 @@ require.extensions['.ts'] = (module, filename) => {
   module._compile(outputText, filename);
 };
 
-const { generateLoggedStageNodes } = require('../utils/gameLogic.ts');
+const { generateLoggedStageNodes, getAvailableRouteNodeIndices, isRouteNodeAvailable } = require('../utils/gameLogic.ts');
 const { NodeType } = require('../types.ts');
 
 const fail = (message) => {
@@ -58,6 +58,21 @@ if (!first.stageNodes[14].every((node) => node.type === NodeType.BOSS && node.is
 
 if (first.routeGenerationLog.length < first.stageNodes.length * 3) {
   fail('route generation log is missing node decisions');
+}
+
+const openingChoices = getAvailableRouteNodeIndices(1, [], 3);
+if (openingChoices.join(',') !== '0,1,2') {
+  fail(`opening turn should expose all 3 choices, received ${openingChoices.join(',')}`);
+}
+
+const leftPath = [{ turn: 1, nodeIndex: 0, nodeId: first.stageNodes[0][0].id }];
+const leftConnected = getAvailableRouteNodeIndices(2, leftPath, 3);
+if (leftConnected.join(',') !== '0,1') {
+  fail(`left route should connect to nodes 1-2, received ${leftConnected.join(',')}`);
+}
+
+if (isRouteNodeAvailable(2, 2, leftPath, 3)) {
+  fail('route guard allowed a disconnected right-side node after choosing the left route');
 }
 
 console.log(`PASS exploration route generation check (${seed}, miniboss turn ${minibossTurn}, log entries ${first.routeGenerationLog.length})`);

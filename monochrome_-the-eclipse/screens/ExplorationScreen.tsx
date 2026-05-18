@@ -11,6 +11,7 @@ import ActionButton from '../components/ui/ActionButton';
 import { getNodeTypeCounts } from '../utils/nodePresentation';
 import { STAGE_TURNS } from '../constants';
 import { stageData } from '../dataStages';
+import { getAvailableRouteNodeIndices } from '../utils/gameLogic';
 
 const routePressureText = (counts: Record<string, number>) => {
   if ((counts[NodeType.BOSS] ?? 0) > 0) return '보스 신호가 열렸습니다. 지금 빌드가 이 층의 결론을 감당해야 합니다.';
@@ -35,6 +36,7 @@ export const ExplorationScreen = () => {
   const selectNode = useGameStore(state => state.selectNode);
 
   const currentNodes = stageNodes[currentTurn - 1] || [];
+  const availableNodeIndices = getAvailableRouteNodeIndices(currentTurn, path, currentNodes.length);
   const nodeCounts = getNodeTypeCounts(currentNodes);
   const progressPercent = Math.min(100, Math.round((currentTurn / STAGE_TURNS) * 100));
   const stageInfo = stageData[currentStage as keyof typeof stageData];
@@ -139,11 +141,17 @@ export const ExplorationScreen = () => {
           </Panel>
 
           <div className="flex flex-1 items-center">
-            <NodeSelection nodes={currentNodes} onSelect={(node, index) => selectNode(node, index)} currentTurn={currentTurn} player={player} />
+            <NodeSelection
+              nodes={currentNodes}
+              availableNodeIndices={availableNodeIndices}
+              onSelect={(node, index) => selectNode(node, index)}
+              currentTurn={currentTurn}
+              player={player}
+            />
           </div>
 
           <div className="exploration-footer grid gap-3 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
-            <MiniMap nodes={stageNodes} currentTurn={currentTurn} path={path} />
+            <MiniMap nodes={stageNodes} currentTurn={currentTurn} path={path} availableNodeIndices={availableNodeIndices} />
             <Panel className="exploration-route-read p-3" tone="gold">
               <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-yellow-100">
                 <Route className="h-4 w-4" />

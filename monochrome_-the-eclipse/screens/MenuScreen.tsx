@@ -27,6 +27,11 @@ export const MenuScreen = () => {
   const resetGame = useGameStore(state => state.resetGame);
   const player = useGameStore(state => state.player);
   const gameState = useGameStore(state => state.gameState);
+  const resumeGameState = useGameStore(state => state.resumeGameState);
+  const pendingCombatReward = useGameStore(state => state.pendingCombatReward);
+  const currentEvent = useGameStore(state => state.currentEvent);
+  const enemy = useGameStore(state => state.enemy);
+  const stageNodes = useGameStore(state => state.stageNodes);
   const currentStage = useGameStore(state => state.currentStage);
   const currentTurn = useGameStore(state => state.currentTurn);
   const gameOptions = useGameStore(state => state.gameOptions);
@@ -37,7 +42,15 @@ export const MenuScreen = () => {
     player &&
     player.currentHp > 0 &&
     gameState !== GameState.GAME_OVER &&
-    gameState !== GameState.VICTORY,
+    gameState !== GameState.VICTORY &&
+    (
+      resumeGameState === GameState.STAGE_CLEAR ||
+      resumeGameState === GameState.MEMORY_ALTAR ||
+      pendingCombatReward ||
+      currentEvent ||
+      (enemy && enemy.currentHp > 0) ||
+      stageNodes.length > 0
+    ),
   );
   const routeStatus = hasRun ? `${currentStage}층 / ${currentTurn}턴` : APP_RELEASE_SCOPE;
 

@@ -14,6 +14,7 @@ import { UiSlice, createUiSlice, initialGameOptions, initialTutorialFlags } from
 // --- TYPE DEFINITIONS ---
 export type GameStore = MetaSlice & PlayerSlice & ExplorationSlice & CombatSlice & EventSlice & UiSlice & {
   gameState: GameState;
+  resumeGameState: GameState | null;
   setGameState: (gameState: GameState) => void;
   startGame: () => void;
   continueRun: () => void;
@@ -23,6 +24,7 @@ export type GameStore = MetaSlice & PlayerSlice & ExplorationSlice & CombatSlice
 // --- INITIAL STATE FOR MAIN STORE ---
 const initialMainState = {
   gameState: GameState.MENU,
+  resumeGameState: null,
 };
 
 const hasPlayableCombatState = (state: Partial<GameStore>) => (
@@ -75,7 +77,8 @@ const normalizeHydratedState = (state: GameStore): GameStore => {
 
   if (normalized.pendingCombatReward) {
     clearHydratedPostCombatState(normalized);
-    normalized.gameState = GameState.REWARD;
+    normalized.gameState = GameState.MENU;
+    normalized.resumeGameState = GameState.REWARD;
     normalized.combatEffects = [];
     normalized.playerHit = 0;
     normalized.enemyHit = 0;
@@ -84,12 +87,14 @@ const normalizeHydratedState = (state: GameStore): GameStore => {
   }
 
   if (!normalized.player && normalized.gameState !== GameState.MENU) {
-    normalized.gameState = GameState.CHARACTER_SELECT;
+    normalized.gameState = GameState.MENU;
+    normalized.resumeGameState = null;
     return normalized;
   }
 
   if (normalized.player?.currentHp !== undefined && normalized.player.currentHp <= 0) {
-    normalized.gameState = GameState.GAME_OVER;
+    normalized.gameState = GameState.MENU;
+    normalized.resumeGameState = null;
     return normalized;
   }
 
@@ -101,6 +106,8 @@ const normalizeHydratedState = (state: GameStore): GameStore => {
     normalized.gameState = getResumeTarget(normalized);
   }
 
+  normalized.resumeGameState = normalized.gameState === GameState.MENU ? null : normalized.gameState;
+  normalized.gameState = GameState.MENU;
   return normalized;
 };
 
@@ -119,50 +126,50 @@ export const useGameStore = create<GameStore>()(
 
         // --- GLOBAL ACTIONS ---
         setGameState: (gameState) => set({ gameState }),
-        startGame: () => set({ gameState: GameState.CHARACTER_SELECT }),
+        startGame: () => set({ gameState: GameState.CHARACTER_SELECT, resumeGameState: null }),
         continueRun: () => {
             const state = get();
             if (!state.player) {
-                set({ gameState: GameState.CHARACTER_SELECT });
+                set({ gameState: GameState.CHARACTER_SELECT, resumeGameState: null });
                 return;
             }
 
             if (state.pendingCombatReward) {
-                set({ gameState: GameState.REWARD });
+                set({ gameState: GameState.REWARD, resumeGameState: null });
                 return;
             }
 
-            if (state.gameState === GameState.STAGE_CLEAR) {
-                set({ gameState: GameState.STAGE_CLEAR });
+            if (state.resumeGameState === GameState.STAGE_CLEAR) {
+                set({ gameState: GameState.STAGE_CLEAR, resumeGameState: null });
                 return;
             }
 
-            if (state.gameState === GameState.MEMORY_ALTAR) {
-                set({ gameState: GameState.MEMORY_ALTAR });
+            if (state.resumeGameState === GameState.MEMORY_ALTAR) {
+                set({ gameState: GameState.MEMORY_ALTAR, resumeGameState: null });
                 return;
             }
 
             if (state.currentEvent) {
-                set({ gameState: GameState.EVENT });
+                set({ gameState: GameState.EVENT, resumeGameState: null });
                 return;
             }
 
             if (state.enemy && state.enemy.currentHp > 0 && state.player.currentHp > 0) {
-                set({ gameState: GameState.COMBAT });
+                set({ gameState: GameState.COMBAT, resumeGameState: null });
                 return;
             }
 
             if (state.player.currentHp <= 0) {
-                set({ gameState: GameState.GAME_OVER });
+                set({ gameState: GameState.GAME_OVER, resumeGameState: null });
                 return;
             }
 
             if (state.stageNodes.length > 0) {
-                set({ gameState: GameState.EXPLORATION });
+                set({ gameState: GameState.EXPLORATION, resumeGameState: null });
                 return;
             }
 
-            set({ gameState: GameState.CHARACTER_SELECT });
+            set({ gameState: GameState.CHARACTER_SELECT, resumeGameState: null });
         },
 
         resetGame: (fullReset = false) => {
@@ -217,6 +224,7 @@ export const useGameStore = create<GameStore>()(
 
                 // main store reset
                 draft.gameState = GameState.MENU;
+                draft.resumeGameState = null;
 
                 // metaSlice (conditional reset)
                 draft.metaProgress = fullReset ? initialMetaProgress : currentMetaProgress;

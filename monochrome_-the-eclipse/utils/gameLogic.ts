@@ -13,6 +13,12 @@ export interface RouteGenerationLogEntry {
   roll?: number;
 }
 
+export interface RoutePathStep {
+  turn: number;
+  nodeIndex: number;
+  nodeId: string;
+}
+
 interface StageGenerationOptions {
   seed?: string | number;
   onLog?: (entry: RouteGenerationLogEntry) => void;
@@ -43,6 +49,44 @@ export const createRouteSeed = (stageNumber: number): string => (
 );
 
 const toLogRoll = (roll: number) => Math.round(roll * 1000) / 1000;
+
+export const getConnectedRouteNodeIndices = (previousNodeIndex: number, nodeCount = 3): number[] => {
+  if (nodeCount <= 0) return [];
+
+  const minIndex = Math.max(0, previousNodeIndex - 1);
+  const maxIndex = Math.min(nodeCount - 1, previousNodeIndex + 1);
+  const indices: number[] = [];
+
+  for (let index = minIndex; index <= maxIndex; index++) {
+    indices.push(index);
+  }
+
+  return indices;
+};
+
+export const getAvailableRouteNodeIndices = (
+  currentTurn: number,
+  path: RoutePathStep[],
+  nodeCount = 3,
+): number[] => {
+  if (nodeCount <= 0) return [];
+  if (currentTurn <= 1 || path.length === 0) {
+    return Array.from({ length: nodeCount }, (_, index) => index);
+  }
+
+  const previousStep =
+    [...path].reverse().find(step => step.turn === currentTurn - 1) ??
+    path[path.length - 1];
+
+  return getConnectedRouteNodeIndices(previousStep.nodeIndex, nodeCount);
+};
+
+export const isRouteNodeAvailable = (
+  currentTurn: number,
+  nodeIndex: number,
+  path: RoutePathStep[],
+  nodeCount = 3,
+) => getAvailableRouteNodeIndices(currentTurn, path, nodeCount).includes(nodeIndex);
 
 export const flipCoin = (headsChance: number = 0.5): CoinFace => Math.random() < headsChance ? CoinFace.HEADS : CoinFace.TAILS;
 
