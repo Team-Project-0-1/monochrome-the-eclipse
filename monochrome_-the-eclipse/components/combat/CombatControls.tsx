@@ -79,8 +79,32 @@ export const PatternRail: React.FC<PatternRailProps> = ({
   const selectedIds = useMemo(() => new Set(selectedPatterns.map(pattern => pattern.id)), [selectedPatterns]);
   const selectedUsedIndices = useMemo(() => new Set(selectedPatterns.flatMap(pattern => pattern.indices)), [selectedPatterns]);
   const [inspectedPatternKey, setInspectedPatternKey] = React.useState<string | null>(null);
+  const railRef = React.useRef<HTMLDivElement | null>(null);
   const inspectionTimer = React.useRef<number | null>(null);
   const suppressNextClick = React.useRef(false);
+  const selectedPatternDetails = useMemo(() => {
+    const seen = new Set<string>();
+    return selectedPatterns.flatMap(pattern => {
+      const key = `${pattern.type}-${pattern.face ?? 'mixed'}`;
+      if (seen.has(key)) return [];
+      seen.add(key);
+
+      const ability = getPlayerAbility(player.class, player.acquiredSkills, pattern.type, pattern.face);
+      return [{
+        key,
+        face: pattern.face,
+        label: `${patternLabels[pattern.type]} ${faceLabel(pattern.face)}`,
+        name: ability.name,
+        summary: summarizeAbility(ability),
+      }];
+    }).slice(0, 2);
+  }, [player.acquiredSkills, player.class, selectedPatterns]);
+
+  React.useEffect(() => {
+    if (selectedPatternDetails.length > 0) {
+      railRef.current?.scrollTo({ left: 0 });
+    }
+  }, [selectedPatternDetails.length]);
 
   const clearInspectionTimer = () => {
     if (inspectionTimer.current !== null) {
@@ -98,7 +122,29 @@ export const PatternRail: React.FC<PatternRailProps> = ({
   }
 
   return (
-    <div className="combat-pattern-rail" aria-label="available patterns">
+    <div ref={railRef} className="combat-pattern-rail" aria-label="available patterns">
+      {selectedPatternDetails.length > 0 ? (
+        <aside className="combat-selected-skill-panel" role="status" aria-live="polite">
+          <span className="combat-selected-skill-kicker">선택한 스킬</span>
+          {selectedPatternDetails.map(item => (
+            <div key={item.key} className={`combat-selected-skill-row ${faceClass(item.face)}`}>
+              <div className="combat-selected-skill-title">
+                <strong>{item.name}</strong>
+                <small>{item.label}</small>
+              </div>
+              <EffectSummary
+                summary={item.summary}
+                compact
+                chipLimit={4}
+                showCue
+                cueLabel="왜 좋나"
+                showDetail="details"
+                detailLabel="상세 효과"
+              />
+            </div>
+          ))}
+        </aside>
+      ) : null}
       {groups.map(group => {
         const groupKey = `${group.type}-${group.face ?? 'none'}`;
         const selectedCount = selectedPatterns.filter(pattern => pattern.type === group.type && pattern.face === group.face).length;
@@ -130,6 +176,7 @@ export const PatternRail: React.FC<PatternRailProps> = ({
               }
 
               onToggle(group.type, group.face);
+              setInspectedPatternKey(groupKey);
             }}
             onMouseEnter={() => setInspectedPatternKey(groupKey)}
             onMouseLeave={() => setInspectedPatternKey(current => current === groupKey ? null : current)}

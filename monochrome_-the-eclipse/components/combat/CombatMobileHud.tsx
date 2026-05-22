@@ -91,19 +91,9 @@ export const CombatMobileHud: React.FC<CombatMobileHudProps> = ({
   onExecuteTurn,
 }) => {
   const [patternsOpen, setPatternsOpen] = React.useState(false);
-  const previousSelectedCount = React.useRef(selectedPatterns.length);
-
-  React.useEffect(() => {
-    if (previousSelectedCount.current === 0 && selectedPatterns.length > 0) {
-      setPatternsOpen(false);
-    }
-
-    previousSelectedCount.current = selectedPatterns.length;
-  }, [selectedPatterns.length]);
 
   const handleTogglePattern = (type: PatternType, face?: CoinFace) => {
     onTogglePattern(type, face);
-    setPatternsOpen(false);
   };
 
   return (

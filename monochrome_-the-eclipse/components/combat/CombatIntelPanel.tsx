@@ -156,9 +156,26 @@ export const CombatIntelBar: React.FC<CombatIntelBarProps> = ({
   const selectedAbilityNames = selectedPatterns
     .slice(0, 2)
     .map(pattern => getPlayerAbility(player.class, player.acquiredSkills, pattern.type, pattern.face).name);
-  const playerStatusRows = getStatusRows(player).slice(0, 3);
-  const enemyStatusRows = getStatusRows(enemy).slice(0, 2);
+  const playerStatuses = getStatusRows(player);
+  const enemyStatuses = getStatusRows(enemy);
+  const playerStatusRows = playerStatuses.slice(0, 3);
+  const enemyStatusRows = enemyStatuses.slice(0, 2);
   const passiveCount = (characterData[player.class]?.innatePassives?.length ?? 0) + unlockedPatterns.length;
+  const innatePassive = characterData[player.class]?.innatePassives?.[0] ?? null;
+  const innatePassiveHeadline = innatePassive ? summarizeDescription(innatePassive).headline : null;
+  const activeStatusCount = playerStatuses.length + enemyStatuses.length;
+  const synergyHeadline = selectedAbilityNames.length > 0
+    ? `${selectedAbilityNames.join(' + ')} · 선택 효과 확인`
+    : [
+        innatePassiveHeadline ? `고유: ${innatePassiveHeadline}` : `패시브 ${passiveCount}`,
+        activeStatusCount > 0 ? `상태 ${activeStatusCount}개 작동` : `사용 가능 족보 ${detectedPatterns.length}`,
+      ].join(' · ');
+  const synergyTitle = [
+    innatePassive ? `고유 패시브: ${innatePassive}` : null,
+    activeStatusCount > 0
+      ? '상태 수치가 스킬 조건과 피해/방어에 연결됩니다.'
+      : '상태가 생기면 이 줄에 즉시 표시됩니다.',
+  ].filter(Boolean).join(' ');
 
   const toggleView = (view: CombatIntelView) => {
     if (activeView === view) {
@@ -184,24 +201,24 @@ export const CombatIntelBar: React.FC<CombatIntelBarProps> = ({
           <span>적 예고</span>
           <b>{enemyPatternLabel ?? currentIntent}</b>
         </div>
-        <div className="combat-synergy-strip" aria-label="active status and pattern synergy">
-          <span className="combat-synergy-passive">
+        <div className="combat-synergy-strip" aria-label="active status and pattern synergy" title={synergyTitle}>
+          <span className="combat-synergy-passive" title={innatePassive ?? '습득한 패시브와 고유 패시브 수'}>
             <b>패시브</b>
             <em>{passiveCount}</em>
           </span>
           {playerStatusRows.map(row => (
-            <span key={`player-${row.key}`} className="combat-synergy-token player">
+            <span key={`player-${row.key}`} className="combat-synergy-token player" title={`내 ${statusLabels[row.key] ?? row.key} ${row.value}`}>
               <b>{statusLabels[row.key] ?? row.key}</b>
               <em>{row.value}</em>
             </span>
           ))}
           {enemyStatusRows.map(row => (
-            <span key={`enemy-${row.key}`} className="combat-synergy-token enemy">
+            <span key={`enemy-${row.key}`} className="combat-synergy-token enemy" title={`적 ${statusLabels[row.key] ?? row.key} ${row.value}`}>
               <b>{statusLabels[row.key] ?? row.key}</b>
               <em>{row.value}</em>
             </span>
           ))}
-          <strong>{selectedAbilityNames.length > 0 ? selectedAbilityNames.join(' + ') : `사용 가능 족보 ${detectedPatterns.length}`}</strong>
+          <strong>{synergyHeadline}</strong>
         </div>
         <div className="combat-intel-buttons">
           <button type="button" className={activeView === 'player' ? 'is-active' : ''} onClick={() => toggleView('player')}>
@@ -218,7 +235,7 @@ export const CombatIntelBar: React.FC<CombatIntelBarProps> = ({
           </button>
           <button type="button" className={activeView === 'passives' ? 'is-active' : ''} onClick={() => toggleView('passives')}>
             <Sparkles size={15} />
-            <span>상태</span>
+            <span>패시브/상태</span>
           </button>
         </div>
       </nav>
@@ -462,6 +479,11 @@ const PassiveIntel: React.FC<{
     <div className="combat-intel-split">
       <section>
         <h3>내 상태와 패시브</h3>
+        <div className="combat-intel-note player-cue">
+          <span>연계 보기</span>
+          <b>패시브는 자동 적용되고, 상태 수치는 스킬 조건과 피해/방어에 연결됩니다.</b>
+          <small>족보 설명과 상태 아이콘의 같은 키워드를 맞춰 보면 됩니다.</small>
+        </div>
         <StatusStrip rows={playerStatuses} emptyText="적용 중인 내 상태 없음" />
         {innatePassives.map((description, index) => (
           <article key={`innate-${index}`} className="combat-intel-passive">
