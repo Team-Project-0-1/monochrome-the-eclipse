@@ -106,14 +106,9 @@ export const optimizedAssetPaths: Record<string, string> = {
   "assets/monsters/stage3-generated/stage3_flesh_cultivator_spritesheet.png": "assets/monsters/stage3-generated/stage3_flesh_cultivator_spritesheet.webp",
   "icon-192.png": "icon-192.webp",
   "icon-512.png": "icon-512.webp",
-  "mono.png": "mono.webp",
-  "sprites/characters/mage.png": "sprites/characters/mage.webp",
-  "sprites/characters/rogue.png": "sprites/characters/rogue.webp",
-  "sprites/characters/tank.png": "sprites/characters/tank.webp",
-  "sprites/characters/warrior.png": "sprites/characters/warrior.webp",
-  "sprites/monsters/001_looter1.png": "sprites/monsters/001_looter1.webp",
-  "sprites/monsters/002_looter2.png": "sprites/monsters/002_looter2.webp",
-  "sprites/monsters/003_wild_dog.png": "sprites/monsters/003_wild_dog.webp",
-  "sprites/monsters/004_looter_leader.png": "sprites/monsters/004_looter_leader.webp",
-  "sprites/monsters/005_lumen_reaper.png": "sprites/monsters/005_lumen_reaper.webp"
+  "mono.png": "mono.webp"
+  // 데드 항목 9개 제거 (sprites/characters/*, sprites/monsters/*)
+  //   - public/sprites/ 폴더가 어디서도 호출되지 않는 잔재였고, 함께 삭제됨.
+  //   - 정식 캐릭터/몬스터 스프라이트는 assets/characters/sprites/* 및 assets/monsters/sprites/* 의
+  //     transparent 변형을 사용한다 (dataCharacters.ts / dataMonsters.ts 참조).
 };
