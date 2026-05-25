@@ -120,7 +120,7 @@ export const createEventSlice: StateCreator<GameStore, [], [], EventSlice> = (se
           senseFragments: '감각 조각',
           memoryPieces: '기억 조각',
           curse: '저주',
-          reserveCoinsGained: '행운 동전',
+          reserveCoinsGained: '예비 동전',
         };
         const displayItems: { label: string; value: string | number; }[] = [];
 

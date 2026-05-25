@@ -20,7 +20,7 @@ const outcomeLabels: Record<string, string> = {
   damage: '피해',
   echoRemnants: '에코',
   memoryPieces: '기억',
-  reserveCoinsGained: '행운 동전',
+  reserveCoinsGained: '예비 동전',
   senseFragments: '감각',
 };
 

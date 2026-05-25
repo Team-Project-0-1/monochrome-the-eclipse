@@ -54,6 +54,11 @@ export const App: React.FC = () => {
     document.documentElement.dataset.highContrast = gameOptions.highContrast ? 'true' : 'false';
     document.documentElement.dataset.largeText = gameOptions.largeText ? 'true' : 'false';
     document.documentElement.dataset.combatAssist = gameOptions.combatAssist ? 'true' : 'false';
+
+    const body = document.body;
+    body.classList.toggle('is-reduced-motion', gameOptions.reducedMotion);
+    body.classList.toggle('is-high-contrast', gameOptions.highContrast);
+    body.classList.toggle('is-large-text', gameOptions.largeText);
   }, [
     gameOptions.combatAssist,
     gameOptions.highContrast,
@@ -100,7 +105,8 @@ export const App: React.FC = () => {
       </AnimatePresence>
       {tooltip && (
         <div
-          className="fixed inset-0 z-[49]"
+          className="fixed inset-0"
+          style={{ zIndex: 'var(--z-hud-raised)' }}
           onClick={hideTooltip}
         />
       )}

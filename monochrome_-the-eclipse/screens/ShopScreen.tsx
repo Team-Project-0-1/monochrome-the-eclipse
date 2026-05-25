@@ -37,7 +37,7 @@ interface ShopEntry {
 }
 
 const tabs: { id: ShopTab; label: string; hint: string }[] = [
-  { id: 'items', label: '아이템', hint: '회복/행운' },
+  { id: 'items', label: '아이템', hint: '회복/예비 동전' },
   { id: 'upgrades', label: '족보 강화', hint: '자동 성장' },
   { id: 'skills', label: '기술 습득', hint: '기술 교체' },
 ];
@@ -175,7 +175,7 @@ export const ShopScreen = () => {
           <div>
             <div className="inline-flex items-center gap-2 rounded-md border border-purple-300/30 bg-purple-950/30 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-purple-100">
               <ShoppingBag className="h-4 w-4" />
-              Supply Terminal
+              보급소
             </div>
             <h1 className="mt-2 font-orbitron text-3xl font-black text-white sm:text-4xl">상점</h1>
           </div>
@@ -202,14 +202,14 @@ export const ShopScreen = () => {
         <div className="shop-layout grid min-h-0 gap-4 lg:grid-cols-[18rem_minmax(0,1fr)_20rem]">
           <aside className="shop-resource-strip grid gap-3 rounded-lg border border-cyan-300/16 bg-cyan-950/12 p-3 backdrop-blur-md lg:content-start">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-100">Resources</span>
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-100">자원</span>
               <span className="text-xs text-slate-400">구매 기준</span>
             </div>
             {[
               { imagePath: resourceIconPaths.echoRemnants, label: '에코', value: resources.echoRemnants, accent: 'text-yellow-300' },
               { imagePath: resourceIconPaths.senseFragments, label: '감각', value: resources.senseFragments, accent: 'text-purple-300' },
               { imagePath: resourceIconPaths.memoryPieces, label: '기억', value: resources.memoryPieces, accent: 'text-blue-300' },
-              { imagePath: resourceIconPaths.reserveCoin, label: '행운 동전', value: `${reserveCoins.length}/${MAX_RESERVE_COINS}`, accent: 'text-orange-300' },
+              { imagePath: resourceIconPaths.reserveCoin, label: '예비 동전', value: `${reserveCoins.length}/${MAX_RESERVE_COINS}`, accent: 'text-orange-300' },
             ].map(({ imagePath, label, value, accent }) => (
               <div key={label} className="flex items-center justify-between rounded-md border border-white/8 bg-white/5 px-3 py-2.5">
                 <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-200">
@@ -324,7 +324,7 @@ export const ShopScreen = () => {
           </Panel>
 
           <aside className="shop-compare-panel rounded-lg border border-white/10 bg-black/34 p-4 backdrop-blur-md">
-            <div className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-cyan-100">Preview</div>
+            <div className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-cyan-100">미리보기</div>
             {selectedEntry ? (
               <div className="space-y-4">
                 {selectedEntry.imagePath ? (

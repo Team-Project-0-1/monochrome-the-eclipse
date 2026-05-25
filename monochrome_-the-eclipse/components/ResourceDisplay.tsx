@@ -36,11 +36,11 @@ const ResourceDisplay: React.FC<ResourceDisplayProps> = ({ resources, reserveCoi
       description: '기억의 제단에서 영구 능력 강화에 사용합니다.',
     },
     {
-      name: '행운 동전',
+      name: '예비 동전',
       value: `${reserveCoins.length}/${MAX_RESERVE_COINS}`,
       imagePath: resourceIconPaths.reserveCoin,
       color: 'text-orange-300',
-      description: '전투 중 교체 가능한 행운 동전입니다.',
+      description: '전투 중 동전 교체에 사용하는 예비 동전입니다.',
     },
   ];
 

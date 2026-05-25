@@ -31,7 +31,7 @@ export const patternLabels: Record<PatternType, string> = {
   [PatternType.TRIPLE]: '3연',
   [PatternType.QUAD]: '4연',
   [PatternType.PENTA]: '5연',
-  [PatternType.UNIQUE]: '단일',
+  [PatternType.UNIQUE]: '유일',
   [PatternType.AWAKENING]: '각성',
 };
 

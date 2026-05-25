@@ -33,7 +33,7 @@ export const CharacterSelectScreen = () => {
     return (
         <GameShell className="character-select-screen" contentClassName="character-select-content max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
             <ScreenHeader
-                eyebrow="Expedition roster"
+                eyebrow="출정 명단"
                 title="캐릭터 선택"
                 subtitle="초반 선택에 필요한 역할, 체력, 고유 기술을 먼저 확인하고 탐험을 시작하세요."
                 actions={

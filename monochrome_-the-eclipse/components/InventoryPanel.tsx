@@ -153,7 +153,10 @@ const InventoryPanel: React.FC<InventoryPanelProps> = ({ isOpen, onClose, player
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-[100] p-4">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center p-4"
+      style={{ zIndex: 'var(--z-modal)' }}
+    >
       <div className="inventory-modal-frame bg-gray-800 rounded-lg shadow-2xl p-6 w-full max-w-4xl h-[90vh] flex flex-col border-2 border-cyan-500/50" data-testid="inventory-modal">
         <div className="flex justify-between items-center mb-4 flex-shrink-0">
           <div>

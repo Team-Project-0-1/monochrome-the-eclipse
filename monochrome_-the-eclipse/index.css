@@ -9779,6 +9779,7 @@ html[data-large-text="true"] {
 .event-scene.scene-shelter { --event-accent: rgba(45, 212, 191, 0.18); }
 .event-scene.scene-pouch { --event-accent: rgba(251, 146, 60, 0.2); }
 .event-scene.scene-well { --event-accent: rgba(96, 165, 250, 0.22); }
+.event-scene.scene-stage3-safe { --event-accent: rgba(148, 163, 184, 0.2); }
 
 .event-scene-prop {
   align-items: center;
@@ -13019,22 +13020,8 @@ body {
 .combat-reward-choice-detail {
   color: #94a3b8;
   font-size: 0.72rem;
-  margin-top: 0.45rem;
-}
-
-.combat-reward-choice-detail > summary {
-  cursor: pointer;
-  font-weight: 900;
-  list-style: none;
-}
-
-.combat-reward-choice-detail > summary::-webkit-details-marker {
-  display: none;
-}
-
-.combat-reward-choice-detail p {
   line-height: 1.45;
-  margin-top: 0.3rem;
+  margin-top: 0.45rem;
 }
 
 .combat-reward-detail-chip .effect-summary {

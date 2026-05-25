@@ -67,7 +67,7 @@ export const ExplorationScreen = () => {
           <Panel className="p-3" tone="cyan">
             <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100">
               <Activity className="h-4 w-4" />
-              Expedition Kit
+              장비
             </div>
             <div className="flex flex-col gap-2">
               <ActionButton onClick={() => setInventoryOpen(true)} variant="primary" className="w-full" data-testid="open-inventory-button">
@@ -88,7 +88,7 @@ export const ExplorationScreen = () => {
               <div className="min-w-0">
                 <div className="mb-2 inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">
                   <MapPinned className="h-3.5 w-3.5 text-cyan-200" />
-                  Stage {currentStage} Route
+                  STAGE {currentStage} · 경로
                 </div>
                 <h1 className="text-3xl font-black leading-tight text-white sm:text-4xl">
                   {stageInfo?.name ?? '미확인 구역'}
@@ -99,15 +99,15 @@ export const ExplorationScreen = () => {
               </div>
               <div className="route-stat-grid grid min-w-0 gap-2 text-sm sm:grid-cols-3 xl:w-[560px]">
                 <div className="border-l border-cyan-300/35 pl-3">
-                  <div className="text-[11px] uppercase tracking-[0.16em] text-slate-500">Layer</div>
+                  <div className="text-[11px] uppercase tracking-[0.16em] text-slate-500">층</div>
                   <div className="truncate font-bold text-white">{currentTurn}/{STAGE_TURNS}</div>
                 </div>
                 <div className="border-l border-cyan-300/35 pl-3">
-                  <div className="text-[11px] uppercase tracking-[0.16em] text-slate-500">Threat</div>
+                  <div className="text-[11px] uppercase tracking-[0.16em] text-slate-500">위협</div>
                   <div className="route-stat-value font-bold text-cyan-100">{stageInfo?.theme ?? '미확인 신호'}</div>
                 </div>
                 <div className="border-l border-cyan-300/35 pl-3">
-                  <div className="text-[11px] uppercase tracking-[0.16em] text-slate-500">Weapon</div>
+                  <div className="text-[11px] uppercase tracking-[0.16em] text-slate-500">무기</div>
                   <div className="route-stat-value font-bold text-slate-100">{weaponProfile}</div>
                 </div>
               </div>
@@ -155,7 +155,7 @@ export const ExplorationScreen = () => {
             <Panel className="exploration-route-read p-3" tone="gold">
               <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-yellow-100">
                 <Route className="h-4 w-4" />
-                Route Read
+                경로 해석
               </div>
               <p className="text-sm leading-relaxed text-slate-300">
                 전투를 피하기만 하면 성장 속도가 느려지고, 보상만 쫓으면 체력이 먼저 무너집니다. 좋은 런은 위험을 피하는 것이 아니라 감당 가능한 위험을 고르는 데서 시작됩니다.

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { ChevronRight, Eye, Gauge, Keyboard, SlidersHorizontal, Volume2, Zap } from 'lucide-react';
+import { ChevronRight, Eye, Gauge, HelpCircle, Keyboard, SlidersHorizontal, Volume2, Zap } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
 import ActionButton from '../components/ui/ActionButton';
 import { assetCssUrl } from '../utils/assetPath';
@@ -37,6 +37,7 @@ export const MenuScreen = () => {
   const gameOptions = useGameStore(state => state.gameOptions);
   const setGameOption = useGameStore(state => state.setGameOption);
   const toggleGameOption = useGameStore(state => state.toggleGameOption);
+  const resetTutorial = useGameStore(state => state.resetTutorial);
 
   const hasRun = Boolean(
     player &&
@@ -64,6 +65,11 @@ export const MenuScreen = () => {
     playUiSound(gameOptions.soundEnabled, 'confirm');
     continueRun();
   }, [continueRun, gameOptions.soundEnabled]);
+
+  const replayTutorial = useCallback(() => {
+    playUiSound(gameOptions.soundEnabled, 'confirm');
+    resetTutorial();
+  }, [gameOptions.soundEnabled, resetTutorial]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -157,7 +163,7 @@ export const MenuScreen = () => {
           <div className="menu-accessibility-dock rounded-lg border border-cyan-300/20 bg-cyan-950/16 p-3 backdrop-blur-md">
             <div className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-100">
               <Eye className="h-4 w-4" />
-              Options
+              OPTIONS
             </div>
             <div className="menu-option-grid grid gap-2">
               {optionButtons.map(({ key, label, icon: Icon }) => (
@@ -181,10 +187,23 @@ export const MenuScreen = () => {
               ))}
             </div>
 
+            <button
+              type="button"
+              onClick={replayTutorial}
+              className="menu-tutorial-replay mt-3 inline-flex w-full min-h-10 items-center justify-between gap-2 rounded-md border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-slate-200 transition-colors hover:bg-white/10"
+              title="모든 화면의 튜토리얼 코치마크를 다시 표시합니다."
+            >
+              <span className="inline-flex items-center gap-2">
+                <HelpCircle className="h-4 w-4 text-cyan-200" />
+                튜토리얼 다시 보기
+              </span>
+              <span className="text-[10px] font-semibold text-slate-400">전 화면</span>
+            </button>
+
             <details className="menu-audio-disclosure mt-3 border-t border-white/10 pt-3">
               <summary className="mb-2 flex cursor-pointer items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-100">
                 <SlidersHorizontal className="h-4 w-4" />
-                Audio Mix
+                AUDIO MIX
               </summary>
               <div className="menu-audio-content grid gap-2">
                 {audioSliders.map(({ key, label }) => (
