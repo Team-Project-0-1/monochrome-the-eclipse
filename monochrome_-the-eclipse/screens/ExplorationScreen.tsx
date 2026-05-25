@@ -10,7 +10,7 @@ import Panel from '../components/ui/Panel';
 import ActionButton from '../components/ui/ActionButton';
 import { getNodeTypeCounts } from '../utils/nodePresentation';
 import { STAGE_TURNS } from '../constants';
-import { stageData } from '../dataStages';
+import { stageData } from '../data/dataStages';
 import { getAvailableRouteNodeIndices } from '../utils/gameLogic';
 
 const routePressureText = (counts: Record<string, number>) => {

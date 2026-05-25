@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { HelpCircle, Shield, Swords } from 'lucide-react';
-import { characterActiveSkills } from '../../dataCharacters';
-import { getPlayerAbility } from '../../dataSkills';
+import { characterActiveSkills } from '../../data/dataCharacters';
+import { getPlayerAbility } from '../../data/dataSkills';
 import {
   CharacterClass,
   Coin,

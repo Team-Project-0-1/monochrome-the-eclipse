@@ -1,4 +1,4 @@
-import { effectConfig } from '../dataEffects';
+import { effectConfig } from '../data/dataEffects';
 import { StatusEffectType } from '../types';
 import type { ShopEntryPresentation } from './shopPresentation';
 

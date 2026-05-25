@@ -11,7 +11,7 @@ import { CombatOutcomeRail } from '../components/combat/CombatOutcomeRail';
 import { CombatStage } from '../components/combat/CombatStage';
 import { useCombatEffectTimeline } from '../hooks/useCombatEffectTimeline';
 import { playGameSfx, playUiSound } from '../utils/sound';
-import { characterActiveSkills } from '../dataCharacters';
+import { characterActiveSkills } from '../data/dataCharacters';
 import { summarizeAbility } from '../utils/effectSummary';
 
 const mobileHudQuery = '(max-width: 767px)';

@@ -1,9 +1,9 @@
 import React from 'react';
 import { BookOpen, Calculator, Crosshair, Sparkles, X } from 'lucide-react';
-import { characterActiveSkills, characterData } from '../../dataCharacters';
-import { getPlayerAbility } from '../../dataSkills';
-import { getMonsterPhase, monsterData, monsterPatterns } from '../../dataMonsters';
-import { patternUpgrades } from '../../dataUpgrades';
+import { characterActiveSkills, characterData } from '../../data/dataCharacters';
+import { getPlayerAbility } from '../../data/dataSkills';
+import { getMonsterPhase, monsterData, monsterPatterns } from '../../data/dataMonsters';
+import { patternUpgrades } from '../../data/dataUpgrades';
 import {
   CoinFace,
   CombatPrediction,

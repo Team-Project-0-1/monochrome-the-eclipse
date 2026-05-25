@@ -1,5 +1,5 @@
-import { stageData } from '../dataStages';
-import { monsterData } from '../dataMonsters';
+import { stageData } from '../data/dataStages';
+import { monsterData } from '../data/dataMonsters';
 
 export const DOCUMENTED_STAGE_COUNT = 3;
 

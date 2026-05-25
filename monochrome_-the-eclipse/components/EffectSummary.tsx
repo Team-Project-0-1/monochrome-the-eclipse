@@ -11,7 +11,7 @@ import {
   Swords,
   Zap,
 } from 'lucide-react';
-import { effectIconPaths } from '../dataEffects';
+import { effectIconPaths } from '../data/dataEffects';
 import { assetPath } from '../utils/assetPath';
 import {
   EffectChip,

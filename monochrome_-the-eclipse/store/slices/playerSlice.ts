@@ -2,7 +2,7 @@ import { StateCreator } from 'zustand';
 import { produce } from 'immer';
 import { GameStore } from '../gameStore';
 import { PlayerCharacter, CharacterClass, ShopItem, PatternUpgradeDefinition, SkillUpgradeDefinition, MemoryUpgradeType, GameState, CoinFace, Coin } from '../../types';
-import { characterData } from '../../dataCharacters';
+import { characterData } from '../../data/dataCharacters';
 import { MAX_RESERVE_COINS, MAX_SKILLS, MEMORY_UPGRADE_DATA } from '../../constants';
 import { generateLoggedStageNodes } from '../../utils/gameLogic';
 

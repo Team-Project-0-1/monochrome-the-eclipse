@@ -8,8 +8,8 @@ import {
   MonsterPatternDefinition,
   AbilityEffect,
   MonsterPhaseDefinition,
-} from "./types";
-import { assetPath } from "./utils/assetPath";
+} from "../types";
+import { assetPath } from "../utils/assetPath";
 
 const monsterSpriteAnimations = { idle: 0, attack: 1, skill: 2, death: 3 };
 
