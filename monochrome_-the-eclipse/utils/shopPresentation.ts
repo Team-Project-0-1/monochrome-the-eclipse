@@ -44,7 +44,7 @@ export const getBasicItemPresentation = (
       status: 'owned',
       statusLabel: '한도 도달',
       actionLabel: '보유중',
-      helperText: `행운 동전은 최대 ${MAX_RESERVE_COINS}개까지 보유할 수 있습니다.`,
+      helperText: `예비 동전은 최대 ${MAX_RESERVE_COINS}개까지 보유할 수 있습니다.`,
     };
   }
 

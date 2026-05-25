@@ -31,7 +31,7 @@ const baseNodePresentation: Record<NodeType, Omit<NodePresentation, 'routeName' 
   [NodeType.SHOP]: {
     label: '상점',
     signal: '보급 신호',
-    description: '전투 없이 다음 전투를 준비합니다. 보유 에코를 회복, 행운 동전, 기술 강화로 바꿉니다.',
+    description: '전투 없이 다음 전투를 준비합니다. 보유 에코를 회복, 예비 동전, 기술 강화로 바꿉니다.',
     risk: '전투 보상 없음',
     reward: '즉시 보강',
     stake: '현재 빌드 보정',
@@ -64,7 +64,7 @@ const baseNodePresentation: Record<NodeType, Omit<NodePresentation, 'routeName' 
   [NodeType.MINIBOSS]: {
     label: '중간 보스',
     signal: '고밀도 위협',
-    description: '난도가 높지만 행운 동전과 핵심 보상을 노릴 수 있습니다. 런을 강하게 밀어붙이는 선택입니다.',
+    description: '난도가 높지만 예비 동전과 핵심 보상을 노릴 수 있습니다. 런을 강하게 밀어붙이는 선택입니다.',
     risk: '큰 피해 가능',
     reward: '희귀 보상',
     stake: '고위험 성장',

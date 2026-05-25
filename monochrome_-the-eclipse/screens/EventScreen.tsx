@@ -25,9 +25,11 @@ export const EventScreen = () => {
   }
 
   const scene = getEventScenePresentation(currentEvent.id);
+  const sceneBackgroundImage = scene.backgroundCss ?? assetCssUrl(scene.backgroundPath ?? 'assets/backgrounds/event-encounter.png');
+  const sceneMobileBackgroundImage = scene.backgroundCss ?? assetCssUrl(scene.mobileBackgroundPath ?? scene.backgroundPath ?? 'assets/backgrounds/event-encounter.png');
   const sceneBackgroundStyle = {
-    '--event-bg-image': assetCssUrl(scene.backgroundPath),
-    '--event-mobile-bg-image': assetCssUrl(scene.mobileBackgroundPath ?? scene.backgroundPath),
+    '--event-bg-image': sceneBackgroundImage,
+    '--event-mobile-bg-image': sceneMobileBackgroundImage,
   } as React.CSSProperties;
 
   const continueFromResult = () => {
@@ -121,15 +123,15 @@ export const EventScreen = () => {
 
               <div className="event-player-grid mt-6 grid gap-2 text-sm sm:grid-cols-3">
                 <div className="rounded-md border border-white/10 bg-white/5 px-3 py-2">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Sense</div>
+                  <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">감각</div>
                   <div className="mt-1 font-black text-cyan-100">{player.signature ?? '감각 동기'}</div>
                 </div>
                 <div className="rounded-md border border-white/10 bg-white/5 px-3 py-2">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Weapon</div>
+                  <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">무기</div>
                   <div className="mt-1 font-black text-white">{player.weapon ?? '무기'}</div>
                 </div>
                 <div className="rounded-md border border-white/10 bg-white/5 px-3 py-2">
-                  <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">HP</div>
+                  <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">체력</div>
                   <div className="mt-1 font-black text-lime-200">{player.currentHp}/{player.maxHp}</div>
                 </div>
               </div>
@@ -138,7 +140,7 @@ export const EventScreen = () => {
             <aside className="event-choice-panel rounded-lg border border-white/10 bg-black/38 p-3 backdrop-blur-md sm:p-4">
               <div className="mb-3 flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-[0.2em] text-yellow-100">Choices</div>
+                  <div className="text-xs font-bold uppercase tracking-[0.2em] text-yellow-100">선택지</div>
                   <p className="mt-1 text-xs text-slate-400">선택 전 확률과 위험을 확인하세요.</p>
                 </div>
                 <Dice5 className="h-6 w-6 text-yellow-200" />

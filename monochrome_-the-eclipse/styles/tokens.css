@@ -1,0 +1,630 @@
+/* =============================================================================
+ * Monochrome: The Eclipse — Design Tokens
+ * -----------------------------------------------------------------------------
+ * 모든 시각 결정의 단일 진실(Single Source of Truth).
+ * 컴포넌트 CSS와 인라인 스타일은 raw 색상/숫자 대신 이 토큰을 참조한다.
+ *
+ * 출처: docs/ui-copy-guide.md §4(색상) §5(정보 우선순위) §6(모션)
+ * 분위기: 흑백 기반 + 혈흔/눈동자/무기에 붉은색 포인트 (GDD 기획 인용)
+ * =============================================================================
+ */
+
+:root {
+  /* ---------------------------------------------------------------------------
+   * 1. 베이스 컬러 — 흑백 신호 (Eclipse 톤)
+   * --------------------------------------------------------------------------- */
+  --color-bg-deep:       #02040a; /* 가장 깊은 어둠 (배경 최하단) */
+  --color-bg-base:       #050810; /* 화면 베이스 */
+  --color-bg-raised:     #0b1220; /* 패널/카드 베이스 */
+  --color-bg-overlay:    #111827; /* 모달/오버레이 */
+  --color-bg-scrim:      rgba(2, 4, 10, 0.62); /* 배경 위 어둠막 */
+
+  --color-surface-1:     rgba(255, 255, 255, 0.04);
+  --color-surface-2:     rgba(255, 255, 255, 0.08);
+  --color-surface-3:     rgba(255, 255, 255, 0.14);
+
+  --color-border-faint:  rgba(255, 255, 255, 0.08);
+  --color-border-soft:   rgba(255, 255, 255, 0.14);
+  --color-border-strong: rgba(255, 255, 255, 0.28);
+
+  --color-ink-primary:   #f8fafc; /* 본문 텍스트 */
+  --color-ink-secondary: #cbd5f5; /* 보조 텍스트 */
+  --color-ink-muted:     #94a3b8; /* 약화 텍스트 */
+  --color-ink-faint:     #64748b; /* 가장 약한 텍스트 */
+  --color-ink-inverse:   #0f172a; /* 밝은 배경 위 텍스트 */
+
+  /* ---------------------------------------------------------------------------
+   * 2. 동전 면 — 현행 결정: 빨강(공격)/파랑(방어)
+   *
+   * 결정 근거:
+   *  - 기획서(2025-07) UI/UX 지시서는 "앞면=노랑, 뒷면=파랑"으로 명시되어 있으나,
+   *    덱빌더 코어 게이머(Slay the Spire 등) 컨벤션은 "공격=빨강, 방어=파랑"이 보편.
+   *  - 실제 구현·플레이테스트에서 빨강/파랑이 더 직관적이라 판단되어 코드 기준 유지.
+   *  - 노랑 계열은 보상/희귀(--color-accent-gold)로 분리하여 의미 중복을 피한다.
+   *  - GDD 가이드를 따라야 할 경우 *-alt 토큰을 활용해 점진 전환 가능.
+   * --------------------------------------------------------------------------- */
+  --color-face-heads:           #ef4444; /* 빨강: 앞면(공격) */
+  --color-face-heads-strong:    #b91c1c;
+  --color-face-heads-soft:      rgba(239, 68, 68, 0.18);
+  --color-face-heads-on:        #1a0606; /* 빨강 위 텍스트 */
+
+  --color-face-tails:           #3b82f6; /* 파랑: 뒷면(방어) */
+  --color-face-tails-strong:    #1d4ed8;
+  --color-face-tails-soft:      rgba(59, 130, 246, 0.18);
+  --color-face-tails-on:        #02101c;
+
+  --color-face-unknown:         #64748b;
+  --color-face-unknown-soft:    rgba(100, 116, 139, 0.22);
+
+  /* GDD 가이드 색상 (alt) — 추후 정책 전환 시 활성화 */
+  --color-face-heads-alt:       #facc15; /* 노랑 */
+  --color-face-tails-alt:       #38bdf8; /* 시안 */
+
+  /* ---------------------------------------------------------------------------
+   * 3. 사이드 컬러 — 플레이어/적
+   * --------------------------------------------------------------------------- */
+  --color-player:         #22d3ee; /* 시안 (아군) */
+  --color-player-strong:  #0891b2;
+  --color-player-soft:    rgba(34, 211, 238, 0.18);
+  --color-player-on:      #021318;
+
+  --color-enemy:          #f87171; /* 적 사이드 */
+  --color-enemy-strong:   #dc2626;
+  --color-enemy-soft:     rgba(248, 113, 113, 0.18);
+  --color-enemy-on:       #1a0606;
+
+  /* ---------------------------------------------------------------------------
+   * 4. 결과 톤 — 전투 예측/보상 시인성
+   *    OutcomeRail/MobileOutcome/IntelBar 동일하게 참조한다.
+   * --------------------------------------------------------------------------- */
+  --color-tone-safe:      #4ade80; /* 무피해 이득/유리 교환 */
+  --color-tone-safe-soft: rgba(74, 222, 128, 0.16);
+  --color-tone-trade:     #fbbf24; /* 동등 교환 */
+  --color-tone-trade-soft:rgba(251, 191, 36, 0.16);
+  --color-tone-danger:    #f87171; /* 손해 교환/사망 위험 */
+  --color-tone-danger-soft:rgba(248, 113, 113, 0.18);
+  --color-tone-lethal:    #c084fc; /* 처치 가능 */
+  --color-tone-lethal-soft:rgba(192, 132, 252, 0.20);
+  --color-tone-empty:     #475569; /* 선택 대기 */
+  --color-tone-empty-soft:rgba(71, 85, 105, 0.22);
+
+  /* 의미 별 직접 사용 */
+  --color-damage:         var(--color-tone-danger);
+  --color-defense:        #94a3b8;
+  --color-heal:           var(--color-tone-safe);
+
+  /* ---------------------------------------------------------------------------
+   * 5. 포인트 컬러 — 혈흔/눈동자/무기 (GDD 정식 포인트)
+   * --------------------------------------------------------------------------- */
+  --color-accent-blood:        #b91c1c;
+  --color-accent-blood-soft:   rgba(185, 28, 28, 0.32);
+  --color-accent-eclipse:      #a855f7; /* 일식의 보랏빛 잔광 */
+  --color-accent-gold:         #facc15; /* 보상/희귀 */
+  --color-accent-memory:       #60a5fa; /* 기억의 제단 청색 */
+
+  /* ---------------------------------------------------------------------------
+   * 6. 상태 효과 컬러 — 9종 (docs §2.5 매핑)
+   *    아이콘 배경/테두리/숫자에 일관 사용.
+   * --------------------------------------------------------------------------- */
+  --color-status-amplify:     #f97316; /* 증폭: 주황 */
+  --color-status-pursuit:     #a855f7; /* 추적: 보라 */
+  --color-status-mark:        #ec4899; /* 광분/표식: 핑크 */
+  --color-status-counter:     #38bdf8; /* 반격: 시안 */
+  --color-status-curse:       #6366f1; /* 저주: 인디고 */
+  --color-status-resonance:   #facc15; /* 공명: 노랑 */
+  --color-status-bleed:       #b91c1c; /* 출혈: 진홍 */
+  --color-status-shatter:     #f97316; /* 분쇄: 주황 (방어 깎임) */
+  --color-status-seal:        #475569; /* 봉인: 회색 (공격 깎임) */
+
+  /* 분류용 톤 (버프=초록 톤, 디버프=붉은 톤) */
+  --color-status-buff:        var(--color-tone-safe);
+  --color-status-debuff:      var(--color-tone-danger);
+
+  /* ---------------------------------------------------------------------------
+   * 7. 공간 (4px 스케일)
+   * --------------------------------------------------------------------------- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  28px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ---------------------------------------------------------------------------
+   * 8. 모서리 반경
+   * --------------------------------------------------------------------------- */
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:   12px;
+  --radius-2xl:  16px;
+  --radius-pill: 999px;
+  --radius-circle: 50%;
+
+  /* ---------------------------------------------------------------------------
+   * 9. 타입스케일 (GDD: 본문 13~18px, 로그는 고정폭)
+   * --------------------------------------------------------------------------- */
+  --font-xs:   11px;
+  --font-sm:   13px;
+  --font-base: 14px;
+  --font-md:   15px;
+  --font-lg:   17px;
+  --font-xl:   20px;
+  --font-2xl:  24px;
+  --font-3xl:  30px;
+  --font-4xl:  36px;
+  --font-5xl:  48px;
+
+  --line-tight:   1.15;
+  --line-snug:    1.32;
+  --line-normal:  1.5;
+  --line-relaxed: 1.65;
+
+  --tracking-tight:  -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.08em;
+  --tracking-wider:  0.16em;
+  --tracking-widest: 0.2em;
+
+  --font-family-sans:     'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-family-display:  'Orbitron', system-ui, sans-serif;
+  --font-family-mono:     'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+
+  /* ---------------------------------------------------------------------------
+   * 10. Z-INDEX — 단계화 (28종 흩어진 값을 7단계로 정리)
+   *     0~9     : 무대 레이어 (배경, 그라운드, 모션-arc)
+   *     10~19   : 무대 위 콘텐츠 (스프라이트, 이펙트 anchor)
+   *     20~29   : 무대 위 오버레이 (HP바, 머리 위 정보)
+   *     30~49   : 무대 위 강조 (적 의도, 결과 배너)
+   *     50~69   : HUD (조작 패널, 카드)
+   *     70~89   : 떠 있는 보조 (툴팁, 코치마크, 인스펙트)
+   *     90~99   : 페이지 가드 (FocusBanner)
+   *     100~199 : 모달
+   *     200+    : 글로벌 알림/배너
+   * --------------------------------------------------------------------------- */
+  --z-below:      -1;
+  --z-base:        0;
+  --z-stage-bg:    1;
+  --z-stage-fx:    3;
+  --z-stage-sprite: 12;
+  --z-stage-overlay: 22;
+  --z-stage-banner: 36;
+
+  --z-hud:         50;
+  --z-hud-raised:  58;
+
+  --z-tooltip:     74;
+  --z-coachmark:   80;
+  --z-focus-banner: 92;
+
+  --z-modal-backdrop: 100;
+  --z-modal:       110;
+  --z-modal-top:   140;
+
+  --z-toast:       200;
+  --z-debug:       9999;
+
+  /* ---------------------------------------------------------------------------
+   * 11. 그림자
+   * --------------------------------------------------------------------------- */
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.42);
+  --shadow-lg:  0 12px 28px rgba(0, 0, 0, 0.48);
+  --shadow-xl:  0 24px 52px rgba(0, 0, 0, 0.55);
+  --shadow-glow-player: 0 0 18px rgba(34, 211, 238, 0.45);
+  --shadow-glow-enemy:  0 0 18px rgba(248, 113, 113, 0.50);
+  --shadow-glow-danger: 0 0 22px rgba(185, 28, 28, 0.55);
+  --shadow-glow-safe:   0 0 18px rgba(74, 222, 128, 0.40);
+
+  /* ---------------------------------------------------------------------------
+   * 12. 모션 (GDD: 0.3~0.5s, 지연 금지)
+   * --------------------------------------------------------------------------- */
+  --motion-instant:  0.08s;
+  --motion-fast:     0.15s;
+  --motion-base:     0.30s;
+  --motion-slow:     0.45s;
+  --motion-emphasis: 0.60s;
+
+  --ease-standard:   cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --ease-accelerate: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ---------------------------------------------------------------------------
+   * 13. 터치 타깃 (GDD: 최소 40×40px)
+   * --------------------------------------------------------------------------- */
+  --touch-min:       40px;
+  --touch-comfortable: 44px;
+  --touch-prominent:  56px;
+
+  /* ---------------------------------------------------------------------------
+   * 14. 컨테이너 폭
+   * --------------------------------------------------------------------------- */
+  --container-sm:  640px;
+  --container-md:  768px;
+  --container-lg:  1024px;
+  --container-xl:  1280px;
+  --container-2xl: 1536px;
+}
+
+/* =============================================================================
+ * 접근성 모드 — 토큰 오버라이드
+ * =============================================================================
+ */
+
+/* prefers-reduced-motion: 시스템 설정 우선 */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast:     0.01s;
+    --motion-base:     0.01s;
+    --motion-slow:     0.01s;
+    --motion-emphasis: 0.01s;
+  }
+}
+
+/* 게임 옵션 reducedMotion=true 일 때 body에 클래스 부착 (App에서 처리)
+ * 모든 framer-motion/animation은 이 토큰 또는 .is-reduced-motion 가드를 따른다.
+ */
+body.is-reduced-motion {
+  --motion-fast:     0.01s;
+  --motion-base:     0.01s;
+  --motion-slow:     0.01s;
+  --motion-emphasis: 0.01s;
+}
+
+body.is-reduced-motion *,
+body.is-reduced-motion *::before,
+body.is-reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* 고대비 모드 */
+body.is-high-contrast {
+  --color-border-faint:  rgba(255, 255, 255, 0.22);
+  --color-border-soft:   rgba(255, 255, 255, 0.36);
+  --color-border-strong: rgba(255, 255, 255, 0.55);
+  --color-ink-secondary: #e2e8f0;
+  --color-ink-muted:     #cbd5f5;
+  --color-ink-faint:     #94a3b8;
+  --color-tone-safe:     #86efac;
+  --color-tone-danger:   #fca5a5;
+  --color-tone-trade:    #fcd34d;
+  --color-tone-lethal:   #d8b4fe;
+}
+
+/* 큰 글자 모드 */
+body.is-large-text {
+  --font-xs:   13px;
+  --font-sm:   15px;
+  --font-base: 17px;
+  --font-md:   18px;
+  --font-lg:   20px;
+  --font-xl:   23px;
+  --font-2xl:  27px;
+  --font-3xl:  34px;
+  --font-4xl:  40px;
+  --font-5xl:  54px;
+  --touch-min: 48px;
+  --touch-comfortable: 52px;
+}
+
+/* =============================================================================
+ * 시맨틱 헬퍼 클래스 — 토큰을 곧바로 쓰기 위한 유틸리티
+ * =============================================================================
+ */
+
+.token-face-heads {
+  --face-color:      var(--color-face-heads);
+  --face-color-on:   var(--color-face-heads-on);
+  --face-color-soft: var(--color-face-heads-soft);
+}
+
+.token-face-tails {
+  --face-color:      var(--color-face-tails);
+  --face-color-on:   var(--color-face-tails-on);
+  --face-color-soft: var(--color-face-tails-soft);
+}
+
+.token-face-unknown {
+  --face-color:      var(--color-face-unknown);
+  --face-color-on:   var(--color-ink-primary);
+  --face-color-soft: var(--color-face-unknown-soft);
+}
+
+/* =============================================================================
+ * Coin face — 동전 본체 색상 단일 출처
+ *   CoinDisplay/ReserveCoinStrip 등에서 raw Tailwind 색 대신 이 클래스를 쓴다.
+ *   정책 전환(예: GDD 노랑/시안) 시 tokens.css의 --color-face-* 만 바꾸면 됨.
+ * =============================================================================
+ */
+.coin-face {
+  background-color: var(--color-face-unknown);
+  border-color: color-mix(in srgb, var(--color-face-unknown) 60%, white);
+}
+
+.coin-face.is-heads {
+  background-color: var(--color-face-heads);
+  border-color: color-mix(in srgb, var(--color-face-heads) 50%, white);
+}
+
+.coin-face.is-tails {
+  background-color: var(--color-face-tails);
+  border-color: color-mix(in srgb, var(--color-face-tails) 50%, white);
+}
+
+.coin-face.is-unknown {
+  background-color: var(--color-face-unknown);
+  border-color: color-mix(in srgb, var(--color-face-unknown) 50%, white);
+}
+
+/* 잠금 배지 (CoinDisplay 우하단) — 중립 회색 토큰 사용 */
+.coin-lock-badge {
+  background-color: var(--color-bg-overlay);
+  border-color: var(--color-ink-primary);
+}
+
+/* 결과 톤 → 텍스트/배경 즉시 적용 */
+.tone-safe   { color: var(--color-tone-safe); }
+.tone-trade  { color: var(--color-tone-trade); }
+.tone-danger { color: var(--color-tone-danger); }
+.tone-lethal { color: var(--color-tone-lethal); }
+.tone-empty  { color: var(--color-ink-muted); }
+
+/* =============================================================================
+ * CoinDisplay 상태 배지 (5상태 이중 부호화 — 색 + 아이콘 + 텍스트)
+ *   1) selected : 액티브 스킬 적용 확정 (초록)
+ *   2) swap     : 예비 동전 교체 대기 (시안)
+ *   3) skill    : 액티브 스킬 후보 (보라)
+ *   4) used     : 선택 족보에서 사용 예정 (호박)
+ *   5) idle     : 평상시 — 배지 없음
+ * locked은 별도 자물쇠 배지(우하단)로 분리되어 동시 표시 가능.
+ * =============================================================================
+ */
+
+.coin-state-pill {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  line-height: 1;
+  z-index: var(--z-stage-overlay);
+  pointer-events: none;
+  border: 1px solid var(--color-border-soft);
+  box-shadow: var(--shadow-sm);
+  background: var(--color-bg-overlay);
+  color: var(--color-ink-primary);
+}
+
+.coin-state-pill em {
+  font-style: normal;
+}
+
+.coin-state-pill.is-selected {
+  background: var(--color-tone-safe-soft);
+  border-color: var(--color-tone-safe);
+  color: var(--color-tone-safe);
+  box-shadow: var(--shadow-glow-safe);
+}
+
+.coin-state-pill.is-swap {
+  background: var(--color-player-soft);
+  border-color: var(--color-player);
+  color: var(--color-player);
+  box-shadow: var(--shadow-glow-player);
+}
+
+.coin-state-pill.is-skill {
+  background: rgba(168, 85, 247, 0.18);
+  border-color: var(--color-accent-eclipse);
+  color: var(--color-accent-eclipse);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.45);
+}
+
+.coin-state-pill.is-used {
+  background: var(--color-tone-trade-soft);
+  border-color: var(--color-tone-trade);
+  color: var(--color-tone-trade);
+}
+
+/* prefers-reduced-motion 시 펄스 정지 */
+body.is-reduced-motion .coin-state-pill {
+  box-shadow: none;
+}
+
+/* =============================================================================
+ * Pattern Rail / Active Skill — (i) 버튼 분리
+ *   long-press 제스처 대신 명시적 정보 버튼으로 상세 효과를 토글한다.
+ *   - 카드 본체 click = 선택/실행
+ *   - (i) click = 상세 토글
+ * =============================================================================
+ */
+
+.combat-pattern-chip-wrap,
+.combat-active-skill-wrap {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+}
+
+.combat-pattern-chip-wrap > .combat-pattern-chip,
+.combat-active-skill-wrap > .combat-active-skill {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.combat-pattern-info,
+.combat-active-skill-info {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: var(--z-tooltip);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-circle);
+  border: 1px solid var(--color-border-soft);
+  background: var(--color-bg-overlay);
+  color: var(--color-ink-secondary);
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--ease-standard),
+              color var(--motion-fast) var(--ease-standard),
+              transform var(--motion-fast) var(--ease-standard);
+}
+
+.combat-pattern-info:hover,
+.combat-active-skill-info:hover,
+.combat-pattern-info:focus-visible,
+.combat-active-skill-info:focus-visible {
+  background: var(--color-player-soft);
+  border-color: var(--color-player);
+  color: var(--color-player);
+  outline: none;
+  transform: scale(1.06);
+}
+
+.combat-pattern-info:active,
+.combat-active-skill-info:active {
+  transform: scale(0.95);
+}
+
+.combat-pattern-info[aria-expanded='true'],
+.combat-active-skill-info[aria-expanded='true'] {
+  background: var(--color-player-soft);
+  border-color: var(--color-player);
+  color: var(--color-player);
+}
+
+/* 모바일에서 충분한 터치 타깃 확보 (44px 가상 영역) */
+.combat-pattern-info::before,
+.combat-active-skill-info::before {
+  content: '';
+  position: absolute;
+  inset: -11px;
+}
+
+/* =============================================================================
+ * 태블릿 중간 레이아웃 (768px ~ 1023px)
+ *   기존 코드는 데스크탑↔모바일 단일 컷오프(767px)만 가져 태블릿 폭에서
+ *   가로 스크롤이 발생하고 카드가 좁아진다. 이 블록은 그 사각지대를 메운다.
+ * =============================================================================
+ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* IntelBar: 시너지/버튼이 한 줄에 안 들어가면 자연스럽게 줄바꿈 */
+  .combat-intel-bar {
+    flex-wrap: wrap;
+    row-gap: var(--space-2);
+    overflow-x: visible;
+  }
+  .combat-intel-bar .combat-synergy-strip {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  .combat-intel-bar .combat-intel-buttons {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  /* OutcomeRail: 4노드 트랙이 좁아지지 않게 줄바꿈 허용 */
+  .combat-outcome-track {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .combat-outcome-track .combat-outcome-arrow {
+    display: none; /* 줄바꿈 환경에서는 화살표가 어색하므로 숨김 */
+  }
+  .combat-outcome-node {
+    flex: 1 1 calc(50% - var(--space-2));
+    min-width: 140px;
+  }
+
+  /* PatternRail: 카드 가로 배치 유지, 폭 자동 */
+  .combat-pattern-rail {
+    flex-wrap: wrap;
+    row-gap: var(--space-2);
+  }
+
+  /* Bottom HUD: 도구열이 한 줄에 안 들어가면 줄바꿈 */
+  .combat-player-control-row {
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  /* ShopScreen: 3컬럼(자원/목록/미리보기) → 자원만 상단, 본문 2컬럼 */
+  .shop-layout {
+    grid-template-columns: minmax(0, 1fr) 18rem !important;
+    grid-template-areas:
+      'resources resources'
+      'list      preview';
+  }
+  .shop-layout > .shop-resource-strip {
+    grid-area: resources;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-2);
+  }
+  .shop-layout > .shop-terminal { grid-area: list; }
+  .shop-layout > .shop-compare-panel { grid-area: preview; }
+
+  /* ExplorationScreen: Route Read를 본문 아래 풀폭으로 */
+  .exploration-footer {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+/* =============================================================================
+ * 작은 노트북 (1024 ~ 1279px) — 살짝 더 여유
+ * =============================================================================
+ */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .shop-layout {
+    grid-template-columns: 16rem minmax(0, 1fr) 18rem !important;
+  }
+}
+
+/* 예비 동전 빈 상태: 라벨 + 보조 안내 두 줄 */
+.combat-reserve-empty {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-border-soft);
+  color: var(--color-ink-muted);
+  font-size: var(--font-xs);
+  line-height: 1.2;
+  background: var(--color-surface-1);
+}
+
+.combat-reserve-empty strong {
+  color: var(--color-ink-secondary);
+  font-weight: 700;
+}
+
+.combat-reserve-empty small {
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}

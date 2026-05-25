@@ -43,7 +43,7 @@
       "status": "ready",
       "title": "공명 중계탑",
       "backgroundPath": "assets/backgrounds/event-stage3-resonance-relay.png",
-      "role": "공명/증폭 위험과 행운 동전 보상 압박"
+      "role": "공명/증폭 위험과 예비 동전 보상 압박"
     },
     {
       "id": "event_stage3_flesh_vat",
@@ -466,7 +466,7 @@
       "name": "섬광 절단",
       "role": "attack recovery",
       "usageRule": "월식의 성가대 처치 후 3개 중 1개 선택",
-      "effect": "에코 42, 감각 조각 2, 행운 동전 1개",
+      "effect": "에코 42, 감각 조각 2, 예비 동전 1개",
       "playerCue": "다음 빌드 실험을 위한 즉시 자원과 안전장치"
     },
     {
@@ -477,7 +477,7 @@
       "name": "무채 장막",
       "role": "defense research",
       "usageRule": "월식의 성가대 처치 후 3개 중 1개 선택",
-      "effect": "에코 28, 기억 조각 5, 행운 동전 1개",
+      "effect": "에코 28, 기억 조각 5, 예비 동전 1개",
       "playerCue": "방어형 성장과 다음 런 연구 자원 확보"
     },
     {

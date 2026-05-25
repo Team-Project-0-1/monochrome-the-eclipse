@@ -70,7 +70,7 @@ const createStage3SecretTechniqueChoices = (): CombatRewardChoice[] => [
   {
     id: 'stage3_secret_technique_flash',
     label: '비기: 섬광 절단',
-    description: '월식의 합창을 끊어내는 공격형 비기입니다. 최종 보상 선택에서 에코와 행운 동전을 확보합니다.',
+    description: '월식의 합창을 끊어내는 공격형 비기입니다. 최종 보상 선택에서 에코와 예비 동전을 확보합니다.',
     rewards: { echoRemnants: 42, senseFragments: 2, reserveCoin: true },
     secretTechniqueId: 'stage3_secret_technique_flash',
   },
@@ -134,8 +134,8 @@ export const createCombatRewardChoices = (
   if (isElite || isBoss) {
     choices.push({
       id: 'reserve_coin',
-      label: '행운 동전 확보',
-      description: '보상량은 낮지만 전투 중 교체할 수 있는 행운 동전을 얻습니다.',
+      label: '예비 동전 확보',
+      description: '보상량은 낮지만 전투 중 교체할 수 있는 예비 동전을 얻습니다.',
       rewards: { echoRemnants: Math.max(4, Math.floor(baseEcho * 0.5)), reserveCoin: true },
     });
   }

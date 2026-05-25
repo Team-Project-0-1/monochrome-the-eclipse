@@ -12,12 +12,15 @@ interface UseCombatEffectTimelineArgs {
   combatEffects: CombatEffectData[];
   screenShakeControls: AnimationControls;
   screenFlashControls: AnimationControls;
+  /** prefers-reduced-motion 또는 게임 옵션 reducedMotion이 켜졌을 때 true. 모든 카메라 베트를 비활성화한다. */
+  reducedMotion?: boolean;
 }
 
 export const useCombatEffectTimeline = ({
   combatEffects,
   screenShakeControls,
   screenFlashControls,
+  reducedMotion = false,
 }: UseCombatEffectTimelineArgs) => {
   const [presentedEffects, setPresentedEffects] = useState<CombatEffectData[]>([]);
   const [resultBanner, setResultBanner] = useState<CombatResultBanner | null>(null);
@@ -39,6 +42,10 @@ export const useCombatEffectTimeline = ({
   }, [combatEffects]);
 
   const playCameraBeat = (effect: CombatEffectData) => {
+    // reducedMotion이 켜진 경우 카메라 베트(흔들림/플래시)를 완전히 생략한다.
+    // 결과 배너 등 가독성 정보는 유지된다.
+    if (reducedMotion) return;
+
     if (isPositiveDamage(effect)) {
       const heavyPlayerHit = effect.target === 'player' && getEffectAmount(effect) > 10;
       screenShakeControls.start({
