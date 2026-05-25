@@ -16717,7 +16717,134 @@ body {
 }
 
 .combat-screen .combat-synergy-strip {
-  max-width: min(28rem, 36vw);
+  max-width: min(34rem, 43vw);
+}
+
+.combat-selected-skill-panel {
+  background:
+    linear-gradient(180deg, rgba(12, 17, 28, 0.96), rgba(4, 7, 13, 0.94)),
+    radial-gradient(circle at 16% 0%, rgba(250, 204, 21, 0.15), transparent 68%);
+  border: 1px solid rgba(250, 204, 21, 0.36);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  color: #f8fafc;
+  display: grid;
+  flex: 0 0 min(24rem, 66vw);
+  gap: 0.36rem;
+  min-height: 3.62rem;
+  min-width: 17rem;
+  padding: 0.5rem 0.58rem;
+}
+
+.combat-selected-skill-kicker {
+  color: #facc15;
+  font-size: 0.56rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.combat-selected-skill-row {
+  display: grid;
+  gap: 0.28rem;
+  min-width: 0;
+}
+
+.combat-selected-skill-title {
+  align-items: baseline;
+  display: flex;
+  gap: 0.45rem;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.combat-selected-skill-title strong {
+  color: #fff7df;
+  font-size: 0.84rem;
+  line-height: 1.1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.combat-selected-skill-title small {
+  color: #a5f3fc;
+  flex: 0 0 auto;
+  font-size: 0.62rem;
+  font-weight: 900;
+}
+
+.combat-selected-skill-panel .effect-summary-cue {
+  background: rgba(250, 204, 21, 0.1);
+  border-color: rgba(250, 204, 21, 0.22);
+  padding: 0.28rem 0.34rem;
+}
+
+.combat-selected-skill-panel .effect-summary-cue span {
+  color: #facc15;
+}
+
+.combat-selected-skill-panel .effect-summary-cue b {
+  color: #fff7df;
+  font-size: 0.68rem;
+}
+
+.combat-selected-skill-panel .effect-summary-detail {
+  color: #cbd5e1;
+  font-size: 0.68rem;
+  margin-top: 0.12rem;
+}
+
+.combat-focus-banner .combat-focus-detail {
+  align-items: start;
+  background: rgba(2, 6, 23, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  display: grid;
+  flex: 0 1 min(20rem, 46vw);
+  gap: 0.08rem;
+  min-width: 12rem;
+  overflow: hidden;
+  padding: 0.34rem 0.46rem;
+  white-space: normal;
+}
+
+.combat-focus-banner .combat-focus-detail small,
+.combat-focus-banner .combat-focus-detail strong,
+.combat-focus-banner .combat-focus-detail em {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.combat-focus-banner .combat-focus-detail small {
+  color: #bae6fd;
+  font-size: 0.58rem;
+  font-weight: 950;
+}
+
+.combat-focus-banner .combat-focus-detail strong {
+  color: #fff;
+  font-size: 0.78rem;
+  line-height: 1.05;
+}
+
+.combat-focus-banner .combat-focus-detail em {
+  color: #e0f2fe;
+  font-size: 0.68rem;
+  font-style: normal;
+}
+
+.combat-focus-banner.is-notice {
+  left: 1rem;
+  max-width: min(30rem, calc(100vw - 2rem));
+  right: auto;
+  top: 1rem;
+  transform: none !important;
+  z-index: 92;
 }
 
 @media (max-width: 767px) {
@@ -16729,6 +16856,23 @@ body {
   }
 
   .combat-screen .combat-synergy-strip {
-    max-width: 40vw;
+    max-width: 52vw;
+  }
+
+  .combat-selected-skill-panel {
+    flex-basis: min(19rem, 82vw);
+    min-width: 15rem;
+    padding: 0.44rem 0.5rem;
+  }
+
+  .combat-focus-banner .combat-focus-detail {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+
+  .combat-focus-banner.is-notice {
+    left: 0.5rem;
+    top: 0.5rem !important;
+    width: calc(100vw - 1rem) !important;
   }
 }

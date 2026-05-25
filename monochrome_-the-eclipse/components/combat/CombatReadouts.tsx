@@ -251,24 +251,46 @@ export const ResultBanner: React.FC<{ banner: CombatResultBanner | null }> = ({ 
 
 interface FocusBannerProps {
   text: string | null;
+  detail?: {
+    label: string;
+    title: string;
+    detail: string;
+    description: string;
+  } | null;
   revealedFace: CoinFace | null;
+  variant?: 'focus' | 'notice';
+  buttonLabel?: string;
   onCancel: () => void;
 }
 
-export const FocusBanner: React.FC<FocusBannerProps> = ({ text, revealedFace, onCancel }) => {
+export const FocusBanner: React.FC<FocusBannerProps> = ({
+  text,
+  detail,
+  revealedFace,
+  variant = 'focus',
+  buttonLabel = '취소',
+  onCancel,
+}) => {
   if (!text) return null;
 
   return (
     <motion.div
-      className="combat-focus-banner"
+      className={`combat-focus-banner is-${variant}`}
       initial={{ opacity: 0, x: '-50%', y: -20 }}
       animate={{ opacity: 1, x: '-50%', y: 0 }}
       exit={{ opacity: 0, x: '-50%', y: -20 }}
     >
       <Info size={18} />
       <span>{text}</span>
+      {detail ? (
+        <span className="combat-focus-detail">
+          <small>{detail.label}</small>
+          <strong>{detail.title}</strong>
+          <em title={detail.description}>{detail.detail}</em>
+        </span>
+      ) : null}
       {revealedFace ? <b>{faceLabel(revealedFace)}</b> : null}
-      <button type="button" onClick={onCancel} aria-label="취소">
+      <button type="button" onClick={onCancel} aria-label={buttonLabel}>
         <X size={16} />
       </button>
     </motion.div>

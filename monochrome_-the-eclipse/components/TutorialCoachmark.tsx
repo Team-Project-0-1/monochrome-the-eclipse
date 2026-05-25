@@ -106,14 +106,47 @@ const getTutorialCopy = (gameState: GameState): TutorialCopy | null => (
   tutorialCopyOverrides[gameState] ?? tutorialByState[gameState] ?? null
 );
 
+const getCombatTutorialCopy = (
+  selectedPatternCount: number,
+  detectedPatternCount: number,
+  incomingDamage: number,
+): TutorialCopy => {
+  if (selectedPatternCount === 0) {
+    return {
+      key: 'combat',
+      title: '첫 전투: 족보 읽기',
+      next: detectedPatternCount > 0
+        ? `밝게 뜬 족보 ${detectedPatternCount}개 중 하나 선택`
+        : '동전이 만드는 가능한 족보 확인',
+      watch: '앞면은 공격, 뒷면은 방어, 태그는 이번 턴 효과',
+      fallback: '족보 카드를 길게 누르거나 마우스를 올리면 왜 좋은지와 상세 효과가 보입니다.',
+    };
+  }
+
+  return {
+    key: 'combat',
+    title: '첫 전투: 실행 전 확인',
+    next: '선택한 스킬 설명과 예상 피해를 보고 실행',
+    watch: incomingDamage > 0
+      ? `받는 피해 ${incomingDamage}, 적 예고, 패시브/상태`
+      : '적 예고, 패시브/상태, 다음 턴에 쌓일 효과',
+    fallback: '피해가 크면 방어 족보, 행운 교체, 액티브를 먼저 확인하세요.',
+  };
+};
+
 const TutorialCoachmark: React.FC = () => {
   const gameState = useGameStore(state => state.gameState);
   const gameOptions = useGameStore(state => state.gameOptions);
   const tutorialFlags = useGameStore(state => state.tutorialFlags);
   const dismissTutorial = useGameStore(state => state.dismissTutorial);
   const setGameOption = useGameStore(state => state.setGameOption);
+  const selectedPatternCount = useGameStore(state => state.selectedPatterns.length);
+  const detectedPatternCount = useGameStore(state => state.detectedPatterns.length);
+  const incomingDamage = useGameStore(state => state.combatPrediction?.damageToPlayer ?? 0);
 
-  const copy = getTutorialCopy(gameState);
+  const copy = gameState === GameState.COMBAT
+    ? getCombatTutorialCopy(selectedPatternCount, detectedPatternCount, incomingDamage)
+    : getTutorialCopy(gameState);
   if (!copy || !gameOptions.tutorialEnabled || tutorialFlags[copy.key]) {
     return null;
   }

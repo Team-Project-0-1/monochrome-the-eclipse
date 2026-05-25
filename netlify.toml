@@ -1,0 +1,14 @@
+[build]
+base = "monochrome_-the-eclipse"
+command = "npm run check:netlify-build"
+publish = "dist"
+
+[build.environment]
+NODE_VERSION = "22"
+VITE_BASE_PATH = "/"
+
+[context.deploy-preview.environment]
+VITE_BASE_PATH = "/"
+
+[context.branch-deploy.environment]
+VITE_BASE_PATH = "/"

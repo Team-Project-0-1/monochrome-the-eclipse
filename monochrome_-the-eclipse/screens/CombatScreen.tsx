@@ -11,6 +11,8 @@ import { CombatOutcomeRail } from '../components/combat/CombatOutcomeRail';
 import { CombatStage } from '../components/combat/CombatStage';
 import { useCombatEffectTimeline } from '../hooks/useCombatEffectTimeline';
 import { playGameSfx, playUiSound } from '../utils/sound';
+import { characterActiveSkills } from '../dataCharacters';
+import { summarizeAbility } from '../utils/effectSummary';
 
 const mobileHudQuery = '(max-width: 767px)';
 
@@ -64,7 +66,16 @@ export const CombatScreen: React.FC = () => {
   const currentStage = useGameStore(state => state.currentStage);
   const unlockedPatterns = useGameStore(state => state.unlockedPatterns);
   const [activeIntelView, setActiveIntelView] = React.useState<CombatIntelView | null>(null);
+  const [activeSkillNotice, setActiveSkillNotice] = React.useState<{
+    label: string;
+    title: string;
+    detail: string;
+    description: string;
+  } | null>(null);
   const isMobileHud = useMobileCombatHud();
+  const isSkillTargetingMode = activeSkillState.phase !== 'idle';
+  const isSwapMode = swapState.phase !== 'idle';
+  const isFocusMode = isSkillTargetingMode || isSwapMode;
 
   const screenShakeControls = useAnimation();
   const screenFlashControls = useAnimation();
@@ -74,16 +85,35 @@ export const CombatScreen: React.FC = () => {
     screenFlashControls,
   });
 
+  React.useEffect(() => {
+    if (!activeSkillNotice || isFocusMode) return;
+
+    const timer = window.setTimeout(() => setActiveSkillNotice(null), 3200);
+    return () => window.clearTimeout(timer);
+  }, [activeSkillNotice, isFocusMode]);
+
   if (!player || !enemy) {
     return <div className="combat-loading">Loading Combat...</div>;
   }
 
-  const isSkillTargetingMode = activeSkillState.phase !== 'idle';
-  const isSwapMode = swapState.phase !== 'idle';
-  const isFocusMode = isSkillTargetingMode || isSwapMode;
   const canExecute = selectedPatterns.length > 0 && !isFocusMode;
   const disabledByFocus = isFocusMode;
   const devTestMode = import.meta.env.DEV && testMode;
+  const activeSkill = characterActiveSkills[player.class];
+  const activeSkillSummary = activeSkill ? summarizeAbility(activeSkill) : null;
+  const focusDetail = isSkillTargetingMode && activeSkill && activeSkillSummary
+    ? {
+        label: '액티브 사용 중',
+        title: activeSkill.name,
+        detail: activeSkillSummary.cue,
+        description: activeSkillSummary.detail,
+      }
+    : activeSkillNotice;
+  const focusText = isFocusMode
+    ? getFocusPrompt()
+    : activeSkillNotice
+      ? '액티브 효과가 적용되었습니다'
+      : null;
 
   const onCoinClick = (index: number) => {
     playUiSound(gameOptions.soundEnabled, 'select');
@@ -104,7 +134,7 @@ export const CombatScreen: React.FC = () => {
     }
   };
 
-  const getFocusPrompt = () => {
+  function getFocusPrompt() {
     if (swapState.phase === 'revealed') return '교체할 내 동전을 선택하세요.';
 
     switch (activeSkillState.phase) {
@@ -119,7 +149,7 @@ export const CombatScreen: React.FC = () => {
       default:
         return null;
     }
-  };
+  }
 
   const cancelFocus = () => {
     playUiSound(gameOptions.soundEnabled, 'deny');
@@ -144,6 +174,15 @@ export const CombatScreen: React.FC = () => {
   };
 
   const handleUseActiveSkill = () => {
+    if (activeSkill && activeSkillSummary) {
+      setActiveSkillNotice({
+        label: '액티브 상세',
+        title: activeSkill.name,
+        detail: activeSkillSummary.cue,
+        description: activeSkillSummary.detail,
+      });
+    }
+
     playGameSfx(gameOptions.soundEnabled, 'combatSkill');
     useActiveSkill();
   };
@@ -177,8 +216,20 @@ export const CombatScreen: React.FC = () => {
       />
 
       <AnimatePresence>
-        {isFocusMode ? (
-          <FocusBanner text={getFocusPrompt()} revealedFace={swapState.revealedFace} onCancel={cancelFocus} />
+        {isFocusMode || activeSkillNotice ? (
+          <FocusBanner
+            text={focusText}
+            detail={focusDetail}
+            revealedFace={swapState.revealedFace}
+            variant={isFocusMode ? 'focus' : 'notice'}
+            buttonLabel={isFocusMode ? '취소' : '닫기'}
+            onCancel={() => {
+              if (isFocusMode) {
+                cancelFocus();
+              }
+              setActiveSkillNotice(null);
+            }}
+          />
         ) : null}
       </AnimatePresence>
 

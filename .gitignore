@@ -25,10 +25,12 @@
 
 # Cloudflare local state and secrets
 /.wrangler/
+/.netlify/
 /.dev.vars
 /.dev.vars.*
 !/.dev.vars.example
 /monochrome_-the-eclipse/.wrangler/
+/monochrome_-the-eclipse/.netlify/
 /monochrome_-the-eclipse/.dev.vars
 /monochrome_-the-eclipse/.dev.vars.*
 !/monochrome_-the-eclipse/.dev.vars.example
