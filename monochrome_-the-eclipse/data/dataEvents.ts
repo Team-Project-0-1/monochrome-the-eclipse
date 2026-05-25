@@ -3,6 +3,11 @@ import {
   EventDefinition,
 } from "../types";
 
+// PR #6 머지 시 isStage3PublicSafeMode 모듈이 main에 없어 import가 dead임.
+// 잔재 모듈 통합(stage3 public-safe mode 작업) PR이 따로 진행되면 이 줄을 import로 교체.
+// 현재는 false로 강제 = 항상 정식 stage3 event 사용.
+const isStage3PublicSafeMode = false;
+
 export const eventData: { [key: string]: EventDefinition } = {
   event_supplies: {
     id: "event_supplies",
@@ -187,7 +192,48 @@ export const eventData: { [key: string]: EventDefinition } = {
       },
     ],
   },
-  event_stage3_resonance_relay: {
+  event_stage3_resonance_relay: isStage3PublicSafeMode ? {
+    id: "event_stage3_resonance_relay",
+    title: "심층 중계기",
+    description:
+      "최종 심층의 낡은 중계기가 낮은 주파수로 깜빡입니다. 동전 모양의 표식들이 겹치며 다음 전투의 규칙을 예고합니다.",
+    choices: [
+      {
+        text: "공명판의 박자를 안정시킨다",
+        baseSuccessRate: 55,
+        senseBonus: { [CharacterClass.MAGE]: 25, [CharacterClass.WARRIOR]: 10 },
+        success: {
+          senseFragments: 2,
+          message: "중계기의 박자가 정리되고 남은 파동이 감각 조각으로 굳었습니다.",
+        },
+        failure: {
+          curse: 2,
+          message: "되돌아온 신호가 몸 안쪽에서 울립니다. 저주가 따라붙었습니다.",
+        },
+      },
+      {
+        text: "송신핵을 회수한다",
+        baseSuccessRate: 45,
+        senseBonus: { [CharacterClass.TANK]: 25 },
+        success: {
+          echoRemnants: 35,
+          reserveCoinsGained: 1,
+          message: "송신핵은 아직 따뜻했습니다. 에코 잔재와 뒤틀린 예비 동전 하나를 확보했습니다.",
+        },
+        failure: {
+          combat: "annihilationAmplifier",
+          message: "송신핵을 건드리는 순간, 심층 신호체 A가 전투 형태로 응답합니다.",
+        },
+      },
+      {
+        text: "간섭 범위 밖으로 빠져나간다",
+        guaranteed: true,
+        result: {
+          message: "중계기는 계속 울리지만, 지금은 그 신호를 등지고 지나갑니다.",
+        },
+      },
+    ],
+  } : {
     id: "event_stage3_resonance_relay",
     title: "공명 중계탑",
     description:
@@ -213,7 +259,7 @@ export const eventData: { [key: string]: EventDefinition } = {
         success: {
           echoRemnants: 35,
           reserveCoinsGained: 1,
-          message: "송신핵은 아직 따뜻했습니다. 에코 잔재와 뒤틀린 행운 동전 하나를 확보했습니다.",
+          message: "송신핵은 아직 따뜻했습니다. 에코 잔재와 뒤틀린 예비 동전 하나를 확보했습니다.",
         },
         failure: {
           combat: "annihilationAmplifier",
@@ -229,7 +275,47 @@ export const eventData: { [key: string]: EventDefinition } = {
       },
     ],
   },
-  event_stage3_flesh_vat: {
+  event_stage3_flesh_vat: isStage3PublicSafeMode ? {
+    id: "event_stage3_flesh_vat",
+    title: "심층 조율실",
+    description:
+      "차가운 조율 장치들이 일정한 리듬으로 켜졌다 꺼집니다. 하얀 결정들이 안전 케이스 안에서 흔들립니다.",
+    choices: [
+      {
+        text: "결정을 조심스럽게 회수한다",
+        baseSuccessRate: 50,
+        senseBonus: { [CharacterClass.ROGUE]: 30 },
+        success: {
+          memoryPieces: 2,
+          message: "장치의 박자보다 빠르게 손을 빼냈습니다. 기억 조각이 손바닥에 남았습니다.",
+        },
+        failure: {
+          damage: 12,
+          message: "잠들어 있던 장치가 반응했습니다. 뒤늦은 통증이 따라옵니다.",
+        },
+      },
+      {
+        text: "조율 장치를 정지시킨다",
+        baseSuccessRate: 60,
+        senseBonus: { [CharacterClass.WARRIOR]: 15, [CharacterClass.MAGE]: 15 },
+        success: {
+          echoRemnants: 28,
+          message: "장치가 꺼지며 남은 에코가 재처럼 흩어졌습니다.",
+        },
+        failure: {
+          combat: "fleshCultivator",
+          message: "불안정한 신호가 심층 신호체 B를 불러냈습니다.",
+        },
+      },
+      {
+        text: "작동 중인 장치를 건드리지 않는다",
+        guaranteed: true,
+        result: {
+          message: "조율실은 계속 박동합니다. 지금은 그 리듬에 이름을 붙이지 않기로 합니다.",
+        },
+      },
+    ],
+  } : {
     id: "event_stage3_flesh_vat",
     title: "장의 배양조",
     description:
@@ -270,7 +356,51 @@ export const eventData: { [key: string]: EventDefinition } = {
       },
     ],
   },
-  event_stage3_eclipse_sanctuary: {
+  event_stage3_eclipse_sanctuary: isStage3PublicSafeMode ? {
+    id: "event_stage3_eclipse_sanctuary",
+    title: "무채 제단",
+    description:
+      "밝기를 잃은 제단 위로 희미한 원형 표식이 내려앉습니다. 봉인된 동전들이 둘레를 돌며 선택을 재촉합니다.",
+    choices: [
+      {
+        text: "봉인 동전의 궤도를 읽는다",
+        baseSuccessRate: 50,
+        senseBonus: { [CharacterClass.MAGE]: 25 },
+        success: {
+          senseFragments: 1,
+          memoryPieces: 1,
+          message: "동전의 궤도가 잠깐 멈추고, 감각과 기억이 같은 문양으로 겹쳤습니다.",
+        },
+        failure: {
+          curse: 1,
+          damage: 8,
+          message: "읽는 순간 제단이 당신의 박자를 먼저 읽었습니다.",
+        },
+      },
+      {
+        text: "제단에 에코를 바친다",
+        requiredResources: { echoRemnants: 15 },
+        baseSuccessRate: 70,
+        success: {
+          echoRemnants: -15,
+          reserveCoinsGained: 1,
+          message: "에코가 사라진 자리에 무채색 예비 동전 하나가 남았습니다.",
+        },
+        failure: {
+          echoRemnants: -15,
+          combat: "abyssObserver",
+          message: "제단은 대가만 삼키고, 심층 관측 신호를 깨웠습니다.",
+        },
+      },
+      {
+        text: "기도가 시작되기 전에 떠난다",
+        guaranteed: true,
+        result: {
+          message: "침묵은 깨지지 않았습니다. 그 사실만으로도 충분한 보상일 수 있습니다.",
+        },
+      },
+    ],
+  } : {
     id: "event_stage3_eclipse_sanctuary",
     title: "침묵 성역",
     description:
@@ -298,7 +428,7 @@ export const eventData: { [key: string]: EventDefinition } = {
         success: {
           echoRemnants: -15,
           reserveCoinsGained: 1,
-          message: "에코가 사라진 자리에 무채색 행운 동전 하나가 남았습니다.",
+          message: "에코가 사라진 자리에 무채색 예비 동전 하나가 남았습니다.",
         },
         failure: {
           echoRemnants: -15,

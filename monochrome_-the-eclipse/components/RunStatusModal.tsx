@@ -171,7 +171,7 @@ const RunStatusModal: React.FC<RunStatusModalProps> = ({ isOpen, onClose }) => {
                     { imagePath: resourceIconPaths.echoRemnants, label: '에코', value: resources.echoRemnants, color: 'text-yellow-200' },
                     { imagePath: resourceIconPaths.senseFragments, label: '감각', value: resources.senseFragments, color: 'text-purple-200' },
                     { imagePath: resourceIconPaths.memoryPieces, label: '기억', value: resources.memoryPieces, color: 'text-blue-200' },
-                    { imagePath: resourceIconPaths.reserveCoin, label: '행운 동전', value: `${reserveCoins.length}/${MAX_RESERVE_COINS}`, color: 'text-orange-200' },
+                    { imagePath: resourceIconPaths.reserveCoin, label: '예비 동전', value: `${reserveCoins.length}/${MAX_RESERVE_COINS}`, color: 'text-orange-200' },
                   ].map(({ imagePath, label, value, color }) => (
                     <div key={label} className="rounded-md border border-white/10 bg-white/6 p-3">
                       <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-slate-400">

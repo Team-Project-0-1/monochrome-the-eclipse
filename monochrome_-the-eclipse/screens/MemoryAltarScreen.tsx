@@ -46,7 +46,7 @@ export const MemoryAltarScreen = () => {
           <div className="memory-altar-intro rounded-lg border border-blue-300/20 bg-blue-950/18 p-4 backdrop-blur-md">
             <div className="mb-3 inline-flex items-center gap-2 rounded-md border border-blue-200/30 bg-blue-950/30 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-blue-100">
               <Landmark className="h-4 w-4" />
-              Memory Altar
+              기억의 제단
             </div>
             <h1 className="font-orbitron text-3xl font-black text-white">기억의 제단</h1>
             <p className="mt-3 text-sm leading-relaxed text-slate-300">

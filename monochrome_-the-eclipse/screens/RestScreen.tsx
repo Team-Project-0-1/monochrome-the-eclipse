@@ -58,7 +58,7 @@ export const RestScreen = () => {
         <div className="rest-story">
           <div className="rest-kicker">
             <Moon className="h-4 w-4" />
-            Safe Resonance
+            안전 공명대
           </div>
           <h1 className="font-orbitron text-4xl font-black text-white sm:text-6xl">휴식처</h1>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-200 sm:text-base">
@@ -66,7 +66,7 @@ export const RestScreen = () => {
           </p>
 
           <div className="rest-dialogue">
-            <div className="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-100">Camp Log</div>
+            <div className="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-100">야영 기록</div>
             <p>"동전은 멈췄을 때 더 크게 울린다. 지금은 선택을 미룰 수 있는 몇 안 되는 순간이다."</p>
           </div>
         </div>

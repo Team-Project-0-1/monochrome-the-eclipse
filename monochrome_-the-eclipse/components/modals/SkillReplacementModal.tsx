@@ -13,7 +13,10 @@ const SkillReplacementModal: React.FC = () => {
     if (!skillReplacementState?.isModalOpen || !player) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-[101] p-4">
+        <div
+            className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center p-4"
+            style={{ zIndex: 'var(--z-modal-top)' }}
+        >
             <div className="max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-lg border border-yellow-500 bg-gray-800 p-6 shadow-xl">
                 <h3 className="text-xl font-bold text-yellow-400 mb-4">기술 슬롯 가득 참</h3>
                 <p className="text-gray-300 mb-4">새로운 기술 '{skillReplacementState.newSkill.name}'을(를) 배우려면 기존 기술 하나를 잊어야 합니다.</p>

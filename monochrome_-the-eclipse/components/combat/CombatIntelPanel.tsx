@@ -106,6 +106,72 @@ const monsterPassiveSummaries: Record<string, { name: string; description: strin
     name: '톱날 이빨',
     description: '10 이상의 피해를 주면 출혈을 추가로 부여합니다.',
   },
+  // Stage 2 — Amplifier / Cultivator / Observer 라인
+  PASSIVE_AMPLIFIER_RUPTURE_SOUND: {
+    name: '파열 음파',
+    description: '증폭이 5 이상일 때 공격에 공명 2를 추가로 남깁니다.',
+  },
+  PASSIVE_AMPLIFIER_BROAD_INTERFERENCE: {
+    name: '광역 간섭',
+    description: '플레이어의 공명이 폭발할 때 방어를 최대 3 무너뜨립니다.',
+  },
+  PASSIVE_AMPLIFIER_COLLAPSE_VIBRATION: {
+    name: '붕괴 진동',
+    description: '증폭이 한계에 닿으면 모든 공격이 +5 추가 피해를 입힙니다.',
+  },
+  PASSIVE_CULTIVATOR_BUTCHER_INSTINCT: {
+    name: '도축 본능',
+    description: '대상의 표식이 4 이상이면 공격 시 출혈 2를 추가로 부여합니다.',
+  },
+  PASSIVE_CULTIVATOR_FRESH_MEAT: {
+    name: '신선한 고기',
+    description: '출혈 중인 대상에게 공격하면 +2 피해를 더 입힙니다.',
+  },
+  PASSIVE_CULTIVATOR_HOOK_RETRIEVAL: {
+    name: '갈고리 회수',
+    description: '다단 공격(2회 이상)에 표식 1을 추가로 부여합니다.',
+  },
+  PASSIVE_OBSERVER_VOID_GAZE: {
+    name: '공허 주시',
+    description: '대상의 저주가 4 이상이면 공격 시 봉인 1을 부여합니다.',
+  },
+  PASSIVE_OBSERVER_MENTAL_COLLAPSE: {
+    name: '정신 붕괴',
+    description: '봉인된 대상에게 +4 추가 피해를 입힙니다.',
+  },
+  PASSIVE_OBSERVER_ABYSS_ECHO: {
+    name: '심연 메아리',
+    description: '대상이 봉인되었을 때 봉인 수치만큼(최대 3) 저주를 되돌립니다.',
+  },
+  // Stage 3 — Apostle / Choir 라인 (보스 단)
+  PASSIVE_APOSTLE_ADAPTIVE_EVOLUTION: {
+    name: '적응 진화',
+    description: '피격할 때마다 증폭 1을 얻습니다. 전투당 최대 3회 누적됩니다.',
+  },
+  PASSIVE_APOSTLE_FLESH_REFLECTION: {
+    name: '육체 반사',
+    description: '자신의 반격이 5 이상이면 모든 공격이 +5 피해를 입힙니다.',
+  },
+  PASSIVE_APOSTLE_TWISTED_REGENERATION: {
+    name: '비틀린 재생',
+    description: '체력 50% 이하일 때 턴 종료마다 5를 회복합니다.',
+  },
+  PASSIVE_CHOIR_ECHO_MULTIPLICATION: {
+    name: '메아리 증식',
+    description: '플레이어의 공명이 폭발한 직후 저주 2를 추가로 부여합니다.',
+  },
+  PASSIVE_CHOIR_UNHOLY_HYMN: {
+    name: '부정 찬가',
+    description: '봉인된 대상에게 +5 추가 피해를 입힙니다.',
+  },
+  PASSIVE_CHOIR_DOOM_FORETELLING: {
+    name: '종말 예고',
+    description: '대상의 누적 디버프 합이 10 이상이면 피해를 1.5배로 증폭합니다.',
+  },
+  PASSIVE_CHOIR_ECLIPSE_PHENOMENON: {
+    name: '월식 현상',
+    description: '체력 50% 이하일 때 모든 공격에 공명 2를 추가로 남깁니다.',
+  },
 };
 
 const formatCoinIndices = (indices: number[]) => (
@@ -133,7 +199,7 @@ const getCombatNextCue = (
   if (prediction.damageToEnemy >= enemy.currentHp) return '실행하면 처치';
   if (prediction.damageToPlayer >= player.currentHp) return '방어/회복 먼저';
   if (prediction.damageToPlayer > prediction.damageToEnemy) return '받는 피해 줄이기';
-  return '행운/액티브 확인 후 실행';
+  return '예비 동전/액티브 확인 후 실행';
 };
 
 export const CombatIntelBar: React.FC<CombatIntelBarProps> = ({
@@ -148,11 +214,9 @@ export const CombatIntelBar: React.FC<CombatIntelBarProps> = ({
   onOpen,
   onClose,
 }) => {
-  const enemyPatternLabel = getIntentPatternLabel(intent, enemy);
-  const damageToEnemy = prediction?.damageToEnemy ?? 0;
-  const damageToPlayer = prediction?.damageToPlayer ?? 0;
-  const currentIntent = intent?.description ?? '대기';
-  const nextCue = getCombatNextCue(player, enemy, selectedPatterns, prediction);
+  // 예상 피해 / 적 예고 / 다음 행동 cue 는 CombatOutcomeRail/MobileOutcomeSummary에
+  // 이미 상시 노출되므로 이 바에서는 제거하여 정보 중복을 해소한다.
+  // 본 바는 (1) 시너지/상태 요약, (2) 4개 정보 패널 토글만 담당한다.
   const selectedAbilityNames = selectedPatterns
     .slice(0, 2)
     .map(pattern => getPlayerAbility(player.class, player.acquiredSkills, pattern.type, pattern.face).name);
@@ -187,21 +251,8 @@ export const CombatIntelBar: React.FC<CombatIntelBarProps> = ({
 
   return (
     <>
-      <nav className="combat-intel-bar" aria-label="combat information">
-        <div className="combat-intel-snapshot">
-          <span>예상</span>
-          <b className="player">적 -{damageToEnemy}</b>
-          <b className="enemy">내 -{damageToPlayer}</b>
-        </div>
-        <div className="combat-intel-snapshot is-next">
-          <span>다음</span>
-          <b>{nextCue}</b>
-        </div>
-        <div className="combat-intel-snapshot is-wide">
-          <span>적 예고</span>
-          <b>{enemyPatternLabel ?? currentIntent}</b>
-        </div>
-        <div className="combat-synergy-strip" aria-label="active status and pattern synergy" title={synergyTitle}>
+      <nav className="combat-intel-bar is-condensed" aria-label="전투 정보 요약 및 패널 토글">
+        <div className="combat-synergy-strip" aria-label="패시브 및 상태 시너지" title={synergyTitle}>
           <span className="combat-synergy-passive" title={innatePassive ?? '습득한 패시브와 고유 패시브 수'}>
             <b>패시브</b>
             <em>{passiveCount}</em>
@@ -231,7 +282,7 @@ export const CombatIntelBar: React.FC<CombatIntelBarProps> = ({
           </button>
           <button type="button" className={activeView === 'calc' ? 'is-active' : ''} onClick={() => toggleView('calc')}>
             <Calculator size={15} />
-            <span>결과</span>
+            <span>결과 계산</span>
           </button>
           <button type="button" className={activeView === 'passives' ? 'is-active' : ''} onClick={() => toggleView('passives')}>
             <Sparkles size={15} />
@@ -504,7 +555,7 @@ const PassiveIntel: React.FC<{
         {enemyPassiveIds.length > 0 ? enemyPassiveIds.map(id => {
           const passive = monsterPassiveSummaries[id] ?? {
             name: id.replace(/^PASSIVE_/, '').replace(/_/g, ' '),
-            description: '상세 효과 설명이 아직 전투 정보 테이블에 연결되지 않았습니다.',
+            description: '이 적의 고유 패시브입니다. 전투 흐름을 보며 효과를 파악하세요.',
           };
           return (
             <article key={id} className="combat-intel-passive danger">

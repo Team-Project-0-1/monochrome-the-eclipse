@@ -130,7 +130,7 @@ const getCombatTutorialCopy = (
     watch: incomingDamage > 0
       ? `받는 피해 ${incomingDamage}, 적 예고, 패시브/상태`
       : '적 예고, 패시브/상태, 다음 턴에 쌓일 효과',
-    fallback: '피해가 크면 방어 족보, 행운 교체, 액티브를 먼저 확인하세요.',
+    fallback: '피해가 크면 방어 족보, 예비 동전 교체, 액티브를 먼저 확인하세요.',
   };
 };
 

@@ -46,7 +46,7 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndic
         <div>
           <div className="mb-2 inline-flex items-center gap-2 rounded-md border border-cyan-300/30 bg-cyan-950/40 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-100">
             <RadioTower className="h-3.5 w-3.5" />
-            Floor {currentTurn} Signal
+            {currentTurn}층 신호
           </div>
           <h2 className="text-2xl font-black text-white sm:text-3xl">다음 신호를 고르세요</h2>
           <p className="mt-1 max-w-2xl text-sm leading-relaxed text-slate-300">
@@ -88,7 +88,7 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndic
                 <div className="mb-4 flex items-start justify-between gap-3">
                   <div>
                     <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/55">
-                      Path {String(index + 1).padStart(2, '0')}
+                      경로 {String(index + 1).padStart(2, '0')}
                     </div>
                     <div className="mt-1 text-sm font-bold text-white">{meta.routeName}</div>
                   </div>

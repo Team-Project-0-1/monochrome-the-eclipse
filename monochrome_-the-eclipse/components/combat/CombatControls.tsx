@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { HelpCircle, Shield, Swords } from 'lucide-react';
+import { HelpCircle, Info, Shield, Swords } from 'lucide-react';
 import { characterActiveSkills } from '../../data/dataCharacters';
 import { getPlayerAbility } from '../../data/dataSkills';
 import {
@@ -80,8 +80,6 @@ export const PatternRail: React.FC<PatternRailProps> = ({
   const selectedUsedIndices = useMemo(() => new Set(selectedPatterns.flatMap(pattern => pattern.indices)), [selectedPatterns]);
   const [inspectedPatternKey, setInspectedPatternKey] = React.useState<string | null>(null);
   const railRef = React.useRef<HTMLDivElement | null>(null);
-  const inspectionTimer = React.useRef<number | null>(null);
-  const suppressNextClick = React.useRef(false);
   const selectedPatternDetails = useMemo(() => {
     const seen = new Set<string>();
     return selectedPatterns.flatMap(pattern => {
@@ -105,13 +103,6 @@ export const PatternRail: React.FC<PatternRailProps> = ({
       railRef.current?.scrollTo({ left: 0 });
     }
   }, [selectedPatternDetails.length]);
-
-  const clearInspectionTimer = () => {
-    if (inspectionTimer.current !== null) {
-      window.clearTimeout(inspectionTimer.current);
-      inspectionTimer.current = null;
-    }
-  };
 
   if (groups.length === 0) {
     return (
@@ -161,68 +152,65 @@ export const PatternRail: React.FC<PatternRailProps> = ({
         const isInspecting = inspectedPatternKey === groupKey;
 
         return (
-          <button
+          <div
             key={groupKey}
-            type="button"
-            className={`combat-pattern-chip ${faceClass(group.face)} ${selectedClass} ${cappedClass}`}
-            disabled={disabled}
-            aria-pressed={selectedCount > 0}
-            aria-describedby={detailId}
-            onClick={(event) => {
-              if (suppressNextClick.current) {
-                event.preventDefault();
-                suppressNextClick.current = false;
-                return;
-              }
-
-              onToggle(group.type, group.face);
-              setInspectedPatternKey(groupKey);
-            }}
+            className={`combat-pattern-chip-wrap ${isInspecting ? 'is-inspecting' : ''}`}
             onMouseEnter={() => setInspectedPatternKey(groupKey)}
             onMouseLeave={() => setInspectedPatternKey(current => current === groupKey ? null : current)}
-            onFocus={() => setInspectedPatternKey(groupKey)}
-            onBlur={() => setInspectedPatternKey(current => current === groupKey ? null : current)}
-            onPointerDown={(event) => {
-              if (event.pointerType === 'mouse') return;
-              clearInspectionTimer();
-              suppressNextClick.current = false;
-              inspectionTimer.current = window.setTimeout(() => {
-                suppressNextClick.current = true;
-                setInspectedPatternKey(groupKey);
-              }, 420);
-            }}
-            onPointerUp={clearInspectionTimer}
-            onPointerCancel={clearInspectionTimer}
-            title={ability.description}
-            data-testid={`combat-pattern-${group.type.toLowerCase()}-${group.face?.toLowerCase() ?? 'mixed'}`}
           >
-            <span className="combat-card-topline">
-              <span className="combat-card-corner">{patternLabels[group.type]}</span>
-              <span className="combat-card-face">
-                {faceLabel(group.face)}
-                {selectedCount > 0 ? <small>선택 {selectedCount}</small> : null}
+            <button
+              type="button"
+              className={`combat-pattern-chip ${faceClass(group.face)} ${selectedClass} ${cappedClass}`}
+              disabled={disabled}
+              aria-pressed={selectedCount > 0}
+              aria-describedby={detailId}
+              onClick={() => onToggle(group.type, group.face)}
+              onFocus={() => setInspectedPatternKey(groupKey)}
+              onBlur={() => setInspectedPatternKey(current => current === groupKey ? null : current)}
+              title={ability.description}
+              data-testid={`combat-pattern-${group.type.toLowerCase()}-${group.face?.toLowerCase() ?? 'mixed'}`}
+            >
+              <span className="combat-card-topline">
+                <span className="combat-card-corner">{patternLabels[group.type]}</span>
+                <span className="combat-card-face">
+                  {faceLabel(group.face)}
+                  {selectedCount > 0 ? <small>선택 {selectedCount}</small> : null}
+                </span>
               </span>
-            </span>
-            <span className="combat-pattern-art">
-              <img
-                className="combat-pattern-icon-img"
-                src={assetPath(patternIconPaths[group.type])}
-                alt=""
-                loading="lazy"
-                aria-hidden="true"
-              />
-            </span>
-            <span className="combat-pattern-text">
-              <EffectSummary summary={summary} compact hideHeadline chipLimit={3} showCue cueLabel="역할" className="combat-pattern-summary" />
-              <strong>{ability.name}</strong>
-              <span>{selectedCount > 0 ? `선택 ${selectedCount}` : `후보 ${group.patterns.length}`}</span>
-            </span>
+              <span className="combat-pattern-art">
+                <img
+                  className="combat-pattern-icon-img"
+                  src={assetPath(patternIconPaths[group.type])}
+                  alt=""
+                  loading="lazy"
+                  aria-hidden="true"
+                />
+              </span>
+              <span className="combat-pattern-text">
+                <EffectSummary summary={summary} compact hideHeadline chipLimit={3} showCue cueLabel="역할" className="combat-pattern-summary" />
+                <strong>{ability.name}</strong>
+                <span>{selectedCount > 0 ? `선택 ${selectedCount}` : `후보 ${group.patterns.length}`}</span>
+              </span>
+            </button>
+            <button
+              type="button"
+              className="combat-pattern-info"
+              aria-label={`${ability.name} 상세 효과 보기`}
+              aria-expanded={isInspecting}
+              aria-controls={detailId}
+              onClick={(event) => {
+                event.stopPropagation();
+                setInspectedPatternKey(current => current === groupKey ? null : groupKey);
+              }}
+            >
+              <Info size={13} aria-hidden="true" />
+            </button>
             <span id={detailId} className={`combat-pattern-detail ${isInspecting ? 'is-open' : ''}`} role="tooltip">
               <span>상세 효과</span>
               <strong>{ability.name}</strong>
               <em>{summary.detail}</em>
             </span>
-          </button>
+          </div>
         );
       })}
       {usedCoinIndices.length > 0 ? <span className="combat-used-count">{usedCoinIndices.length}개 사용 예정</span> : null}
@@ -239,70 +227,63 @@ interface ActiveSkillPillProps {
 export const ActiveSkillPill: React.FC<ActiveSkillPillProps> = ({ player, disabled, onClick }) => {
   const skill = characterActiveSkills[player.class];
   const [showDetail, setShowDetail] = React.useState(false);
-  const detailTimer = React.useRef<number | null>(null);
-  const suppressNextClick = React.useRef(false);
   if (!skill) return null;
 
   const onCooldown = player.activeSkillCooldown > 0;
   const isDisabled = disabled || onCooldown;
   const summary = summarizeAbility(skill);
-
-  const clearDetailTimer = () => {
-    if (detailTimer.current !== null) {
-      window.clearTimeout(detailTimer.current);
-      detailTimer.current = null;
-    }
-  };
+  const detailId = `combat-active-skill-detail-${player.class.toLowerCase()}`;
 
   return (
-    <button
-      type="button"
-      className="combat-active-skill"
-      disabled={isDisabled}
-      onClick={(event) => {
-        if (suppressNextClick.current) {
-          event.preventDefault();
-          suppressNextClick.current = false;
-          return;
-        }
-
-        onClick();
-      }}
+    <div
+      className={`combat-active-skill-wrap ${showDetail ? 'is-inspecting' : ''}`}
       onMouseEnter={() => setShowDetail(true)}
       onMouseLeave={() => setShowDetail(false)}
-      onFocus={() => setShowDetail(true)}
-      onBlur={() => setShowDetail(false)}
-      onPointerDown={(event) => {
-        if (event.pointerType === 'mouse') return;
-        clearDetailTimer();
-        suppressNextClick.current = false;
-        detailTimer.current = window.setTimeout(() => {
-          suppressNextClick.current = true;
-          setShowDetail(true);
-        }, 420);
-      }}
-      onPointerUp={clearDetailTimer}
-      onPointerCancel={clearDetailTimer}
-      title={skill.description}
     >
-      <img
-        className="combat-active-skill-img"
-        src={assetPath(activeSkillIconPaths[player.class])}
-        alt=""
-        loading="lazy"
-        aria-hidden="true"
-      />
-      <span className="combat-active-skill-copy">
-        <strong>{skill.name}</strong>
-        <EffectSummary text={skill.description} compact hideHeadline chipLimit={2} showCue cueLabel="용도" />
-      </span>
-      <b>{onCooldown ? `쿨 ${player.activeSkillCooldown}` : 'OK'}</b>
-      <span className={`combat-active-skill-detail ${showDetail ? 'is-open' : ''}`} role="tooltip">
+      <button
+        type="button"
+        className="combat-active-skill"
+        disabled={isDisabled}
+        onClick={onClick}
+        onFocus={() => setShowDetail(true)}
+        onBlur={() => setShowDetail(false)}
+        title={skill.description}
+        aria-describedby={detailId}
+      >
+        <img
+          className="combat-active-skill-img"
+          src={assetPath(activeSkillIconPaths[player.class])}
+          alt=""
+          loading="lazy"
+          aria-hidden="true"
+        />
+        <span className="combat-active-skill-copy">
+          <strong>{skill.name}</strong>
+          <EffectSummary text={skill.description} compact hideHeadline chipLimit={2} showCue cueLabel="용도" />
+        </span>
+        <b title={onCooldown ? `${player.activeSkillCooldown}턴 후 사용 가능 (쿨타임 3턴)` : '지금 사용 가능 · 쿨타임 3턴'}>
+          {onCooldown ? `쿨 ${player.activeSkillCooldown}턴` : '사용 가능'}
+        </b>
+      </button>
+      <button
+        type="button"
+        className="combat-active-skill-info"
+        aria-label={`${skill.name} 상세 효과 보기`}
+        aria-expanded={showDetail}
+        aria-controls={detailId}
+        onClick={(event) => {
+          event.stopPropagation();
+          setShowDetail(current => !current);
+        }}
+      >
+        <Info size={13} aria-hidden="true" />
+      </button>
+      <span id={detailId} className={`combat-active-skill-detail ${showDetail ? 'is-open' : ''}`} role="tooltip">
         <span>액티브 상세</span>
         <strong>{skill.name}</strong>
         <em>{summary.detail}</em>
       </span>
-    </button>
+    </div>
   );
 };
 
@@ -339,7 +320,12 @@ export const ReserveCoinStrip: React.FC<ReserveCoinStripProps> = ({
   }, [pendingIndex, reserveCoins.length, selectedIndex]);
 
   if (reserveCoins.length === 0) {
-    return <div className="combat-reserve-empty">행운 없음</div>;
+    return (
+      <div className="combat-reserve-empty" title="예비 동전은 상점·이벤트·미니보스 보상으로 얻습니다.">
+        <strong>예비 동전 없음</strong>
+        <small>상점/이벤트/미니보스에서 획득</small>
+      </div>
+    );
   }
 
   const activeIndex = selectedIndex ?? pendingIndex;
@@ -348,7 +334,7 @@ export const ReserveCoinStrip: React.FC<ReserveCoinStripProps> = ({
   return (
     <div className="combat-reserve-control">
       <div className="combat-reserve-head">
-        <span>행운</span>
+        <span>예비</span>
         <b>{reserveCoins.length}/{MAX_RESERVE_COINS}</b>
       </div>
       <div className="combat-reserve-strip" aria-label="reserve coins">
@@ -365,7 +351,7 @@ export const ReserveCoinStrip: React.FC<ReserveCoinStripProps> = ({
             className={`combat-reserve-slot ${faceClass(shownFace)} ${isActive ? 'is-selected' : ''} ${selectedIndex === index ? 'is-revealed' : ''}`}
             disabled={isSwapping}
             onClick={() => setPendingIndex(index)}
-            title={`행운 동전 ${index + 1}${shownFace ? `: ${faceLabel(shownFace)}` : ''}`}
+            title={`예비 동전 ${index + 1}${shownFace ? `: ${faceLabel(shownFace)}` : ''}`}
           >
             <small>{index + 1}</small>
             <span className="combat-reserve-face">

@@ -61,7 +61,7 @@ export const CombatRewardScreen = () => {
           <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <div className="inline-flex items-center gap-2 rounded-md border border-yellow-200/30 bg-yellow-950/30 px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.2em] text-yellow-100">
               <Sparkles className="h-4 w-4" />
-              Reward Choice
+              보상 선택
             </div>
             <ActionButton
               variant="ghost"
@@ -99,7 +99,7 @@ export const CombatRewardScreen = () => {
                 <div className="flex h-full flex-col">
                   <div className="mb-3 flex items-start justify-between gap-3">
                     <div>
-                      <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-yellow-100/70">Pick One</div>
+                      <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-yellow-100/70">하나 선택</div>
                       <h2 className="mt-1 text-2xl font-black text-white">{choice.label}</h2>
                     </div>
                     <ArrowRight className="h-5 w-5 text-yellow-100 transition-transform group-hover:translate-x-1" />
@@ -109,10 +109,9 @@ export const CombatRewardScreen = () => {
                     <span>선택 이유</span>
                     <strong>{getRewardChoiceCue(choice)}</strong>
                   </div>
-                  <details className="combat-reward-choice-detail">
-                    <summary>상세</summary>
-                    <p>{choice.description}</p>
-                  </details>
+                  <p className="combat-reward-choice-detail mt-2 text-xs leading-relaxed text-slate-300">
+                    {choice.description}
+                  </p>
 
                   <div className="mt-4 grid gap-2">
                     {skillReward && (
@@ -155,7 +154,7 @@ export const CombatRewardScreen = () => {
                           ? '감각 조각'
                           : key === 'memoryPieces'
                             ? '기억 조각'
-                            : '행운 동전';
+                            : '예비 동전';
                       const displayValue = typeof value === 'boolean' ? '+1' : `+${value}`;
 
                       return (

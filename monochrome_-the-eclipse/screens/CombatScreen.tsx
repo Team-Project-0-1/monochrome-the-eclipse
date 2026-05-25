@@ -83,6 +83,7 @@ export const CombatScreen: React.FC = () => {
     combatEffects,
     screenShakeControls,
     screenFlashControls,
+    reducedMotion: gameOptions.reducedMotion,
   });
 
   React.useEffect(() => {
