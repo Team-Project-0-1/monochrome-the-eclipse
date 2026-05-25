@@ -21,7 +21,7 @@ Still release-sensitive:
 - Stage 3 is playable in prototype scope, but generated Stage 3 assets still need owner provenance approval before a broader public push.
 - There is no committed browser E2E regression suite yet; current verification is build checks plus targeted browser smoke inspection.
 - PC install/PWA behavior has not been validated on a deployed public URL yet.
-- Prototype/portfolio operations are now documented in `monochrome_-the-eclipse/docs/prototype-product-brief.md` and `monochrome_-the-eclipse/docs/prototype-operations-playbook.md`.
+- Prototype/portfolio operations are now documented in `monochrome_-the-eclipse/docs/design/prototype-product-brief.md` and `monochrome_-the-eclipse/docs/operations/prototype-operations-playbook.md`.
 
 ## Verification Evidence - 2026-05-01
 
@@ -94,7 +94,7 @@ Acceptance criteria:
 - `npm run release:check` passes. Status: passed on 2026-05-01.
 - Browser smoke test covers desktop combat, mobile combat, shop, event, reward, and rest. Status: passed on 2026-05-01.
 - No console errors after fresh page load and one short run. Status: passed on 2026-05-01.
-- `docs/content-source-ledger.md` has no unacknowledged blockers for the shipped scope.
+- `monochrome_-the-eclipse/docs/content/content-source-ledger.md` has no unacknowledged blockers for the shipped scope.
 
 Work:
 - Keep using GitHub Pages as the fallback deploy target.

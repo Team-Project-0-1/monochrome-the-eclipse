@@ -31,10 +31,10 @@ Use `npm run prototype:check` before a portfolio/prototype deployment. It runs t
 
 ## Product and Operations Docs
 
-- `docs/prototype-product-brief.md` - portfolio positioning, scope, demo script, and product gates.
-- `docs/prototype-operations-playbook.md` - deployment, smoke testing, monitoring, incident triage, rollback, and patch cadence.
-- `docs/stage-3-prd.md` - implemented Stage 3 gate, boss, and reward scope.
-- `docs/stage-3-content-brief.md` - Stage 3 content contract and source trace.
+- `docs/design/prototype-product-brief.md` - portfolio positioning, scope, demo script, and product gates.
+- `docs/operations/prototype-operations-playbook.md` - deployment, smoke testing, monitoring, incident triage, rollback, and patch cadence.
+- `docs/design/stage-3-prd.md` - implemented Stage 3 gate, boss, and reward scope.
+- `docs/content/stage-3-content-brief.md` - Stage 3 content contract and source trace.
 - `../docs/release-direction-criteria.md` - criteria separating prototype, paid Early Access, and paid 1.0.
 - `../docs/user-required-release-actions.md` - owner decisions that Codex should not make alone.
 
