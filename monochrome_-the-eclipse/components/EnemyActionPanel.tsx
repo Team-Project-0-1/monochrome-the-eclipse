@@ -1,6 +1,6 @@
 import React from 'react';
 import { CoinFace, EnemyCharacter, EnemyIntent, PatternType } from '../types';
-import { monsterData, monsterPatterns } from '../dataMonsters';
+import { monsterData, monsterPatterns } from '../data/dataMonsters';
 import { Swords, Shield, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import EffectSummary from './EffectSummary';

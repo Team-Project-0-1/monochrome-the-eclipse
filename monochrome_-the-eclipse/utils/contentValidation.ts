@@ -1,5 +1,5 @@
-import { stageData } from '../dataStages';
-import { monsterData, monsterPatterns } from '../dataMonsters';
+import { stageData } from '../data/dataStages';
+import { monsterData, monsterPatterns } from '../data/dataMonsters';
 import { isStagePlayable } from './stageProgression';
 
 export interface ContentValidationIssue {

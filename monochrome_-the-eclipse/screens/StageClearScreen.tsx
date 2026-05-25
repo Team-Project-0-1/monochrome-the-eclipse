@@ -3,7 +3,7 @@ import { useGameStore } from '../store/gameStore';
 import RunResultScreen from '../components/RunResultScreen';
 import { GameState } from '../types';
 import { isStagePlayable } from '../utils/stageProgression';
-import { stageData } from '../dataStages';
+import { stageData } from '../data/dataStages';
 
 export const StageClearScreen = () => {
   const startStage = useGameStore(state => state.startStage);

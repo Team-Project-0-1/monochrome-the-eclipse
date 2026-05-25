@@ -1,4 +1,4 @@
-import { effectIconPaths } from '../dataEffects';
+import { effectIconPaths } from '../data/dataEffects';
 import {
   CharacterClass,
   PatternType,

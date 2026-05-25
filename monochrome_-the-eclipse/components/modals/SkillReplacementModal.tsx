@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGameStore } from '../../store/gameStore';
-import { playerSkillUnlocks } from '../../dataSkills';
+import { playerSkillUnlocks } from '../../data/dataSkills';
 import EffectSummary from '../EffectSummary';
 import { summarizeDescription } from '../../utils/effectSummary';
 

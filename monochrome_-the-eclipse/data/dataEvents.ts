@@ -1,7 +1,7 @@
 import {
   CharacterClass,
   EventDefinition,
-} from "./types";
+} from "../types";
 
 export const eventData: { [key: string]: EventDefinition } = {
   event_supplies: {

@@ -1,6 +1,6 @@
 import { EnemyCharacter, PlayerCharacter } from '../types';
-import { playerSkillUnlocks } from '../dataSkills';
-import { patternUpgrades } from '../dataUpgrades';
+import { playerSkillUnlocks } from '../data/dataSkills';
+import { patternUpgrades } from '../data/dataUpgrades';
 import { faceLabel, patternLabels } from './combatPresentation';
 import { MAX_SKILLS } from '../constants';
 

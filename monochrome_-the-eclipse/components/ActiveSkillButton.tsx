@@ -1,6 +1,6 @@
 import React from 'react';
 import { PlayerCharacter, CharacterClass, LucideIcon } from '../types';
-import { characterActiveSkills } from '../dataCharacters';
+import { characterActiveSkills } from '../data/dataCharacters';
 import { Dices, Shuffle, GitCommit, Lock } from 'lucide-react';
 import EffectSummary from './EffectSummary';
 

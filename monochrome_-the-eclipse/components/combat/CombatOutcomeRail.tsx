@@ -7,7 +7,7 @@ import {
   getIntentPatternLabel,
   patternLabels,
 } from '../../utils/combatPresentation';
-import { getPlayerAbility } from '../../dataSkills';
+import { getPlayerAbility } from '../../data/dataSkills';
 
 interface CombatOutcomeRailProps {
   player: PlayerCharacter;

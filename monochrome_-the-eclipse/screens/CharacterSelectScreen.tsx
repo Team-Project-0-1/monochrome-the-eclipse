@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGameStore } from '../store/gameStore';
 import { CharacterClass, LucideIcon, GameState } from '../types';
-import { characterData, characterActiveSkills } from '../dataCharacters';
+import { characterData, characterActiveSkills } from '../data/dataCharacters';
 import { Zap, Target, ShieldCheck, Ghost, Layers, BrainCircuit, BookOpen, Map, Swords, ArrowUpCircle, Cpu } from "lucide-react";
 import GameShell from '../components/ui/GameShell';
 import ScreenHeader from '../components/ui/ScreenHeader';

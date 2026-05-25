@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { ArrowRight, CheckCircle2, ShoppingBag, UserRoundSearch, XCircle } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
-import { shopData } from '../dataShop';
-import { patternUpgrades } from '../dataUpgrades';
-import { playerSkillUnlocks } from '../dataSkills';
+import { shopData } from '../data/dataShop';
+import { patternUpgrades } from '../data/dataUpgrades';
+import { playerSkillUnlocks } from '../data/dataSkills';
 import { PatternUpgradeDefinition, ShopItem, SkillUpgradeDefinition } from '../types';
 import EffectSummary from '../components/EffectSummary';
 import ActionButton from '../components/ui/ActionButton';

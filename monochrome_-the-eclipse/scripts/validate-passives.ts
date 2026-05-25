@@ -1,5 +1,5 @@
-import { characterData } from '../dataCharacters';
-import { monsterData } from '../dataMonsters';
+import { characterData } from '../data/dataCharacters';
+import { monsterData } from '../data/dataMonsters';
 import {
   applyPassives,
   processEndOfTurn,

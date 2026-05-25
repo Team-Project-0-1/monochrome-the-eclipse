@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { DetectedPattern, PatternType, CoinFace, CharacterClass } from '../types';
-import { getPlayerAbility } from '../dataSkills';
+import { getPlayerAbility } from '../data/dataSkills';
 import { CheckCircle, PlusCircle, XCircle } from 'lucide-react';
 import EffectSummary from './EffectSummary';
 import { summarizeAbility } from '../utils/effectSummary';

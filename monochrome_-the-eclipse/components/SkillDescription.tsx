@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGameStore } from '../store/gameStore';
-import { effectConfig, effectIconPaths } from '../dataEffects';
+import { effectConfig, effectIconPaths } from '../data/dataEffects';
 import { StatusEffectType } from '../types';
 
 const keywordStyles: { [key: string]: string } = {

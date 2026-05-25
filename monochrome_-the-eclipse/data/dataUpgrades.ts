@@ -1,7 +1,7 @@
 import {
   PatternUpgradeDefinition,
   CharacterClass,
-} from "./types";
+} from "../types";
 
 export const patternUpgrades: { [key in CharacterClass]?: { [id: string]: PatternUpgradeDefinition } } = {
   [CharacterClass.WARRIOR]: {

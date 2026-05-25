@@ -13,7 +13,7 @@ import {
   hpPercent,
   statusLabels,
 } from '../../utils/combatPresentation';
-import { effectConfig, effectIconPaths } from '../../dataEffects';
+import { effectConfig, effectIconPaths } from '../../data/dataEffects';
 import { assetPath } from '../../utils/assetPath';
 import EnemyIntentDisplay from '../EnemyIntentDisplay';
 

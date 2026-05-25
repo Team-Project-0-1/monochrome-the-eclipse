@@ -4,10 +4,10 @@ import { GameStore } from '../gameStore';
 import { StageNode, NodeType, EventDefinition, GameState, EnemyCharacter, CombatLogMessage, CharacterClass, CoinFace } from '../../types';
 import { detectPatterns, generateCoins, generateLoggedStageNodes, isRouteNodeAvailable } from '../../utils/gameLogic';
 import type { RouteGenerationLogEntry } from '../../utils/gameLogic';
-import { stageData } from '../../dataStages';
-import { eventData } from '../../dataEvents';
+import { stageData } from '../../data/dataStages';
+import { eventData } from '../../data/dataEvents';
 import { STAGE_TURNS } from '../../constants';
-import { monsterData } from '../../dataMonsters';
+import { monsterData } from '../../data/dataMonsters';
 import { determineEnemyIntent, calculateCombatPrediction, applyInnatePassives } from '../../utils/combatLogic';
 import { isDocumentedFinalStage, isStagePlayable } from '../../utils/stageProgression';
 

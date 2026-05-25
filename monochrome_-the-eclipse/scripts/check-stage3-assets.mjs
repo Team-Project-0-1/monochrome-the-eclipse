@@ -125,9 +125,9 @@ const requireTextIncludes = (label, text, expected) => {
   }
 };
 
-const dataMonsters = readText("dataMonsters.ts");
-const dataStages = readText("dataStages.ts");
-const dataEvents = readText("dataEvents.ts");
+const dataMonsters = readText("data/dataMonsters.ts");
+const dataStages = readText("data/dataStages.ts");
+const dataEvents = readText("data/dataEvents.ts");
 const eventScenes = readText("utils/eventScenes.ts");
 const generatedAssetManifest = readText("utils/generatedAssetManifest.ts");
 const spriteManifest = readText("public/assets/monsters/sprites/manifest.json");
@@ -142,9 +142,9 @@ for (const monster of monsterAssets) {
   const spritesheetAssetPath = publicAssetPath(monster.spritesheet);
   const spritesheetManifestPath = `../stage3-generated/${path.basename(monster.spritesheet)}`;
 
-  requireTextIncludes("dataMonsters.ts", dataMonsters, `${monster.key}: {`);
-  requireTextIncludes("dataMonsters.ts", dataMonsters, portraitAssetPath);
-  requireTextIncludes("dataMonsters.ts", dataMonsters, spritesheetAssetPath);
+  requireTextIncludes("data/dataMonsters.ts", dataMonsters, `${monster.key}: {`);
+  requireTextIncludes("data/dataMonsters.ts", dataMonsters, portraitAssetPath);
+  requireTextIncludes("data/dataMonsters.ts", dataMonsters, spritesheetAssetPath);
   requireTextIncludes("public/assets/monsters/sprites/manifest.json", spriteManifest, `"${monster.key}": "${spritesheetManifestPath}"`);
   requireTextIncludes("generatedAssetManifest.ts", generatedAssetManifest, `"${portraitAssetPath}": "${portraitAssetPath.replace(/\.png$/, ".webp")}"`);
   requireTextIncludes("generatedAssetManifest.ts", generatedAssetManifest, `"${spritesheetAssetPath}": "${spritesheetAssetPath.replace(/\.png$/, ".webp")}"`);
@@ -159,18 +159,18 @@ for (const backgroundPath of backgroundAssets) {
 }
 
 requireTextIncludes(
-  "dataStages.ts",
+  "data/dataStages.ts",
   dataStages,
   "eventPool: ['event_stage3_resonance_relay', 'event_stage3_flesh_vat', 'event_stage3_eclipse_sanctuary']",
 );
 requireTextIncludes(
-  "dataStages.ts",
+  "data/dataStages.ts",
   dataStages,
   "combatPool: ['annihilationAmplifier', 'fleshCultivator', 'abyssObserver']",
 );
 
 for (const eventId of stage3EventIds) {
-  requireTextIncludes("dataEvents.ts", dataEvents, eventId);
+  requireTextIncludes("data/dataEvents.ts", dataEvents, eventId);
   requireTextIncludes("utils/eventScenes.ts", eventScenes, eventId);
 }
 
