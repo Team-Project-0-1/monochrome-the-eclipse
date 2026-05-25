@@ -2,6 +2,12 @@ export interface EventScenePresentation {
   className: string;
   backgroundPath: string;
   mobileBackgroundPath?: string;
+  /**
+   * 이미 처리된 CSS 값(예: `linear-gradient(...)`)을 직접 넣고 싶을 때.
+   * EventScreen은 scene.backgroundCss가 있으면 그것을, 없으면 assetCssUrl(backgroundPath)를 사용한다.
+   * (stage3 public-safe mode 같은 후속 통합 PR에서 fallback 배경을 주입할 자리)
+   */
+  backgroundCss?: string;
   kicker: string;
   location: string;
   speaker: string;
