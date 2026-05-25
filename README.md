@@ -51,10 +51,10 @@ This runs the release gate and verifies prototype-facing metadata, scope labelin
 
 ## Product and Operations Docs
 
-- `monochrome_-the-eclipse/docs/prototype-product-brief.md` - product positioning, release scope, demo script, and next gates.
-- `monochrome_-the-eclipse/docs/prototype-operations-playbook.md` - deployment, smoke testing, monitoring, incident triage, rollback, and patch cadence.
-- `monochrome_-the-eclipse/docs/stage-3-prd.md` - locked Stage 3 gate, boss, and reward planning scope.
-- `monochrome_-the-eclipse/docs/stage-3-content-brief.md` - Stage 3 content contract and public-copy guardrails.
+- `monochrome_-the-eclipse/docs/design/prototype-product-brief.md` - product positioning, release scope, demo script, and next gates.
+- `monochrome_-the-eclipse/docs/operations/prototype-operations-playbook.md` - deployment, smoke testing, monitoring, incident triage, rollback, and patch cadence.
+- `monochrome_-the-eclipse/docs/design/stage-3-prd.md` - locked Stage 3 gate, boss, and reward planning scope.
+- `monochrome_-the-eclipse/docs/content/stage-3-content-brief.md` - Stage 3 content contract and public-copy guardrails.
 - `docs/release-direction-criteria.md` - criteria for prototype, paid Early Access, and paid 1.0.
 - `docs/user-required-release-actions.md` - owner decisions for hosting, labels, Stage 3 scope, analytics, and asset rights.
 

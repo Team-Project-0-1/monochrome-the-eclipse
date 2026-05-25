@@ -32,8 +32,8 @@ Before publishing, confirm:
 - The build label is visible on the menu.
 - The metadata and manifest describe the project as a prototype.
 - Stage 3 playable content and strict content checks are current.
-- `docs/prototype-product-brief.md` is current.
-- `docs/prototype-operations-playbook.md` is current.
+- `docs/design/prototype-product-brief.md` is current.
+- `docs/operations/prototype-operations-playbook.md` is current.
 - `../docs/release-direction-criteria.md` is current.
 - `../docs/user-required-release-actions.md` has no unhandled owner decision for the chosen release scope.
 

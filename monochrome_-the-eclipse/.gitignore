@@ -30,3 +30,7 @@ playwright-report
 *.njsproj
 *.sln
 *.sw?
+
+# AI 협업 가이드 — 전역 ~/.gitignore_global의 `AGENTS.md` 무시 룰을 프로젝트 단위로 무력화.
+# 본 파일은 OMX/OMC 자동 갱신과 별개로 프로젝트 협업 규칙의 단일 출처(SSoT).
+!AGENTS.md
