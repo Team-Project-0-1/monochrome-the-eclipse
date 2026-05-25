@@ -1,6 +1,6 @@
 import React from 'react';
 import { PlayerCharacter, EnemyCharacter, StatusEffectType } from '../types';
-import { effectConfig, effectIconPaths } from '../dataEffects';
+import { effectConfig, effectIconPaths } from '../data/dataEffects';
 import { assetPath } from '../utils/assetPath';
 
 interface EnhancedStatusEffectDisplayProps {

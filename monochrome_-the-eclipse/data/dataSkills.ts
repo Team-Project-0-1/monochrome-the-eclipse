@@ -10,7 +10,7 @@ import {
   AbilityEffect,
   DetectedPattern,
   StatusApplication,
-} from "./types";
+} from "../types";
 
 // Helper for random values in effects
 const randomBetween = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;

@@ -1,4 +1,4 @@
-import { StatusEffectType } from './types';
+import { StatusEffectType } from '../types';
 
 export const effectIconPaths: Partial<Record<StatusEffectType, string>> = {
   [StatusEffectType.AMPLIFY]: 'assets/icons/status/amplify.png',

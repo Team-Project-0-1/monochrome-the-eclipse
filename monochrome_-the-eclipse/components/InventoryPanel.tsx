@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { PlayerCharacter, SkillUpgradeDefinition, PatternUpgradeDefinition, PatternType, CoinFace, StatusEffectType, LucideIcon } from '../types';
-import { playerSkillUnlocks, playerAbilities } from '../dataSkills';
-import { patternUpgrades } from '../dataUpgrades';
+import { playerSkillUnlocks, playerAbilities } from '../data/dataSkills';
+import { patternUpgrades } from '../data/dataUpgrades';
 import { MAX_SKILLS } from '../constants';
 import { X, Trash2, Zap, Droplet, Shield, Ghost, BookOpen, Star } from 'lucide-react';
 import EffectSummary from './EffectSummary';

@@ -134,8 +134,8 @@ const validateMonster = (monster, segments, tier, runtimeMonsterKeys, runtimePat
   requireArray(monster.passives, `${formatPath(segments)}.passives`, 1);
 };
 
-const dataStages = readText("dataStages.ts");
-const dataMonsters = readText("dataMonsters.ts");
+const dataStages = readText("data/dataStages.ts");
+const dataMonsters = readText("data/dataMonsters.ts");
 
 const runtimeMonsterKeys = new Set([
   "annihilationAmplifier",
@@ -167,8 +167,8 @@ const runtimePatternKeys = new Set([
   "CHOIR_BLACK_SANCTUARY",
 ]);
 
-runtimeMonsterKeys.forEach(key => requireText("dataMonsters.ts", dataMonsters, `${key}: {`));
-runtimePatternKeys.forEach(key => requireText("dataMonsters.ts", dataMonsters, `${key}: {`));
+runtimeMonsterKeys.forEach(key => requireText("data/dataMonsters.ts", dataMonsters, `${key}: {`));
+runtimePatternKeys.forEach(key => requireText("data/dataMonsters.ts", dataMonsters, `${key}: {`));
 
 [
   "combatPool: ['annihilationAmplifier', 'fleshCultivator', 'abyssObserver']",
@@ -207,7 +207,7 @@ runtimePatternKeys.forEach(key => requireText("dataMonsters.ts", dataMonsters, `
   "public/assets/backgrounds/event-stage3-eclipse-sanctuary.png",
 ].forEach(requireFile);
 
-const dataEvents = readText("dataEvents.ts");
+const dataEvents = readText("data/dataEvents.ts");
 const eventScenes = readText(path.join("utils", "eventScenes.ts"));
 [
   "event_stage3_resonance_relay",

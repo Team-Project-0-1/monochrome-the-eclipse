@@ -1,5 +1,5 @@
-import { CharacterClass, StatusEffectType } from "./types";
-import { assetPath } from "./utils/assetPath";
+import { CharacterClass, StatusEffectType } from "../types";
+import { assetPath } from "../utils/assetPath";
 
 export const characterData = {
   [CharacterClass.WARRIOR]: {

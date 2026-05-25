@@ -1,7 +1,7 @@
 import {
   ShopItem,
   StatusEffectType,
-} from "./types";
+} from "../types";
 
 export const shopData: { basic: { name: string; items: ShopItem[] } } = {
   basic: {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { AlertTriangle, HeartPulse, Shield, Swords, Target } from 'lucide-react';
-import { getPlayerAbility } from '../../dataSkills';
+import { getPlayerAbility } from '../../data/dataSkills';
 import {
   CombatPrediction,
   DetectedPattern,

@@ -18,7 +18,7 @@ import {
   getIntentPatternLabel,
   patternLabels,
 } from '../../utils/combatPresentation';
-import { getPlayerAbility } from '../../dataSkills';
+import { getPlayerAbility } from '../../data/dataSkills';
 import EffectSummary from '../EffectSummary';
 import { summarizeAbility, type EffectSummary as EffectSummaryData } from '../../utils/effectSummary';
 

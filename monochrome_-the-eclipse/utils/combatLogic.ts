@@ -13,10 +13,10 @@ import {
   MonsterPatternDefinition,
   CharacterClass,
 } from '../types';
-import { getMonsterPhase, monsterData, monsterPatterns } from '../dataMonsters';
-import { characterData } from '../dataCharacters';
-import { patternUpgrades } from '../dataUpgrades';
-import { getPlayerAbility } from '../dataSkills';
+import { getMonsterPhase, monsterData, monsterPatterns } from '../data/dataMonsters';
+import { characterData } from '../data/dataCharacters';
+import { patternUpgrades } from '../data/dataUpgrades';
+import { getPlayerAbility } from '../data/dataSkills';
 import { detectPatterns, generateCoins } from './gameLogic';
 import { statusLabels } from './combatPresentation';
 import { EffectPayload } from '../store/slices/uiSlice';

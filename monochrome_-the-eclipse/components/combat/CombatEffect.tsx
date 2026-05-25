@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
-import { effectConfig, effectIconPaths } from '../../dataEffects';
+import { effectConfig, effectIconPaths } from '../../data/dataEffects';
 import { CombatEffect as CombatEffectType, StatusEffectType } from '../../types';
 import { assetPath } from '../../utils/assetPath';
 
