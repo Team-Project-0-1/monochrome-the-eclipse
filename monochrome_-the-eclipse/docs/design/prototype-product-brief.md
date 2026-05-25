@@ -1,7 +1,7 @@
 # Prototype Product Brief
 
 Version: Prototype v0.1
-Last updated: 2026-05-18
+Last updated: 2026-05-19
 
 ## Positioning
 
@@ -22,6 +22,7 @@ Included:
 - Playable lobby, character select, exploration, combat, reward, event, shop, rest, game over, and stage clear flows.
 - Stage 1, Stage 2, and Stage 3 combat content connected through the current route system.
 - Stage 3 boss reward flow with 3 `비기` choices before victory.
+- Public-safe Stage 3 presentation mode for broader prototype builds while generated Stage 3 art is pending approval.
 - Character-specific combat tools and passive validation coverage.
 - Responsive desktop and mobile portrait smoke-tested layout.
 - Release metadata, web app manifest, icons, cache/security headers, and dist budget checks.
@@ -29,7 +30,7 @@ Included:
 Explicitly not included:
 - Final Stage 3 balance certification.
 - Final Stage 3 event/balance certification from external playtests.
-- Final paid-release provenance approval for generated monster/background assets.
+- Final paid-release provenance approval for generated monster/background assets. Public-safe builds do not ship the approval-sensitive Stage 3 generated monster/background files.
 - Production analytics dashboard.
 - Full automated browser E2E suite.
 
@@ -42,9 +43,10 @@ Use this when presenting the project:
 ## Quality Bar
 
 The prototype is shippable when:
-- `npm run prototype:check` passes.
+- `npm run prototype:check:public` passes for a public URL, or `npm run prototype:check` passes for an owner/internal art-review build.
 - The first screen clearly labels the build as `Prototype v0.1`.
 - The public copy does not imply a finished paid game.
+- The public-safe build is used unless the generated Stage 3 monster/background assets have owner provenance approval.
 - Stage 3 playable content, strict content checks, and source-trace docs are current.
 - A reviewer can find the product brief, release criteria, user-required actions, and operations playbook without asking the developer.
 

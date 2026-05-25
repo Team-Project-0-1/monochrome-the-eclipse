@@ -29,8 +29,8 @@ const indexHtml = readText(appDir, 'index.html');
 const manifest = readText(appDir, 'public/manifest.webmanifest');
 const headers = readText(appDir, 'public/_headers');
 const dataStages = readText(appDir, 'dataStages.ts');
-const productBrief = readText(appDir, 'docs/prototype-product-brief.md');
-const opsPlaybook = readText(appDir, 'docs/prototype-operations-playbook.md');
+const productBrief = readText(appDir, 'docs/design/prototype-product-brief.md');
+const opsPlaybook = readText(appDir, 'docs/operations/prototype-operations-playbook.md');
 const directionCriteria = readText(repoDir, 'docs/release-direction-criteria.md');
 const userActions = readText(repoDir, 'docs/user-required-release-actions.md');
 
