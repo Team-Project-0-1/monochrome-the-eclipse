@@ -155,7 +155,7 @@ export const useGameStore = create<GameStore>()(
         ...createUiSlice(set, get, api),
         // ...
       }),
-      { name: 'monochrome-eclipse-save', /* partialize, merge, migrate */ }
+      { name: 'monochrome-the-eclipse-save', /* partialize, merge, migrate */ }
     )
   )
 );
@@ -238,12 +238,12 @@ Environment variable:    VITE_BASE_PATH=/
 
 ### GitHub Pages (대체 경로)
 
-`.github/workflows/deploy.yml`이 `main` 푸시 시 `VITE_BASE_PATH=/monocrome-eclips/`로 빌드해 자동 배포합니다.
+`.github/workflows/deploy.yml`이 `main` 푸시 시 `VITE_BASE_PATH=/monochrome-the-eclipse/`로 빌드해 자동 배포합니다.
 
 로컬에서 동일하게 빌드하려면:
 
 ```powershell
-$env:VITE_BASE_PATH="/monocrome-eclips/"
+$env:VITE_BASE_PATH="/monochrome-the-eclipse/"
 npm run build
 ```
 

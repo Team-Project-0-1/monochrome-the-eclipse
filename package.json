@@ -1,5 +1,5 @@
 {
-  "name": "monochrome:-the-eclipse",
+  "name": "monochrome-the-eclipse",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,7 +13,7 @@
     "check:exploration-route": "node scripts/check-exploration-route.mjs",
     "check:stage3-content": "node scripts/check-stage3-content.mjs",
     "check:stage3-assets": "node scripts/check-stage3-assets.mjs",
-    "check:pages-build": "vite build --base=/monocrome-eclips/ && node scripts/prune-optimized-pngs.mjs && node scripts/check-dist-budget.mjs && node scripts/check-pages-base.mjs",
+    "check:pages-build": "vite build --base=/monochrome-the-eclipse/ && node scripts/prune-optimized-pngs.mjs && node scripts/check-dist-budget.mjs && node scripts/check-pages-base.mjs",
     "typecheck": "tsc --noEmit",
     "validate:passives": "node scripts/run-passive-validation.mjs",
     "check:release-assets": "node scripts/check-release-assets.mjs",

@@ -16,7 +16,7 @@
 ## 공개 URL 발표 전 반드시 결정할 것
 
 - 정식 공개 URL.
-  - 옵션 A: GitHub Pages fallback, 예상 URL `https://team-project-0-1.github.io/monocrome-eclips/`.
+  - 옵션 A: GitHub Pages fallback, 예상 URL `https://team-project-0-1.github.io/monochrome-the-eclipse/`.
   - 옵션 B: Cloudflare Pages/custom domain, 실제 공개 트래픽에는 권장.
 - 첫 공개 라벨: prototype, alpha, early access, full release 중 하나.
 - 3스테이지 밸런스와 생성 몬스터/배경 에셋의 상업 사용권/최종 승인 미완료를 공개 빌드의 알려진 제한으로 표기할지 여부.

@@ -27,6 +27,33 @@ const initialMainState = {
   resumeGameState: null,
 };
 
+const PERSIST_STORAGE_KEY = 'monochrome-the-eclipse-save';
+const LEGACY_PERSIST_STORAGE_KEYS = ['monochrome-eclipse-save'];
+
+const createPersistentStorage = () => ({
+  getItem: (name: string) => {
+    const value = localStorage.getItem(name);
+    if (value !== null) return value;
+
+    for (const legacyKey of LEGACY_PERSIST_STORAGE_KEYS) {
+      const legacyValue = localStorage.getItem(legacyKey);
+      if (legacyValue !== null) {
+        localStorage.setItem(name, legacyValue);
+        return legacyValue;
+      }
+    }
+
+    return null;
+  },
+  setItem: (name: string, value: string) => {
+    localStorage.setItem(name, value);
+  },
+  removeItem: (name: string) => {
+    localStorage.removeItem(name);
+    LEGACY_PERSIST_STORAGE_KEYS.forEach((legacyKey) => localStorage.removeItem(legacyKey));
+  },
+});
+
 const hasPlayableCombatState = (state: Partial<GameStore>) => (
   Boolean(
     state.player &&
@@ -232,8 +259,8 @@ export const useGameStore = create<GameStore>()(
         },
       }),
       {
-        name: 'monochrome-eclipse-save',
-        storage: createJSONStorage(() => localStorage),
+        name: PERSIST_STORAGE_KEY,
+        storage: createJSONStorage(createPersistentStorage),
         version: 3,
         migrate: (persistedState: any) => ({
           ...persistedState,

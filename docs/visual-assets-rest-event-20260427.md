@@ -3,10 +3,10 @@
 Date: 2026-04-27
 
 ## Generated Concept Images
-- Lobby background: `D:\Documents\GitHub\monocrome-eclips\output\imagegen\monochrome-eclipse-concepts\lobby-ruined-city-eclipse-bg.png`
-- Rest event concept: `D:\Documents\GitHub\monocrome-eclips\output\imagegen\monochrome-eclipse-concepts\rest-event-ui-concept.png`
-- General event concept: `D:\Documents\GitHub\monocrome-eclips\output\imagegen\monochrome-eclipse-concepts\general-event-ui-concept.png`
-- Mobile event/rest concept: `D:\Documents\GitHub\monocrome-eclips\output\imagegen\monochrome-eclipse-concepts\mobile-event-rest-concept.png`
+- Lobby background: `D:\Documents\GitHub\monochrome-the-eclipse\output\imagegen\monochrome-the-eclipse-concepts\lobby-ruined-city-eclipse-bg.png`
+- Rest event concept: `D:\Documents\GitHub\monochrome-the-eclipse\output\imagegen\monochrome-the-eclipse-concepts\rest-event-ui-concept.png`
+- General event concept: `D:\Documents\GitHub\monochrome-the-eclipse\output\imagegen\monochrome-the-eclipse-concepts\general-event-ui-concept.png`
+- Mobile event/rest concept: `D:\Documents\GitHub\monochrome-the-eclipse\output\imagegen\monochrome-the-eclipse-concepts\mobile-event-rest-concept.png`
 
 ## Applied Runtime Assets
 - `public/assets/backgrounds/lobby-eclipse.png`

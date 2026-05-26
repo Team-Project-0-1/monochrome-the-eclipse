@@ -16,12 +16,12 @@ try {
 }
 
 const root = process.cwd();
-const basePath = process.env.E2E_BASE_PATH ?? '/monocrome-eclips/';
+const basePath = process.env.E2E_BASE_PATH ?? '/monochrome-the-eclipse/';
 const port = Number(process.env.E2E_PORT ?? 4185);
 const distDir = path.resolve(root, process.env.E2E_DIST_DIR ?? 'dist');
 const outputDir = path.resolve(root, process.env.E2E_OUTPUT_DIR ?? 'output/e2e');
 const externalBaseUrl = process.env.E2E_BASE_URL;
-const storeKey = 'monochrome-eclipse-save';
+const storeKey = 'monochrome-the-eclipse-save';
 
 fs.mkdirSync(outputDir, { recursive: true });
 
@@ -102,16 +102,16 @@ const capture = async (page, name, step) => {
 };
 
 const seedShopState = () => {
-  const store = JSON.parse(localStorage.getItem('monochrome-eclipse-save') || '{}');
+  const store = JSON.parse(localStorage.getItem(storeKey) || '{}');
   const state = store.state || {};
   state.gameState = 'SHOP';
   state.isInventoryOpen = false;
   state.resources = { echoRemnants: 120, senseFragments: 6, memoryPieces: 6 };
-  localStorage.setItem('monochrome-eclipse-save', JSON.stringify({ state, version: store.version || 3 }));
+  localStorage.setItem(storeKey, JSON.stringify({ state, version: store.version || 3 }));
 };
 
 const seedRewardRecoveryState = () => {
-  const store = JSON.parse(localStorage.getItem('monochrome-eclipse-save') || '{}');
+  const store = JSON.parse(localStorage.getItem(storeKey) || '{}');
   const state = store.state || {};
   state.gameState = 'COMBAT';
   state.pendingCombatReward = {
@@ -140,7 +140,7 @@ const seedRewardRecoveryState = () => {
   state.activeSkillState = { phase: 'idle', selection: [] };
   state.swapState = { phase: 'idle', reserveCoinIndex: null, revealedFace: null };
   state.testMode = false;
-  localStorage.setItem('monochrome-eclipse-save', JSON.stringify({ state, version: store.version || 3 }));
+  localStorage.setItem(storeKey, JSON.stringify({ state, version: store.version || 3 }));
 };
 
 const runFlow = async (browser, baseUrl, name, viewport, errors) => {
