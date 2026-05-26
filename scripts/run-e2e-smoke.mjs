@@ -16,7 +16,7 @@ try {
 }
 
 const root = process.cwd();
-const basePath = process.env.E2E_BASE_PATH ?? '/monochrome-eclips/';
+const basePath = process.env.E2E_BASE_PATH ?? '/monocrome-eclips/';
 const port = Number(process.env.E2E_PORT ?? 4185);
 const distDir = path.resolve(root, process.env.E2E_DIST_DIR ?? 'dist');
 const outputDir = path.resolve(root, process.env.E2E_OUTPUT_DIR ?? 'output/e2e');
