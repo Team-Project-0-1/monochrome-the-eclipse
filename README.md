@@ -1,98 +1,99 @@
-# Monochrome: The Eclipse
+# Monochrome: The Eclipse App
 
-Turn-based roguelike RPG prototype built with React, TypeScript, Vite, Zustand, and Framer Motion.
+React/Vite game client for the Monochrome roguelike combat prototype.
 
-Current public label: **Prototype v0.1**. The project is prepared for a free prototype/portfolio release, not a paid 1.0 commercial launch. Stage 1 and Stage 2 are the playable public scope; Stage 3 remains planned/locked until its design is finalized.
+Current public label: **Prototype v0.1**.
 
-The app source lives in `monochrome_-the-eclipse/`.
+This build is suitable for a prototype/portfolio release, not a paid 1.0 commercial launch. Stage 1 through Stage 3 are the playable public scope, ending in a Stage 3 boss and `비기` reward draft.
 
-## Quick Start
+## Commands
 
 ```powershell
-cd monochrome_-the-eclipse
 npm install
 npm run dev
+npm run check
+npm run release:check
+npm run prototype:check
+npm run build
 ```
 
-Local URL:
+`npm run check` is the preferred handoff command. It runs:
+
+- `npm run typecheck`
+- `npm run validate:passives`
+- `npm run check:release-assets`
+- `npm run build`
+- `npm run check:dist`
+
+Use `npm run release:check` before publishing. It also runs asset optimization and `npm audit --audit-level=moderate`.
+
+Use `npm run prototype:check` before a portfolio/prototype deployment. It runs the release gate and then verifies prototype-facing metadata, scope labeling, Stage 3 playable content, and operations documentation.
+
+## Product and Operations Docs
+
+- `docs/design/prototype-product-brief.md` - portfolio positioning, scope, demo script, and product gates.
+- `docs/operations/prototype-operations-playbook.md` - deployment, smoke testing, monitoring, incident triage, rollback, and patch cadence.
+- `docs/design/stage-3-prd.md` - implemented Stage 3 gate, boss, and reward scope.
+- `docs/content/stage-3-content-brief.md` - Stage 3 content contract and source trace.
+- `../docs/release-direction-criteria.md` - criteria separating prototype, paid Early Access, and paid 1.0.
+- `../docs/user-required-release-actions.md` - owner decisions that Codex should not make alone.
+
+## Local Development
+
+The Vite app uses `VITE_BASE_PATH` to choose the deployment base path. Local and Cloudflare Pages builds default to `/`.
+
+Use this local URL when testing:
 
 ```text
 http://127.0.0.1:5173/
 ```
 
-## Verification
+## Environment
 
-Run the full local check before handing off changes:
+The client build does not inject `GEMINI_API_KEY` or other service secrets.
 
-```powershell
-cd monochrome_-the-eclipse
-npm run check
-```
-
-This runs TypeScript, passive validation scenarios, release asset metadata checks, the production build, and the dist size budget.
-
-Before publishing, run the stricter release gate:
+Use `VITE_BASE_PATH` only for deploy base-path selection:
 
 ```powershell
-cd monochrome_-the-eclipse
-npm run release:check
+$env:VITE_BASE_PATH="/"
+npm run build
 ```
 
-This also refreshes optimized WebP assets and runs `npm audit --audit-level=moderate`.
-
-For a prototype/portfolio handoff, run:
+GitHub Pages fallback builds should use:
 
 ```powershell
-cd monochrome_-the-eclipse
-npm run prototype:check
+$env:VITE_BASE_PATH="/monocrome-eclips/"
+npm run build
 ```
 
-This runs the release gate and verifies prototype-facing metadata, scope labeling, Stage 3 lock status, and operations documentation.
+Do not commit `.env.local`, local dev-server logs, browser screenshots, or Playwright MCP artifacts.
 
-## Product and Operations Docs
+If a future feature needs Gemini or another paid API, route requests through a server/API endpoint. Do not expose the key in frontend code.
 
-- `monochrome_-the-eclipse/docs/design/prototype-product-brief.md` - product positioning, release scope, demo script, and next gates.
-- `monochrome_-the-eclipse/docs/operations/prototype-operations-playbook.md` - deployment, smoke testing, monitoring, incident triage, rollback, and patch cadence.
-- `monochrome_-the-eclipse/docs/design/stage-3-prd.md` - locked Stage 3 gate, boss, and reward planning scope.
-- `monochrome_-the-eclipse/docs/content/stage-3-content-brief.md` - Stage 3 content contract and public-copy guardrails.
-- `docs/release-direction-criteria.md` - criteria for prototype, paid Early Access, and paid 1.0.
-- `docs/user-required-release-actions.md` - owner decisions for hosting, labels, Stage 3 scope, analytics, and asset rights.
+## Cloudflare Pages
 
-## Browser Use Requirement
-
-Codex Browser Use requires the Node runtime used by `node_repl` to be `>= 22.22.0`.
-
-If Browser Use reports that Node is too old, update Node.js LTS and restart Codex:
-
-```powershell
-winget upgrade --id OpenJS.NodeJS.22 --accept-source-agreements --accept-package-agreements
-node -v
-```
-
-If Codex still resolves an older runtime, set `NODE_REPL_NODE_PATH` to the updated `node.exe` and restart Codex.
-
-## Deployment Options
-
-Recommended hosting path:
+Recommended settings:
 
 ```text
-Cloudflare Pages
 Framework preset: Vite
 Root directory: monochrome_-the-eclipse
 Install command: npm ci
-Build command: npm run build
+Build command: npm run prototype:check
 Build output directory: dist
 Environment variable: VITE_BASE_PATH=/
 ```
 
-For the portfolio/prototype release path, use `npm run prototype:check` as the build command when the host can run a full verification gate before publishing.
+## Browser Automation
 
-The repository can then be changed back to private while the built site remains public.
-
-GitHub Pages is still supported as a temporary fallback. The GitHub Actions workflow builds with:
+Browser Use through Codex requires Node `>= 22.22.0`. The previous failing setup was:
 
 ```text
-VITE_BASE_PATH=/monocrome-eclips/
+C:\Program Files\nodejs\node.exe -> v22.14.0
 ```
 
-Do not expose service API keys through Vite client config. If Gemini or another paid API is needed later, call it through a server/API route instead of injecting the key into the browser bundle.
+Update Node LTS, restart Codex, then verify:
+
+```powershell
+node -v
+where.exe node
+```
