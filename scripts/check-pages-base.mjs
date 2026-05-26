@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const distDir = path.join(rootDir, 'dist');
 const indexPath = path.join(distDir, 'index.html');
-const basePath = '/monocrome-eclips/';
+const basePath = '/monochrome-eclips/';
 const failures = [];
 
 if (!existsSync(indexPath)) {
@@ -17,18 +17,18 @@ if (!existsSync(indexPath)) {
     failures.push(`dist/index.html does not include ${basePath}`);
   }
 
-  const rootAssetRefs = [...html.matchAll(/\b(?:src|href)="\/(?!monocrome-eclips\/|\/|#)([^"]+)"/g)]
+  const rootAssetRefs = [...html.matchAll(/\b(?:src|href)="\/(?!monochrome-eclips\/|\/|#)([^"]+)"/g)]
     .map((match) => `/${match[1]}`);
 
   if (rootAssetRefs.length > 0) {
     failures.push(`root-relative asset refs without GitHub Pages base: ${rootAssetRefs.join(', ')}`);
   }
 
-  if (!/\/monocrome-eclips\/assets\/[^"]+\.js/.test(html)) {
-    failures.push('dist/index.html is missing a JS entry under /monocrome-eclips/assets/');
+  if (!/\/monochrome-eclips\/assets\/[^"]+\.js/.test(html)) {
+    failures.push('dist/index.html is missing a JS entry under /monochrome-eclips/assets/');
   }
 
-  const basedRefs = [...html.matchAll(/\b(?:src|href)="\/monocrome-eclips\/([^"]+)"/g)]
+  const basedRefs = [...html.matchAll(/\b(?:src|href)="\/monochrome-eclips\/([^"]+)"/g)]
     .map((match) => match[1])
     .filter((ref) => !ref.startsWith('#'));
 
@@ -36,7 +36,7 @@ if (!existsSync(indexPath)) {
     const cleanRef = ref.split(/[?#]/)[0];
     const targetPath = path.join(distDir, cleanRef);
     if (!existsSync(targetPath)) {
-      failures.push(`base-path asset reference is missing from dist: /monocrome-eclips/${ref}`);
+      failures.push(`base-path asset reference is missing from dist: /monochrome-eclips/${ref}`);
     }
   }
 }

@@ -41,7 +41,7 @@ jobs:
 
       - name: Prototype release check and build
         env:
-          VITE_BASE_PATH: /monocrome-eclips/
+          VITE_BASE_PATH: /monochrome-eclips/
         run: npm run prototype:check
 
       - name: Setup Pages

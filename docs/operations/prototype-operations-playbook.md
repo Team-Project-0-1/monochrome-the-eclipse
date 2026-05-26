@@ -51,7 +51,7 @@ Expected build environment:
 Root directory: .
 Build command: npm run prototype:check
 Build output: dist
-VITE_BASE_PATH=/monocrome-eclips/
+VITE_BASE_PATH=/monochrome-eclips/
 ```
 
 ### Cloudflare Pages preferred

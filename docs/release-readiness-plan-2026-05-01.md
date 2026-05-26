@@ -112,7 +112,7 @@ Acceptance criteria:
 - PC app-window/PWA install behavior is verified in Chrome or Edge if the release wants a desktop-app-like entry point.
 
 Work:
-- If using GitHub Pages first: keep `VITE_BASE_PATH=/monocrome-eclips/`.
+- If using GitHub Pages first: keep `VITE_BASE_PATH=/monochrome-eclips/`.
 - If using Cloudflare Pages first: set `VITE_BASE_PATH=/`.
 - Publish only after the user confirms the canonical URL.
 - After deploy, run the public URL smoke check for menu, manifest, Open Graph image, and one short run.

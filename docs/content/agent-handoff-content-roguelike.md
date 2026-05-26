@@ -39,4 +39,4 @@
 - `npm run check`
 - `npm run check:exploration-route`
 - Store 시뮬레이션: 상점 `증폭 수정`, 300회 경로 생성, 전투 기술 보상 claim.
-- 브라우저: `http://127.0.0.1:5173/monocrome-eclips/` 로드 후 console error 확인.
+- 브라우저: `http://127.0.0.1:5173/monochrome-eclips/` 로드 후 console error 확인.
