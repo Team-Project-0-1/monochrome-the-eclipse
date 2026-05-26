@@ -1,5 +1,4 @@
 [build]
-base = "monochrome_-the-eclipse"
 command = "npm run check:netlify-build"
 publish = "dist"
 
