@@ -53,7 +53,7 @@ Stage 3 should feel like the first complete run climax: the player has already l
 
 ## Verification
 
-Run from `monochrome_-the-eclipse`:
+Run from project root:
 
 ```powershell
 npm run check:stage3-content -- --strict

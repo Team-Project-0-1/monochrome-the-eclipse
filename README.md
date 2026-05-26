@@ -1,6 +1,6 @@
-# Monochrome: The Eclipse App
+# Monochrome: The Eclipse
 
-React/Vite game client for the Monochrome roguelike combat prototype.
+Turn-based roguelike RPG prototype built with React, TypeScript, Vite, Zustand, and Framer Motion.
 
 Current public label: **Prototype v0.1**.
 
@@ -35,8 +35,8 @@ Use `npm run prototype:check` before a portfolio/prototype deployment. It runs t
 - `docs/operations/prototype-operations-playbook.md` - deployment, smoke testing, monitoring, incident triage, rollback, and patch cadence.
 - `docs/design/stage-3-prd.md` - implemented Stage 3 gate, boss, and reward scope.
 - `docs/content/stage-3-content-brief.md` - Stage 3 content contract and source trace.
-- `../docs/release-direction-criteria.md` - criteria separating prototype, paid Early Access, and paid 1.0.
-- `../docs/user-required-release-actions.md` - owner decisions that Codex should not make alone.
+- `docs/release-direction-criteria.md` - criteria separating prototype, paid Early Access, and paid 1.0.
+- `docs/user-required-release-actions.md` - owner decisions that Codex should not make alone.
 
 ## Local Development
 
@@ -76,12 +76,16 @@ Recommended settings:
 
 ```text
 Framework preset: Vite
-Root directory: monochrome_-the-eclipse
+Root directory: .
 Install command: npm ci
 Build command: npm run prototype:check
 Build output directory: dist
 Environment variable: VITE_BASE_PATH=/
 ```
+
+The repository can then be changed back to private while the built site remains public.
+
+GitHub Pages is still supported as a temporary fallback via the workflow in `.github/workflows/deploy.yml`, which builds with `VITE_BASE_PATH=/monocrome-eclips/`.
 
 ## Browser Automation
 

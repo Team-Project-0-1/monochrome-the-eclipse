@@ -1,6 +1,6 @@
 # AI 협업 가이드 (Codex · Claude Code · Cursor)
 
-> 코덱스(OpenAI), Claude Code, Cursor 등 모든 AI 협업 에이전트가 이 프로젝트(`monochrome_-the-eclipse/`)에서 작업할 때 따르는 운영 가이드.
+> 코덱스(OpenAI), Claude Code, Cursor 등 모든 AI 협업 에이전트가 이 프로젝트(``)에서 작업할 때 따르는 운영 가이드.
 > 체크리스트형 권고 + 예외 명시 형식. **단일 진실(SSoT) 문서 위치를 외워두는 것이 가장 중요**합니다.
 >
 > ⚠️ 저장소 루트의 `AGENTS.md` / `CLAUDE.md`는 OMX/OMC가 자동 갱신하는 영역입니다.
@@ -14,10 +14,10 @@
 
 | 문서 | 위치 | 무엇을 담는가 |
 |---|---|---|
-| **UI 카피 가이드** | `monochrome_-the-eclipse/docs/ui-copy-guide.md` | 모든 라벨/용어/톤/색상의 정식 기준 |
-| **디자인 토큰** | `monochrome_-the-eclipse/styles/tokens.css` | 색·공간·z·모션·반경·타입 토큰 |
-| **콘텐츠 출처 원장** | `monochrome_-the-eclipse/docs/content-source-ledger.md` | 자산/규칙의 기획서 매핑 |
-| **후속 백로그** | `monochrome_-the-eclipse/docs/followup-backlog.md` | 미완 작업·회귀 위험·외부 이슈 추적 |
+| **UI 카피 가이드** | `docs/ui-copy-guide.md` | 모든 라벨/용어/톤/색상의 정식 기준 |
+| **디자인 토큰** | `styles/tokens.css` | 색·공간·z·모션·반경·타입 토큰 |
+| **콘텐츠 출처 원장** | `docs/content-source-ledger.md` | 자산/규칙의 기획서 매핑 |
+| **후속 백로그** | `docs/followup-backlog.md` | 미완 작업·회귀 위험·외부 이슈 추적 |
 
 추가 외부 참조:
 - 게임 디자인 문서(GDD): 구글 드라이브 "03. 동전 전투 (포폴) / 기획 포폴 / 동전 GDD"
@@ -44,7 +44,6 @@
 ### 1.3 종료 전
 - ✅ 다음 명령 묶음을 모두 통과해야 PR 머지:
   ```bash
-  cd monochrome_-the-eclipse
   npx tsc --noEmit              # 타입체크
   npm run check:text-integrity  # 텍스트 무결성
   npm run validate:passives     # 패시브 시나리오
@@ -226,7 +225,6 @@ reducedMotion 활성 시 모든 모션이 0.01s로 강제됨. framer-motion `ani
 ## 6. 검증 명령 묶음
 
 ```bash
-cd monochrome_-the-eclipse
 
 # 빠른 검증 (라벨 변경, 작은 컴포넌트 수정)
 npx tsc --noEmit
@@ -258,7 +256,7 @@ npm run build
 - 가이드 위반을 발견하면 *조용히 고치지 말고* 커밋 메시지 또는 PR 디스크립션에 명시.
 - 기획자(박재석)와의 어휘 충돌이 생기면 *코드를 바꾸지 말고* 가이드 §2에서 결정 근거를 추가.
 - 가이드와 기획서가 충돌하면 항상 *기획서*가 우선. 가이드는 기획서를 보조한다.
-- 저장소 루트의 `AGENTS.md` / `CLAUDE.md`는 OMX/OMC가 자동 갱신하는 영역이라 손대지 않는다. 본 가이드는 프로젝트 폴더(`monochrome_-the-eclipse/`) 안의 `AGENTS.md` 한 곳에서만 관리.
+- 저장소 루트의 `AGENTS.md` / `CLAUDE.md`는 OMX/OMC가 자동 갱신하는 영역이라 손대지 않는다. 본 가이드는 프로젝트 폴더(``) 안의 `AGENTS.md` 한 곳에서만 관리.
 
 ---
 

@@ -10,15 +10,15 @@ The app now has a runtime audio layer before final audio production.
 
 ## Runtime Files
 
-- `monochrome_-the-eclipse/utils/audioManifest.ts`
+- `utils/audioManifest.ts`
   - Audio keys, procedural presets, screen-to-BGM mapping.
-- `monochrome_-the-eclipse/utils/audioManager.ts`
+- `utils/audioManager.ts`
   - Web Audio context, gain groups, placeholder music loops, SFX playback.
-- `monochrome_-the-eclipse/utils/sound.ts`
+- `utils/sound.ts`
   - Small gameplay-facing helpers: `playUiSound`, `playGameSfx`, `playVoiceBark`.
-- `monochrome_-the-eclipse/components/AudioController.tsx`
+- `components/AudioController.tsx`
   - React bridge that follows game state, combat hits, event phases, and options.
-- `monochrome_-the-eclipse/public/assets/audio/README.md`
+- `public/assets/audio/README.md`
   - Future production asset slots.
 
 ## Production Audio Needed Later

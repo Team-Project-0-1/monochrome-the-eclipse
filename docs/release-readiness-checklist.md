@@ -15,7 +15,7 @@ Last updated: 2026-05-01
 - Browser console capture reported 0 errors and 0 warnings.
 - QA screenshots are stored in `output/release-qa-2026-05-01/`.
 - Remaining release blockers are user-owned account/domain/rights decisions, tracked in `docs/user-required-release-actions.md`.
-- Prototype/portfolio handoff gate is `npm run prototype:check` from `monochrome_-the-eclipse/`.
+- Prototype/portfolio handoff gate is `npm run prototype:check` from ``.
 
 ## Implemented In Current Pass
 - Persistent game options in Zustand:
@@ -45,10 +45,10 @@ Last updated: 2026-05-01
 
 ## Deferred Infrastructure
 - Custom domain, Cloudflare caching, canonical redirects, GA4, sitemap, and operator dashboard are intentionally deferred until the production domain and account IDs are available.
-- Current local preparation lives in `monochrome_-the-eclipse/docs/operations/traffic-cost-runbook.md`.
+- Current local preparation lives in `docs/operations/traffic-cost-runbook.md`.
 - The current release plan is `docs/release-readiness-plan-2026-05-01.md`.
 - User-owned account/domain/legal tasks are tracked in `docs/user-required-release-actions.md`.
-- Product/operations handoff docs live in `monochrome_-the-eclipse/docs/design/prototype-product-brief.md` and `monochrome_-the-eclipse/docs/operations/prototype-operations-playbook.md`.
+- Product/operations handoff docs live in `docs/design/prototype-product-brief.md` and `docs/operations/prototype-operations-playbook.md`.
 
 ## Asset Notes
 - Player sprites are referenced from `public/assets/characters/sprites/`.
@@ -76,7 +76,7 @@ Last updated: 2026-05-01
 - Landscape combat fits in one screen without panel scrolling.
 
 ## Verification Commands
-Run from `monochrome_-the-eclipse/`:
+Run from ``:
 
 ```bash
 npm run release:check

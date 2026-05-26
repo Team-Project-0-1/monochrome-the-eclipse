@@ -9,7 +9,7 @@
 
 ### P0-1. 동전 색상 시스템을 토큰으로 단일화 ✅
 - **완료**: tokens.css에 `.coin-face / .is-heads / .is-tails / .is-unknown` 시맨틱 클래스 추가. CoinDisplay의 raw Tailwind(`bg-red-500 border-red-300` 등)를 `coin-face is-heads/is-tails/is-unknown`으로 교체. 잠금 배지(`bg-gray-700 border-white`)도 `.coin-lock-badge` 토큰 클래스로.
-- **단일 출처**: `monochrome_-the-eclipse/styles/tokens.css` §"Coin face — 동전 본체 색상 단일 출처".
+- **단일 출처**: `styles/tokens.css` §"Coin face — 동전 본체 색상 단일 출처".
 - **정책 전환 방법**: tokens.css의 `--color-face-heads/--color-face-tails` 값만 바꾸면 전 화면 일괄 반영.
 
 ### P0-2. ReserveCoinArea ✅ (데드 코드 삭제)
@@ -25,9 +25,9 @@
 
 ### P1-0. 이미지 자산 폴더 통합 (3곳 분산 해소)
 - **현재 상태**: 같은 종류 이미지가 3개 위치에 흩어져 있다.
-  - `monochrome_-the-eclipse/assets/monsters/{portraits,sprites}/` — 프로젝트 루트 (잔재 의심, 코드 참조 여부 확인 필요)
-  - `monochrome_-the-eclipse/public/assets/{audio,backgrounds,characters,icons,items,monsters}/` — 메인 사용처. 카테고리 정리는 잘 돼 있음
-  - `monochrome_-the-eclipse/public/sprites/{characters,monsters}/` — 추가 잔재
+  - `assets/monsters/{portraits,sprites}/` — 프로젝트 루트 (잔재 의심, 코드 참조 여부 확인 필요)
+  - `public/assets/{audio,backgrounds,characters,icons,items,monsters}/` — 메인 사용처. 카테고리 정리는 잘 돼 있음
+  - `public/sprites/{characters,monsters}/` — 추가 잔재
 - **왜 문제**: 같은 이름의 파일이 중복 존재하면 어느 쪽이 단일 진실인지 모호. 빌드 시 둘 다 dist에 포함되어 사이즈 낭비. 새 자산 추가 시 어디에 둘지 매번 고민.
 - **작업**:
   1. `assets/` (root)와 `public/sprites/` 내 파일을 grep으로 코드 참조 확인 (`Grep "assets/monsters" "public/sprites"`).
@@ -188,4 +188,4 @@
 | 디자인 토큰 | `styles/tokens.css` | 색/공간/z/모션 토큰 정의 |
 | 콘텐츠 출처 원장 | `docs/content-source-ledger.md` | 자산/규칙 기획서 매핑 |
 | 루트 CLAUDE.md / AGENTS.md | 저장소 루트 | OMX/OMC 관리. 개발 명령어/구조 |
-| 프로젝트 AGENTS.md | `monochrome_-the-eclipse/AGENTS.md` | AI 협업 가이드(이 파일의 단일 출처) |
+| 프로젝트 AGENTS.md | `AGENTS.md` | AI 협업 가이드(이 파일의 단일 출처) |

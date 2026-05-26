@@ -67,8 +67,8 @@ Monster concepts confirmed from Drive and current assets:
 ## Current Local Reference Art
 
 - Character and monster assets live under:
-  - `monochrome_-the-eclipse/public/assets/characters/`
-  - `monochrome_-the-eclipse/public/assets/monsters/`
+  - `public/assets/characters/`
+  - `public/assets/monsters/`
 - Visual audit screenshots live under:
   - `.omx/context/visual-audit-20260427/`
   - `.omx/context/visual-audit-20260427-after/`
@@ -77,7 +77,7 @@ Monster concepts confirmed from Drive and current assets:
 
 ## Implementation Notes
 
-- Main app path: `monochrome_-the-eclipse/`
+- Main app path: ``
 - Framework: Vite + React + TypeScript + Zustand.
 - Deployment base path: `/monocrome-eclips/`
 - Keep the project on Vite unless a migration is explicitly approved. For release scope, improve the current structure first.
@@ -88,7 +88,7 @@ Monster concepts confirmed from Drive and current assets:
 
 ## Verification Baseline
 
-Run from `monochrome_-the-eclipse/`:
+Run from ``:
 
 ```bash
 npx tsc --noEmit

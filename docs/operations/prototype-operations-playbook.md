@@ -48,7 +48,7 @@ Important limitation: GitHub Pages does not apply `public/_headers`. The file is
 Expected build environment:
 
 ```text
-Root directory: monochrome_-the-eclipse
+Root directory: .
 Build command: npm run prototype:check
 Build output: dist
 VITE_BASE_PATH=/monocrome-eclips/
@@ -64,7 +64,7 @@ Expected build environment:
 
 ```text
 Framework preset: Vite
-Root directory: monochrome_-the-eclipse
+Root directory: .
 Install command: npm ci
 Build command: npm run prototype:check
 Build output directory: dist
