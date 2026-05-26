@@ -3,8 +3,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// After flatten (monochrome_-the-eclipse/ → repo root), the app and the repo
+// share a single root. The two names are kept to make read sites
+// (`readText(appDir, …)` vs `readText(repoDir, …)`) self-documenting.
 const appDir = path.resolve(__dirname, '..');
-const repoDir = path.resolve(appDir, '..');
+const repoDir = appDir;
 
 const failures = [];
 

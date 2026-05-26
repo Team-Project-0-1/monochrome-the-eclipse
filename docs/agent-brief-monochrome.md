@@ -77,7 +77,7 @@ Monster concepts confirmed from Drive and current assets:
 
 ## Implementation Notes
 
-- Main app path: ``
+- Main app path: repo root (no subfolder; the app was flattened in `chore(structure): flatten` series).
 - Framework: Vite + React + TypeScript + Zustand.
 - Deployment base path: `/monocrome-eclips/`
 - Keep the project on Vite unless a migration is explicitly approved. For release scope, improve the current structure first.
