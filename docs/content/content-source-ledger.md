@@ -38,7 +38,7 @@
 | Stage 2 상점 | `basic` 상점 유지. 추후 대체/변경 필요 | 문서에는 상점/구매 방향이 있으나 Stage 2 전용 상품 테이블이 없음 |
 | Stage 2 몬스터 에셋 | `assetKey`만 연결하고 실제 이미지/스프라이트가 없으면 기존 전투 실루엣 폴백 사용. 추후 대체/변경 필요 | 몬스터 컨셉 문서에는 비주얼 상세와 일부 에셋 기준이 있으나 적용 가능한 최종 파일이 아직 없음 |
 | Stage 3 전용 이벤트 풀 | `event_stage3_resonance_relay`, `event_stage3_flesh_vat`, `event_stage3_eclipse_sanctuary`를 Stage 3 전용 풀로 연결 | Drive의 Stage 3 몬스터/테마 압력을 기반으로 프로토타입용 이벤트 본문과 선택지를 작성했다. `VITE_STAGE3_PUBLIC_SAFE_MODE=1` public-safe 빌드에서는 공개용 중립 문구로 대체된다 |
-| Stage 3 생성 몬스터 에셋 | 기본 빌드에서는 `public/assets/monsters/stage3-generated/` 아래 5종 전용 포트레이트/스프라이트시트 연결 | 신규 몬스터 기획을 기반으로 이미지 생성 후 크로마키 제거/스프라이트시트 파생 처리. 상업 사용권 및 최종 아트 승인 여부는 오너 검토 필요. `npm run prototype:check:public`은 전투 실루엣 폴백을 사용하고 해당 Stage 3 생성 몬스터 파일을 `dist/`에서 제거한다 |
+| Stage 3 생성 몬스터 에셋 | 기본 빌드에서는 `public/assets/monsters/stage3-generated/` 아래 5종 전용 포트레이트/스프라이트시트 연결 | 신규 몬스터 기획을 기반으로 이미지 생성 후 크로마키 제거/스프라이트시트 파생 처리. 상업 사용권 및 최종 아트 승인 여부는 오너 검토 필요. `VITE_STAGE3_PUBLIC_SAFE_MODE=1 npm run prototype:check`(또는 동등한 환경 설정으로 빌드)는 전투 실루엣 폴백을 사용하고 해당 Stage 3 생성 몬스터 파일을 `dist/`에서 제거한다 |
 | Stage 3 전투/이벤트 배경 | 기본 빌드에서는 `combat-stage-3-eclipse-sanctum`, `event-stage3-resonance-relay`, `event-stage3-flesh-vat`, `event-stage3-eclipse-sanctuary` 연결 | Stage 3 전용 분위기를 위해 이미지 생성 기능으로 제작한 배경을 사용. public-safe 빌드에서는 CSS 기반 중립 배경으로 대체하고 해당 Stage 3 생성 배경 파일을 `dist/`에서 제거한다 |
 | 전투 후 기술 드래프트 | 기존 `playerSkillUnlocks` 데이터에서 미보유 기술 1~2개를 전투 보상 선택지로 제시. 추후 대체/변경 필요 | 전투 시스템 문서에는 전투 경험치/레벨업 후 2~3개 중 선택 구조가 있으나 경험치 수치와 레벨업 곡선 상세가 아직 없음 |
 | 저주 거래 | 구현 보류. 추후 대체/변경 필요 | Drive에서 `저주 거래` 키워드로 검색했지만 구체 규칙/보상 테이블이 확인되지 않음 |
