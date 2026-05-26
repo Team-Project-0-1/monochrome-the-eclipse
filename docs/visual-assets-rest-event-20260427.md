@@ -9,10 +9,10 @@ Date: 2026-04-27
 - Mobile event/rest concept: `D:\Documents\GitHub\monocrome-eclips\output\imagegen\monochrome-eclipse-concepts\mobile-event-rest-concept.png`
 
 ## Applied Runtime Assets
-- `monochrome_-the-eclipse/public/assets/backgrounds/lobby-eclipse.png`
-- `monochrome_-the-eclipse/public/assets/backgrounds/rest-camp.png`
-- `monochrome_-the-eclipse/public/assets/backgrounds/event-encounter.png`
-- `monochrome_-the-eclipse/public/assets/backgrounds/mobile-event-rest.png`
+- `public/assets/backgrounds/lobby-eclipse.png`
+- `public/assets/backgrounds/rest-camp.png`
+- `public/assets/backgrounds/event-encounter.png`
+- `public/assets/backgrounds/mobile-event-rest.png`
 
 ## Implementation Notes
 - Lobby now uses the generated ruined city eclipse background.

@@ -29,12 +29,10 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          cache-dependency-path: './monochrome_-the-eclipse/package-lock.json'
+          cache-dependency-path: './package-lock.json'
 
       - name: Install dependencies
-        run: |
-          cd monochrome_-the-eclipse
-          npm ci
+        run: npm ci
 
       - name: Install asset tooling
         run: |
@@ -44,9 +42,7 @@ jobs:
       - name: Prototype release check and build
         env:
           VITE_BASE_PATH: /monocrome-eclips/
-        run: |
-          cd monochrome_-the-eclipse
-          npm run prototype:check
+        run: npm run prototype:check
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -54,7 +50,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './monochrome_-the-eclipse/dist'
+          path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment

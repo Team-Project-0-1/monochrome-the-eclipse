@@ -1,6 +1,5 @@
 [build]
-base = "monochrome_-the-eclipse"
-command = "npm run check:netlify-build"
+command = "npm run prototype:check"
 publish = "dist"
 
 [build.environment]
