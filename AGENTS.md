@@ -61,9 +61,12 @@
 **증상**: `Expedition Kit`, `Pick One`, `Camp Log`, `Supply Terminal`, `Reward Choice`, `Route Read`, `Run Trace`, `Choices` 같은 영문 키커를 한국어 UI에 무차별 삽입.
 **왜 문제**: 한국어 게임 톤이 깨지고 "Pick One" 옆 "선택 이유" 같은 어색한 조합 발생.
 **해결**:
-- 화이트리스트 5개만 영문 유지: `STAGE N`, `RUN`, `ROUTE`, `MODE`, `SCOPE`, `OPTIONS`, `AUDIO MIX`
-- 그 외 모든 영문 키커는 한국어 번역 (가이드 §3.3 표 참조)
-- 예외: 정식 게임 타이틀(`MONOCHROME`, `THE ECLIPSE`), 빌드 버전(`PROTOTYPE V0.1`)
+- **모든 영문 키커는 한국어 번역.** (가이드 §3.3 표 참조)
+- 영문으로 남기는 예외 (가이드 §3.2):
+  - 정식 게임 타이틀(`MONOCHROME`, `THE ECLIPSE`)
+  - 빌드 버전(`PROTOTYPE V0.1`)
+  - 키보드 키 hint(`Enter`) — 의미는 동행 한국어로 표기
+- **이력 (2026-05-28)**: 이전 `STAGE/RUN/ROUTE/MODE/SCOPE/OPTIONS/AUDIO MIX` 화이트리스트 7종은 폐지. Phase A에서 메뉴/HUD를 모두 한국어로 통일.
 
 ### 2.2 같은 정보를 4~5곳에 노출
 **증상**: 예상 피해가 `CombatIntelBar` + `CombatOutcomeRail` + `CombatTicker` + `EnemyIntentDisplay` + `MobileOutcomeSummary`에 모두 표시.
