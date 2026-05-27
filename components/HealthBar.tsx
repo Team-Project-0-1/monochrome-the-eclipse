@@ -47,7 +47,7 @@ const HealthBar = ({
   return (
     <div className="w-full" data-side={isPlayer ? 'player' : 'enemy'}>
       <div className={`flex items-baseline justify-between mb-1 ${sideToneClass}`}>
-        <span className="text-xs font-medium">{isPlayer ? '체력' : 'HP'}</span>
+        <span className="text-xs font-medium">체력</span>
         <div className="text-right">
           <span className="text-sm font-bold font-orbitron tracking-wider">
             {currentHp}/{max}

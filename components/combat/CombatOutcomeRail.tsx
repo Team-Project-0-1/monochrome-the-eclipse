@@ -177,7 +177,7 @@ export const CombatOutcomeRail: React.FC<CombatOutcomeRailProps> = ({
   const enemyHpAfter = prediction ? Math.max(0, enemy.currentHp - damageToEnemy) : enemy.currentHp;
 
   return (
-    <section className={`combat-outcome-rail tone-${outcome.tone} ${selectedPatterns.length > 0 ? 'is-ready' : 'is-empty'}`} aria-label="turn outcome preview">
+    <section className={`combat-outcome-rail tone-${outcome.tone} ${selectedPatterns.length > 0 ? 'is-ready' : 'is-empty'}`} aria-label="턴 결과 미리보기">
       <header className="combat-outcome-head">
         <div>
           <span>턴 예측</span>

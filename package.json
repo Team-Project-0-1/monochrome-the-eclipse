@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "author": "프로젝트 0.1%",
-  "license": "UNLICENSED",
+  "author": "TurnaboutHero",
+  "license": "SEE LICENSE IN README.md",
   "scripts": {
     "dev": "vite",
     "check:asset-tooling": "node scripts/check-asset-tooling.mjs",

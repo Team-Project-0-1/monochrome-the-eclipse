@@ -4,11 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development Commands
 
-The main project is located in the `monochrome_-the-eclipse/` directory. All commands should be run from within this directory:
-
-```bash
-cd monochrome_-the-eclipse
-```
+The project sources live at the repository root (App.tsx, types.ts, screens/, components/, data/, store/ are all top-level). Run commands directly from the repo root — there is no nested project folder.
 
 ### Core Commands
 - **Development server**: `npm run dev` - Runs Vite development server

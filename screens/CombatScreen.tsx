@@ -314,7 +314,7 @@ export const CombatScreen: React.FC = () => {
                   ))}
                 </div>
 
-                <div className="combat-adjust-tools" aria-label="coin adjustment tools">
+                <div className="combat-adjust-tools" aria-label="동전 조정 도구">
                   <div className="combat-action-row combat-adjust-row">
                     {!isFocusMode ? (
                       <ActiveSkillPill player={player} disabled={disabledByFocus} onClick={handleUseActiveSkill} />

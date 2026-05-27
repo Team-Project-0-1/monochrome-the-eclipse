@@ -151,9 +151,9 @@ export const CombatRewardScreen = () => {
                       const label = key === 'echoRemnants'
                         ? '에코'
                         : key === 'senseFragments'
-                          ? '감각 조각'
+                          ? '감각'
                           : key === 'memoryPieces'
-                            ? '기억 조각'
+                            ? '기억'
                             : '예비 동전';
                       const displayValue = typeof value === 'boolean' ? '+1' : `+${value}`;
 

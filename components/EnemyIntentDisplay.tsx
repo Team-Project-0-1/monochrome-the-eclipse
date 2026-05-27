@@ -72,7 +72,7 @@ const EnemyIntentDisplay = ({
         </div>
       </div>
 
-      <div className="enemy-intent-detail" aria-label="enemy intent details">
+      <div className="enemy-intent-detail" aria-label="적 의도 상세">
         {patternLabel ? <span className="enemy-intent-chip is-pattern">{patternLabel}</span> : null}
         <span className={`enemy-intent-chip is-${category}`}>{getActionSummary(intent)}</span>
         <span className="enemy-intent-chip is-range">범위 {rangeLabel}</span>

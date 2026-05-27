@@ -113,7 +113,7 @@ export const PatternRail: React.FC<PatternRailProps> = ({
   }
 
   return (
-    <div ref={railRef} className="combat-pattern-rail" aria-label="available patterns">
+    <div ref={railRef} className="combat-pattern-rail" aria-label="사용 가능한 족보">
       {selectedPatternDetails.length > 0 ? (
         <aside className="combat-selected-skill-panel" role="status" aria-live="polite">
           <span className="combat-selected-skill-kicker">선택한 스킬</span>
@@ -337,7 +337,7 @@ export const ReserveCoinStrip: React.FC<ReserveCoinStripProps> = ({
         <span>예비</span>
         <b>{reserveCoins.length}/{MAX_RESERVE_COINS}</b>
       </div>
-      <div className="combat-reserve-strip" aria-label="reserve coins">
+      <div className="combat-reserve-strip" aria-label="예비 동전">
         {reserveCoins.map((coin, index) => {
           const isActive = activeIndex === index;
           const shownFace = selectedIndex === index && revealedFace ? revealedFace : coin.face;

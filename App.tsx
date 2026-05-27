@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useGameStore } from './store/gameStore';
 import { GameState } from "./types";
 import { AnimatePresence } from 'framer-motion';
@@ -23,9 +23,8 @@ import TutorialCoachmark from "./components/TutorialCoachmark";
 import AudioController from "./components/AudioController";
 import { validateContentManifest } from "./utils/contentValidation";
 
-let contentValidationLogged = false;
-
 export const App: React.FC = () => {
+  const contentValidationLogged = useRef(false);
   const gameState = useGameStore(state => state.gameState);
   const isInventoryOpen = useGameStore(state => state.isInventoryOpen);
   const setInventoryOpen = useGameStore(state => state.setInventoryOpen);
@@ -38,8 +37,8 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (!import.meta.env.DEV) return;
-    if (contentValidationLogged) return;
-    contentValidationLogged = true;
+    if (contentValidationLogged.current) return;
+    contentValidationLogged.current = true;
 
     const issues = validateContentManifest();
     issues.forEach((issue) => {
@@ -93,7 +92,11 @@ export const App: React.FC = () => {
       case GameState.MEMORY_ALTAR:
         return <MemoryAltarScreen />;
       default:
-        return <div>Unknown game state</div>;
+        return (
+          <div className="flex min-h-screen items-center justify-center bg-gray-950 text-white">
+            알 수 없는 화면 상태입니다.
+          </div>
+        );
     }
   };
 

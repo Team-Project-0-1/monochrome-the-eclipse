@@ -71,7 +71,7 @@ export const CombatStage: React.FC<CombatStageProps> = ({
   return (
     <section
       className={stageClassName}
-      aria-label="combat battlefield"
+      aria-label="전투 무대"
       style={{ '--combat-bg-image': combatBackgroundImage } as React.CSSProperties}
     >
       <div className="combat-backdrop" />

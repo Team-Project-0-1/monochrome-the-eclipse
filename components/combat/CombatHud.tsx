@@ -38,7 +38,7 @@ export const CombatStatusTray: React.FC<{
   const visibleStatuses = statuses.slice(0, 5);
 
   return (
-    <div className={`combat-foot-status-tray ${side}`} aria-label={`${character.name} active status effects`}>
+    <div className={`combat-foot-status-tray ${side}`} aria-label={`${character.name} 활성 상태 효과`}>
       {visibleStatuses.map(status => {
         const config = effectConfig[status.key];
         const iconPath = effectIconPaths[status.key];
@@ -72,7 +72,7 @@ export const CombatOverheadVitals: React.FC<{
   const hpLabel = `${character.currentHp}/${character.maxHp}`;
 
   return (
-    <aside className={`combat-overhead-vitals ${side}`} aria-label={`${character.name} HP`}>
+    <aside className={`combat-overhead-vitals ${side}`} aria-label={`${character.name} 체력`}>
       <div className="combat-overhead-head">
         {side === 'enemy' ? (
           <>
@@ -97,7 +97,7 @@ export const EnemyCoinStrip: React.FC<{ enemy: EnemyCharacter; intent: EnemyInte
   const sourceIndices = intent?.sourceCoinIndices ?? [];
 
   return (
-    <div className={`combat-enemy-strip ${intent?.dangerLevel === 'high' ? 'is-danger-intent' : ''}`} aria-label="enemy intent and coins">
+    <div className={`combat-enemy-strip ${intent?.dangerLevel === 'high' ? 'is-danger-intent' : ''}`} aria-label="적 의도와 동전">
       <EnemyIntentDisplay enemy={enemy} intent={intent} variant="strip" />
       <div className="combat-mini-coins">
         {enemy.coins.map((coin, index) => (

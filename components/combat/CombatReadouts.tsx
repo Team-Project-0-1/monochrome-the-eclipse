@@ -93,7 +93,7 @@ export const CombatDecisionSummary: React.FC<CombatDecisionSummaryProps> = ({
       : intent?.description ?? '대기';
 
   return (
-    <aside className={`combat-decision-summary ${selectedPatterns.length > 0 ? 'is-ready' : 'is-empty'}`} aria-label="combat decision summary">
+    <aside className={`combat-decision-summary ${selectedPatterns.length > 0 ? 'is-ready' : 'is-empty'}`} aria-label="전투 결정 요약">
       <div className="combat-decision-main">
         <span>다음 행동</span>
         {selected.length > 0 ? (

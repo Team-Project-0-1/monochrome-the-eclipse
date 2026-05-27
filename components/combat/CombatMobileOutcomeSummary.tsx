@@ -158,7 +158,7 @@ export const CombatMobileOutcomeSummary: React.FC<CombatMobileOutcomeSummaryProp
   const playerHpAfter = prediction ? Math.max(0, player.currentHp - damageToPlayer) : player.currentHp;
 
   return (
-    <section className={`combat-mobile-outcome tone-${outcome.tone} ${selectedPatterns.length > 0 ? 'is-ready' : 'is-empty'}`} aria-label="mobile turn outcome preview">
+    <section className={`combat-mobile-outcome tone-${outcome.tone} ${selectedPatterns.length > 0 ? 'is-ready' : 'is-empty'}`} aria-label="모바일 턴 결과 미리보기">
       <header className="combat-mobile-outcome-head">
         <div>
           <span>턴 예측</span>

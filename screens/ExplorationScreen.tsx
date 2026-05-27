@@ -88,7 +88,7 @@ export const ExplorationScreen = () => {
               <div className="min-w-0">
                 <div className="mb-2 inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">
                   <MapPinned className="h-3.5 w-3.5 text-cyan-200" />
-                  STAGE {currentStage} · 경로
+                  스테이지 {currentStage} · 경로
                 </div>
                 <h1 className="text-3xl font-black leading-tight text-white sm:text-4xl">
                   {stageInfo?.name ?? '미확인 구역'}
@@ -125,10 +125,12 @@ export const ExplorationScreen = () => {
                 <div className="h-2 overflow-hidden rounded-full bg-white/10">
                   <div className="h-full rounded-full bg-cyan-200" style={{ width: `${progressPercent}%` }} />
                 </div>
-                <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-500">
-                  <span>Seed: {routeSeed ?? '미기록'}</span>
-                  <span>생성 로그 {routeGenerationLog.length}건</span>
-                </div>
+                {import.meta.env.DEV ? (
+                  <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-500">
+                    <span>Seed: {routeSeed ?? '미기록'}</span>
+                    <span>생성 로그 {routeGenerationLog.length}건</span>
+                  </div>
+                ) : null}
               </div>
               <div className="route-pressure-card rounded-md border border-yellow-200/20 bg-yellow-950/18 px-3 py-2 text-yellow-50">
                 <div className="mb-1 flex items-center gap-2 font-bold">

@@ -69,7 +69,7 @@ const MiniMap: React.FC<MiniMapProps> = ({ nodes, currentTurn, path, availableNo
         </span>
       </h3>
       <div className="mini-map-scroll">
-        <div className="mini-map-board" style={boardStyle} aria-label="run route minimap">
+        <div className="mini-map-board" style={boardStyle} aria-label="런 경로 미니맵">
           <svg
             className="mini-map-path pointer-events-none absolute left-0 top-0 z-0 h-full w-full"
             viewBox={`0 0 ${mapWidth} ${mapHeight}`}

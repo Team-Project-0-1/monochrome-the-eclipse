@@ -140,7 +140,7 @@ export const MenuScreen = () => {
             </ActionButton>
             <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
               <Keyboard className="h-4 w-4" />
-              Enter
+              Enter · {hasRun ? '계속하기' : '새 탐험'}
             </div>
           </div>
         </section>
@@ -148,10 +148,10 @@ export const MenuScreen = () => {
         <section className="menu-status-dock">
           <div className="menu-run-strip">
             {[
-              ['RUN', hasRun ? '저장됨' : '대기'],
-              ['ROUTE', routeStatus],
-              ['MODE', '동전 전투'],
-              ['SCOPE', APP_RELEASE_SCOPE],
+              ['진행', hasRun ? '저장됨' : '대기'],
+              ['경로', routeStatus],
+              ['모드', '동전 전투'],
+              ['범위', APP_RELEASE_SCOPE],
             ].map(([label, value]) => (
               <div key={label} className="rounded-md border border-white/8 bg-white/5 px-3 py-2">
                 <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">{label}</div>
@@ -163,7 +163,7 @@ export const MenuScreen = () => {
           <div className="menu-accessibility-dock rounded-lg border border-cyan-300/20 bg-cyan-950/16 p-3 backdrop-blur-md">
             <div className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-100">
               <Eye className="h-4 w-4" />
-              OPTIONS
+              옵션
             </div>
             <div className="menu-option-grid grid gap-2">
               {optionButtons.map(({ key, label, icon: Icon }) => (
@@ -171,7 +171,12 @@ export const MenuScreen = () => {
                   key={key}
                   type="button"
                   onClick={() => {
-                    playUiSound(gameOptions.soundEnabled, key === 'soundEnabled' && gameOptions.soundEnabled ? 'deny' : 'select');
+                    const willEnable = !gameOptions[key];
+                    if (key === 'soundEnabled') {
+                      if (willEnable) playUiSound(true, 'select');
+                    } else {
+                      playUiSound(gameOptions.soundEnabled, 'select');
+                    }
                     toggleGameOption(key);
                   }}
                   aria-pressed={gameOptions[key]}
@@ -203,7 +208,7 @@ export const MenuScreen = () => {
             <details className="menu-audio-disclosure mt-3 border-t border-white/10 pt-3">
               <summary className="mb-2 flex cursor-pointer items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-100">
                 <SlidersHorizontal className="h-4 w-4" />
-                AUDIO MIX
+                사운드 믹스
               </summary>
               <div className="menu-audio-content grid gap-2">
                 {audioSliders.map(({ key, label }) => (

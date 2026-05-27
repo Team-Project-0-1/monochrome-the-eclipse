@@ -168,7 +168,7 @@ const TutorialCoachmark: React.FC = () => {
         </button>
       </div>
       <h2>{copy.title}</h2>
-      <div className="tutorial-coachmark-hints" aria-label="tutorial next steps">
+      <div className="tutorial-coachmark-hints" aria-label="다음 튜토리얼 안내">
         <span className="is-primary">
           <b>다음 행동</b>
           {copy.next}

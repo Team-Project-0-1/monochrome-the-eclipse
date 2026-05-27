@@ -97,7 +97,7 @@ export const CombatMobileHud: React.FC<CombatMobileHudProps> = ({
   };
 
   return (
-    <section className={`combat-mobile-hud ${isFocusMode ? 'is-focus' : ''}`} aria-label="mobile combat controls">
+    <section className={`combat-mobile-hud ${isFocusMode ? 'is-focus' : ''}`} aria-label="모바일 전투 컨트롤">
       <CombatMobileOutcomeSummary
         player={player}
         enemy={enemy}
@@ -122,7 +122,7 @@ export const CombatMobileHud: React.FC<CombatMobileHudProps> = ({
           ))}
         </div>
 
-        <div className="combat-mobile-tool-row" aria-label="mobile coin tools">
+        <div className="combat-mobile-tool-row" aria-label="모바일 동전 도구">
           {!isFocusMode ? (
             <ActiveSkillPill player={player} disabled={disabledByFocus} onClick={onUseActiveSkill} />
           ) : null}
