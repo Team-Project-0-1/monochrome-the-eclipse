@@ -1,7 +1,7 @@
 # 후속 작업 백로그 (Follow-up Backlog)
 
 > 2026-05-25 UI/UX 점검 세션에서 발견했지만 이번에 손대지 않았거나, 일부만 손댄 항목, 그리고 기획서 대비 회귀/리스크가 있는 항목을 우선순위(P0~P3)로 정리.
-> 모든 작업의 카피·용어·톤·색상 기준은 `docs/ui-copy-guide.md`, 디자인 토큰은 `styles/tokens.css`를 참조한다.
+> 모든 작업의 카피·용어·톤·색상 기준은 `docs/ui-copy-guide.md`, 디자인 토큰은 `src/styles/tokens.css`를 참조한다.
 
 ---
 
@@ -9,7 +9,7 @@
 
 ### P0-1. 동전 색상 시스템을 토큰으로 단일화 ✅
 - **완료**: tokens.css에 `.coin-face / .is-heads / .is-tails / .is-unknown` 시맨틱 클래스 추가. CoinDisplay의 raw Tailwind(`bg-red-500 border-red-300` 등)를 `coin-face is-heads/is-tails/is-unknown`으로 교체. 잠금 배지(`bg-gray-700 border-white`)도 `.coin-lock-badge` 토큰 클래스로.
-- **단일 출처**: `styles/tokens.css` §"Coin face — 동전 본체 색상 단일 출처".
+- **단일 출처**: `src/styles/tokens.css` §"Coin face — 동전 본체 색상 단일 출처".
 - **정책 전환 방법**: tokens.css의 `--color-face-heads/--color-face-tails` 값만 바꾸면 전 화면 일괄 반영.
 
 ### P0-2. ReserveCoinArea ✅ (데드 코드 삭제)
@@ -180,12 +180,45 @@
 
 ---
 
+## Phase C — 큰 구조 변경 (2026-05-28 추가)
+
+이번 세션에서 폴더/구조 단의 큰 정리 작업을 Phase A/B/C 셋으로 나눠 진행했다. C-1만 완료, C-2/C-3는 사전 작업이 선행되어야 한다.
+
+### C-1. ✅ `src/` 디렉터리 도입 (완료, 커밋 `d1e3f1b`)
+- `App.tsx`/`index.tsx`/`types.ts`/`constants.ts`/`vite-env.d.ts`/`index.css`와 8개 디렉터리(`screens/components/data/hooks/store/utils/content/styles`)를 `src/` 하위로 통합. git mv로 100% rename 인식 → 파일 히스토리 보존.
+- 진입점(`index.html`), alias(`vite.config.ts`, `tsconfig.json`), scripts(`check-*.mjs`, `validate-passives.ts`) 경로 일괄 갱신.
+- 부수 정리: `check-text-integrity.mjs`의 평탄화 이전 가정 좀비 코드 제거(`repoDir = appDir의 부모` → 단일 `rootDir`).
+- 검증 9종 통과(typecheck, text-integrity, exploration-route, validate-passives, build, check:stage3-content, check:stage3-assets, check:release-assets, check:prototype-readiness).
+
+### C-2. `src/index.css` 16k줄 분할 — **차단 요인 발견, 사전 작업 필요**
+- **목표**: 단일 16,865줄 `src/index.css`를 화면별 모듈로 분리 (AGENTS.md §followup P3-1의 장기 계획).
+- **2026-05-28 분석으로 발견된 차단 요인**:
+  1. **셀렉터가 4개 cascade 영역에 분산 정의**: 예) `.exploration-screen`/`.exploration-layout`/`.route-signal-board`/`.route-node-card`가 라인 7682(메인), 11539(scanlines/`*`/`::after`), 11593(반응형), 11889(반응형) 4곳에 등장. 순서가 의도된 베이스→오버라이드 구조 — 한 영역만 빼면 cascade 뒤집힘.
+  2. **CSS 스펙상 `@import`는 파일 최상단에만 허용**. 7682 위치에 별도 파일을 inline할 방법이 없음 (PostCSS-import 같은 빌드 도구 필요).
+  3. **`index.tsx`에서 import → cascade 끝으로 이동** → 후속 영역의 오버라이드 의도가 깨지는 시각 회귀 가능.
+  4. **첫 ~500줄은 Tailwind 컴파일 출력**(`--tw-*` 변수). 손글 CSS와 혼합되어 있어 단순 분할이 어려움.
+- **시각 회귀가 `typecheck`/`build`로 잡히지 않으며 dev 스모크 테스트가 유일한 검증**. 16k줄 전체 분할은 단일 세션 작업이 아님.
+- **선행 사전 작업 옵션** (택 1):
+  - **A. Tailwind 정식 도입** (`tailwindcss` devDep + `postcss.config.js` + `tailwind.config.js` + `src/index.css`를 `@tailwind base/components/utilities`로 재작성): 컴파일된 prelude 사라짐. 가장 근본적 정리지만 빌드 파이프라인 자체를 바꾸는 큰 변경.
+  - **B. PostCSS + postcss-import만 도입**: 중간 `@import` 가능해져 분할 작업의 토대 형성. Tailwind 컴파일 결과는 그대로 유지. 가벼운 설정 추가.
+  - **C. dedup 선행 (큰 한 PR)**: 4개 cascade 영역을 한 영역으로 모은다. 시각 회귀 위험 매우 큼 — 모든 화면 dev 스모크 테스트 필수. 추천도 낮음.
+- **추천 진행**: 옵션 A → 화면별 분할 → C-3.
+- **연관**: P1-1 (z-index 토큰 마이그레이션) — 분할 작업과 동시 진행하면 cascade 변경 1회로 해결 가능.
+
+### C-3. 모바일/데스크탑 combat HUD 통합
+- **현재 상태**: `src/screens/CombatScreen.tsx`가 데스크탑 HUD를 인라인 JSX로 들고 있고, 모바일은 별도 `src/components/combat/CombatMobileHud.tsx` 구현. 동일 동작이 두 곳에 정의되어 동작 드리프트 위험.
+- **목표**: 단일 구현 + 변형 분기(슬림 vs 풀). 또는 공용 컨테이너 + 차별 컴포넌트.
+- **위험**: 게임 동작 변경 가능성. 모바일 터치 영역(`--touch-min`, `--touch-comfortable`) 토큰 등 시각 영향 큼.
+- **검증**: 데스크탑 + 모바일 viewport에서 실제 전투 1회 완수 (코인 토글/족보 선택/실행/취소/액티브/예비 동전 교체 전체 동선).
+
+---
+
 ## 작업 시 참조 문서
 
 | 문서 | 위치 | 용도 |
 |---|---|---|
 | UI 카피 가이드 | `docs/ui-copy-guide.md` | 모든 라벨/용어/톤의 단일 진실 |
-| 디자인 토큰 | `styles/tokens.css` | 색/공간/z/모션 토큰 정의 |
+| 디자인 토큰 | `src/styles/tokens.css` | 색/공간/z/모션 토큰 정의 |
 | 콘텐츠 출처 원장 | `docs/content-source-ledger.md` | 자산/규칙 기획서 매핑 |
 | 루트 CLAUDE.md / AGENTS.md | 저장소 루트 | OMX/OMC 관리. 개발 명령어/구조 |
 | 프로젝트 AGENTS.md | `AGENTS.md` | AI 협업 가이드(이 파일의 단일 출처) |
