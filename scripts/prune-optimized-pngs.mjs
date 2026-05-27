@@ -16,10 +16,10 @@ if (!existsSync(distDir)) {
   process.exit(0);
 }
 
-const manifestSource = readFileSync(path.join(rootDir, 'utils', 'generatedAssetManifest.ts'), 'utf8');
+const manifestSource = readFileSync(path.join(rootDir, 'src', 'utils', 'generatedAssetManifest.ts'), 'utf8');
 const manifestJson = manifestSource.match(/=\s*(\{[\s\S]*\});?\s*$/)?.[1];
 if (!manifestJson) {
-  throw new Error('Unable to parse utils/generatedAssetManifest.ts');
+  throw new Error('Unable to parse src/utils/generatedAssetManifest.ts');
 }
 
 const publicToWebp = JSON.parse(manifestJson);

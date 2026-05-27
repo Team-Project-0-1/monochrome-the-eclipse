@@ -16,8 +16,8 @@ require.extensions['.ts'] = (module, filename) => {
   module._compile(outputText, filename);
 };
 
-const { generateLoggedStageNodes, getAvailableRouteNodeIndices, isRouteNodeAvailable } = require('../utils/gameLogic.ts');
-const { NodeType } = require('../types.ts');
+const { generateLoggedStageNodes, getAvailableRouteNodeIndices, isRouteNodeAvailable } = require('../src/utils/gameLogic.ts');
+const { NodeType } = require('../src/types.ts');
 
 const fail = (message) => {
   console.error(`FAIL ${message}`);

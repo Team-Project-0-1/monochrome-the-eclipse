@@ -15,7 +15,7 @@
 | 문서 | 위치 | 무엇을 담는가 |
 |---|---|---|
 | **UI 카피 가이드** | `docs/ui-copy-guide.md` | 모든 라벨/용어/톤/색상의 정식 기준 |
-| **디자인 토큰** | `styles/tokens.css` | 색·공간·z·모션·반경·타입 토큰 |
+| **디자인 토큰** | `src/styles/tokens.css` | 색·공간·z·모션·반경·타입 토큰 |
 | **콘텐츠 출처 원장** | `docs/content-source-ledger.md` | 자산/규칙의 기획서 매핑 |
 | **후속 백로그** | `docs/followup-backlog.md` | 미완 작업·회귀 위험·외부 이슈 추적 |
 
@@ -31,14 +31,14 @@
 ### 1.1 시작 전
 - ✅ **카피·라벨**: `docs/ui-copy-guide.md`를 단일 진실로 본다. 새 라벨은 가이드에 먼저 추가하고 코드에 반영.
   - 예외: 신규 캐릭터/적/스테이지 추가 시 가이드를 *동시에* 갱신(둘 중 한쪽만 갱신 금지).
-- ✅ **색·공간·모션**: `styles/tokens.css`의 토큰만 사용한다. raw hex/Tailwind 색상 클래스 신규 도입 금지.
+- ✅ **색·공간·모션**: `src/styles/tokens.css`의 토큰만 사용한다. raw hex/Tailwind 색상 클래스 신규 도입 금지.
   - 예외: 일회성 시각 디버그/개발 모드에서만 임시로 raw 값 허용. PR 머지 전 토큰화.
 - ✅ **z-index**: 새 값을 raw 숫자로 적지 말고 `var(--z-stage-bg|stage-fx|stage-sprite|stage-overlay|stage-banner|hud|hud-raised|tooltip|coachmark|focus-banner|modal-backdrop|modal|modal-top|toast)` 중 하나를 고른다.
   - 예외: 없음. 토큰에 없는 위계가 필요하면 토큰을 먼저 추가.
 
 ### 1.2 작업 중
 - ✅ **컴포넌트 추가**: 동일 정보를 다른 컴포넌트가 이미 보여주고 있는지 먼저 확인. 새 컴포넌트는 *고유한 정보*만 책임진다.
-- ✅ **CSS 클래스**: 신규 셀렉터를 `index.css` 하단에 추가하기 전에 그 클래스가 이미 존재하는지 grep. 동일 셀렉터 재정의 금지.
+- ✅ **CSS 클래스**: 신규 셀렉터를 `src/index.css` 하단에 추가하기 전에 그 클래스가 이미 존재하는지 grep. 동일 셀렉터 재정의 금지.
 - ✅ **터치/마우스**: long-press, suppressNextClick 같은 입력 트릭 사용 금지. tap=실행, (i) 버튼=상세 로 분리.
 
 ### 1.3 종료 전
@@ -73,19 +73,19 @@
 - IntelBar는 시너지·패시브 정보만, OutcomeRail은 턴 결과 트랙만, Ticker는 직전 이력만.
 
 ### 2.3 동일 CSS 셀렉터 4~5회 재정의
-**증상**: `.combat-bottom-hud`, `.combat-pattern-rail`, `.combat-stage` 등이 13,000줄 `index.css` 안에 같은 셀렉터로 4~5번 등장.
+**증상**: `.combat-bottom-hud`, `.combat-pattern-rail`, `.combat-stage` 등이 13,000줄 `src/index.css` 안에 같은 셀렉터로 4~5번 등장.
 **왜 문제**: 후속 수정이 어디에 영향 줄지 예측 불가. 동작은 우선순위(나중에 선언된 것)에 의존.
 **해결**:
 - 신규 셀렉터 추가 전 grep으로 기존 정의 확인.
 - 같은 클래스를 두 번 정의해야 한다면 (예: 미디어 쿼리 안과 밖) 두 정의를 *인접*하게 배치.
-- 장기: `styles/combat.css`, `styles/exploration.css` 등으로 분할 (followup P3-1).
+- 장기: `src/styles/combat.css`, `src/styles/exploration.css` 등으로 분할 (followup P3-1).
 
 ### 2.4 raw 색상 hardcoded
 **증상**: `bg-red-500`, `border-red-300`, `text-blue-100` 같은 Tailwind 색 클래스를 그대로 컴포넌트에 박음. 토큰 우회.
 **왜 문제**: 모드 전환(reducedMotion/highContrast/largeText), 색맹 모드, GDD 색상 정책 변경 시 일괄 변경 불가.
 **해결**:
 - 색은 `var(--color-*)` 토큰만 사용.
-- Tailwind 클래스가 필요하면 `style={{ background: 'var(--color-...)' }}`로 인라인 적용 또는 `styles/tokens.css`에 시맨틱 클래스(예: `.token-face-heads`) 추가.
+- Tailwind 클래스가 필요하면 `style={{ background: 'var(--color-...)' }}`로 인라인 적용 또는 `src/styles/tokens.css`에 시맨틱 클래스(예: `.token-face-heads`) 추가.
 - 예외: `text-white`, `text-slate-300` 같은 *중립* 텍스트 톤은 임시 허용 (장기적으로 `--color-ink-*` 토큰화).
 
 ### 2.5 기획서 미참조 라벨 임의 결정
@@ -123,7 +123,7 @@
 ```
 ## 체크리스트
 - [ ] 라벨/용어가 docs/ui-copy-guide.md를 따르는가 (영문 키커는 화이트리스트만)
-- [ ] 색·공간·z-index가 styles/tokens.css의 토큰을 참조하는가 (raw 값 X)
+- [ ] 색·공간·z-index가 src/styles/tokens.css의 토큰을 참조하는가 (raw 값 X)
 - [ ] 같은 정보를 다른 컴포넌트가 이미 보여주지 않는가 (중복 노출 X)
 - [ ] 신규 CSS 셀렉터가 index.css에 이미 존재하지 않는가 (재정의 X)
 - [ ] 모바일에서 long-press / suppressNextClick 같은 트릭을 쓰지 않는가
@@ -135,7 +135,7 @@
 
 ## 4. 디자인 토큰 매핑 (빠른 참조)
 
-자주 쓰는 것만 발췌. 전체는 `styles/tokens.css` 참조.
+자주 쓰는 것만 발췌. 전체는 `src/styles/tokens.css` 참조.
 
 ### 4.1 색
 ```
@@ -193,7 +193,7 @@ reducedMotion 활성 시 모든 모션이 0.01s로 강제됨. framer-motion `ani
 
 ### 사례 A: 새 화면(예: PvP 화면) 추가
 1. `docs/ui-copy-guide.md`에 화면 카피 정의 추가
-2. `styles/tokens.css`에 필요한 새 토큰 추가 (이미 있으면 재사용)
+2. `src/styles/tokens.css`에 필요한 새 토큰 추가 (이미 있으면 재사용)
 3. 컴포넌트는 Tailwind + 토큰 인라인 스타일 혼합 가능, 색은 토큰만
 4. z-index가 필요하면 토큰 선택 (없으면 추가)
 5. dev 서버 확인 + tsc/build 통과
@@ -207,7 +207,7 @@ reducedMotion 활성 시 모든 모션이 0.01s로 강제됨. framer-motion `ani
 ### 사례 C: 새 적/패시브 추가
 1. `dataMonsters.ts`에 적 정의 추가
 2. `combatLogic.ts`의 `MonsterPassiveId` union에 새 패시브 ID 추가
-3. **`components/combat/CombatIntelPanel.tsx`의 `monsterPassiveSummaries`에 한국어 설명 동시 추가** ← 누락 시 placeholder 표시
+3. **`src/data/dataMonsters.ts`의 `monsterPassiveSummaries`에 한국어 설명 동시 추가** ← 누락 시 placeholder 표시. (이전엔 CombatIntelPanel에 있었으나 데이터 레이어로 이동됨)
 4. `npm run validate:passives` 통과
 
 ### 사례 D: CombatHUD 정보 추가
@@ -265,5 +265,5 @@ npm run build
 - 프로젝트 개발 명령/아키텍처: 저장소 루트 `CLAUDE.md`, `AGENTS.md` (OMX/OMC 관리, 손대지 말 것)
 - 후속 백로그 (다음 작업 우선순위): `docs/followup-backlog.md`
 - 카피 가이드 (라벨 단일 진실): `docs/ui-copy-guide.md`
-- 디자인 토큰: `styles/tokens.css`
+- 디자인 토큰: `src/styles/tokens.css`
 - 콘텐츠 출처 원장: `docs/content-source-ledger.md`

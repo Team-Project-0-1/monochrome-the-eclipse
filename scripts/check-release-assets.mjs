@@ -42,7 +42,7 @@ requireText('index.html', indexHtml, /<html\s+lang="ko"/);
 requireText('index.html', indexHtml, /<meta\s+name="description"/);
 requireText('index.html', indexHtml, /property="og:image"/);
 requireText('index.html', indexHtml, /rel="manifest"/);
-requireText('index.tsx', readText('index.tsx'), /serviceWorker/);
+requireText('src/index.tsx', readText('src/index.tsx'), /serviceWorker/);
 requireText('public/_headers', headers, /Cache-Control:\s*public,\s*max-age=31536000,\s*immutable/i);
 requireText('public/_headers', headers, /X-Content-Type-Options:\s*nosniff/i);
 requireText('public/_headers', headers, /Referrer-Policy:\s*strict-origin-when-cross-origin/i);

@@ -1,5 +1,5 @@
-import { characterData } from '../data/dataCharacters';
-import { monsterData } from '../data/dataMonsters';
+import { characterData } from '../src/data/dataCharacters';
+import { monsterData } from '../src/data/dataMonsters';
 import {
   applyPassives,
   processEndOfTurn,
@@ -7,8 +7,8 @@ import {
   resolveEnemyActions,
   resolvePlayerActions,
   setupNextTurn,
-} from '../utils/combatLogic';
-import { detectPatterns } from '../utils/gameLogic';
+} from '../src/utils/combatLogic';
+import { detectPatterns } from '../src/utils/gameLogic';
 import {
   CharacterClass,
   Coin,

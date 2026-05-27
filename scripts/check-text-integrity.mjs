@@ -3,13 +3,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const appDir = path.resolve(__dirname, '..');
-const repoDir = path.resolve(appDir, '..');
+const rootDir = path.resolve(__dirname, '..');
 
-const scanRoots = [
-  appDir,
-  path.join(repoDir, 'docs'),
-].filter(existsSync);
+// 평탄화 이후 app 디렉터리와 repo가 동일하다. 이전 로직은 repoDir을 한 단계 위로 잡고
+// docs 폴더를 별도로 스캔했지만, 그 경로는 더 이상 존재하지 않아 사실상 죽은 가지였다.
+const scanRoots = [rootDir];
 
 const allowedExtensions = new Set([
   '.css',
@@ -70,7 +68,7 @@ const failures = [];
 
 for (const file of scanRoots.flatMap(walk)) {
   const text = readFileSync(file, 'utf8');
-  const relativePath = path.relative(repoDir, file);
+  const relativePath = path.relative(rootDir, file);
 
   for (const { label, pattern } of mojibakePatterns) {
     const match = pattern.exec(text);

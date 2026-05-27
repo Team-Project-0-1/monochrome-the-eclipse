@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development Commands
 
-The project sources live at the repository root (App.tsx, types.ts, screens/, components/, data/, store/ are all top-level). Run commands directly from the repo root — there is no nested project folder.
+The TypeScript/React sources live under `src/` (App.tsx, types.ts, screens/, components/, data/, store/, utils/, hooks/, styles/, content/, index.css, index.tsx all sit there). Top-level files are limited to configuration (package.json, vite.config.ts, tsconfig.json, index.html), tooling (scripts/, docs/, public/), and AI agent guides (CLAUDE.md, AGENTS.md). Run commands directly from the repo root.
 
 ### Core Commands
 - **Development server**: `npm run dev` - Runs Vite development server

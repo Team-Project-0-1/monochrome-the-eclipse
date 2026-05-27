@@ -125,11 +125,11 @@ const requireTextIncludes = (label, text, expected) => {
   }
 };
 
-const dataMonsters = readText("data/dataMonsters.ts");
-const dataStages = readText("data/dataStages.ts");
-const dataEvents = readText("data/dataEvents.ts");
-const eventScenes = readText("utils/eventScenes.ts");
-const generatedAssetManifest = readText("utils/generatedAssetManifest.ts");
+const dataMonsters = readText("src/data/dataMonsters.ts");
+const dataStages = readText("src/data/dataStages.ts");
+const dataEvents = readText("src/data/dataEvents.ts");
+const eventScenes = readText("src/utils/eventScenes.ts");
+const generatedAssetManifest = readText("src/utils/generatedAssetManifest.ts");
 const spriteManifest = readText("public/assets/monsters/sprites/manifest.json");
 
 for (const monster of monsterAssets) {
@@ -142,9 +142,9 @@ for (const monster of monsterAssets) {
   const spritesheetAssetPath = publicAssetPath(monster.spritesheet);
   const spritesheetManifestPath = `../stage3-generated/${path.basename(monster.spritesheet)}`;
 
-  requireTextIncludes("data/dataMonsters.ts", dataMonsters, `${monster.key}: {`);
-  requireTextIncludes("data/dataMonsters.ts", dataMonsters, portraitAssetPath);
-  requireTextIncludes("data/dataMonsters.ts", dataMonsters, spritesheetAssetPath);
+  requireTextIncludes("src/data/dataMonsters.ts", dataMonsters, `${monster.key}: {`);
+  requireTextIncludes("src/data/dataMonsters.ts", dataMonsters, portraitAssetPath);
+  requireTextIncludes("src/data/dataMonsters.ts", dataMonsters, spritesheetAssetPath);
   requireTextIncludes("public/assets/monsters/sprites/manifest.json", spriteManifest, `"${monster.key}": "${spritesheetManifestPath}"`);
   requireTextIncludes("generatedAssetManifest.ts", generatedAssetManifest, `"${portraitAssetPath}": "${portraitAssetPath.replace(/\.png$/, ".webp")}"`);
   requireTextIncludes("generatedAssetManifest.ts", generatedAssetManifest, `"${spritesheetAssetPath}": "${spritesheetAssetPath.replace(/\.png$/, ".webp")}"`);
@@ -159,19 +159,19 @@ for (const backgroundPath of backgroundAssets) {
 }
 
 requireTextIncludes(
-  "data/dataStages.ts",
+  "src/data/dataStages.ts",
   dataStages,
   "eventPool: ['event_stage3_resonance_relay', 'event_stage3_flesh_vat', 'event_stage3_eclipse_sanctuary']",
 );
 requireTextIncludes(
-  "data/dataStages.ts",
+  "src/data/dataStages.ts",
   dataStages,
   "combatPool: ['annihilationAmplifier', 'fleshCultivator', 'abyssObserver']",
 );
 
 for (const eventId of stage3EventIds) {
-  requireTextIncludes("data/dataEvents.ts", dataEvents, eventId);
-  requireTextIncludes("utils/eventScenes.ts", eventScenes, eventId);
+  requireTextIncludes("src/data/dataEvents.ts", dataEvents, eventId);
+  requireTextIncludes("src/utils/eventScenes.ts", eventScenes, eventId);
 }
 
 [
@@ -180,8 +180,8 @@ for (const eventId of stage3EventIds) {
   "assets/backgrounds/event-stage3-flesh-vat.png",
   "assets/backgrounds/event-stage3-eclipse-sanctuary.png",
 ].forEach((assetPath) => {
-  const label = assetPath.includes("combat-stage-3") ? "CombatStage.tsx" : "utils/eventScenes.ts";
-  const text = assetPath.includes("combat-stage-3") ? readText("components/combat/CombatStage.tsx") : eventScenes;
+  const label = assetPath.includes("combat-stage-3") ? "CombatStage.tsx" : "src/utils/eventScenes.ts";
+  const text = assetPath.includes("combat-stage-3") ? readText("src/components/combat/CombatStage.tsx") : eventScenes;
   requireTextIncludes(label, text, assetPath);
 });
 
