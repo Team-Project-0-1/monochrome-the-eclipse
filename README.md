@@ -1,18 +1,69 @@
+<div align="center">
+
 # Monochrome: The Eclipse
 
-> 동전을 굴려라. 패턴이 곧 검이 된다.
->
-> 일식 이후 어긋난 감각의 세계 — 5개의 동전, 6가지 패턴,
-> 끝없이 다시 시작되는 잔향. 턴제 로그라이트 RPG 프로토타입.
->
-> React 19 · TypeScript · Vite · Zustand · Framer Motion.
+**동전을 굴려라. 패턴이 곧 검이 된다.**
+
+일식 이후 어긋난 감각의 세계 — 5개의 동전, 6가지 패턴, 끝없이 다시 시작되는 잔향.
+턴제 로그라이트 RPG 프로토타입.
+
+[![Play Demo](https://img.shields.io/badge/▶_Play_Demo-Live-success?style=for-the-badge)](https://team-project-0-1.github.io/monochrome-the-eclipse/)
+[![Status](https://img.shields.io/badge/Status-Prototype_v0.1-orange?style=for-the-badge)](#)
+[![License](https://img.shields.io/badge/License-Proprietary-lightgrey?style=for-the-badge)](#라이선스)
+
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-5-000?logo=react&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-11-0055FF?logo=framer&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-06B6D4?logo=tailwindcss&logoColor=white)
+
+</div>
 
 <!-- 메인 히어로 스크린샷: 전투 중 동전 5개와 감지된 패턴, 적 의도가 한 화면에 보이는 컷을 권장. 파일: docs/screenshots/combat-hero.png -->
-![전투 화면 — 동전 5개, 감지된 패턴, 적 의도와 예측 피해가 한눈에 보이는 핵심 루프](docs/screenshots/combat-hero.png)
+[![전투 화면 — 동전 5개, 감지된 패턴, 적 의도와 예측 피해가 한눈에 보이는 핵심 루프](docs/screenshots/combat-hero.png)](https://team-project-0-1.github.io/monochrome-the-eclipse/)
 
-**공개 라벨**: `Prototype v0.1` — 포트폴리오/프로토타입 공개용 빌드입니다. 유료 1.0 상업 출시가 아니라 핵심 전투 루프 · 비주얼 방향 · 운영 디스크플린을 증명하는 빌드라는 점을 명시해 둡니다.
+---
 
-플레이 가능 범위: 스테이지 1 ~ 스테이지 3 (보스 처치 + `비기` 보상 3선택까지).
+## 목차
+
+- [지금 플레이하기](#지금-플레이하기)
+- [왜 이 프로젝트인가](#왜-이-프로젝트인가)
+- [게임 소개](#게임-소개)
+- [한 턴에 일어나는 일](#한-턴에-일어나는-일)
+- [런 흐름](#런-흐름)
+- [빠른 시작](#빠른-시작)
+- [프로젝트 구조](#프로젝트-구조)
+- [아키텍처 & 구현 노트](#아키텍처--구현-노트)
+- [검증 파이프라인](#검증-파이프라인)
+- [환경 변수 & 배포](#환경-변수--배포)
+- [추가 문서](#추가-문서)
+- [기술 스택 요약](#기술-스택-요약)
+- [라이선스](#라이선스)
+
+---
+
+## 지금 플레이하기
+
+**▶ [team-project-0-1.github.io/monochrome-the-eclipse](https://team-project-0-1.github.io/monochrome-the-eclipse/)**
+
+별도 설치 없이 브라우저에서 바로 플레이 가능합니다. 플레이 가능 범위는 스테이지 1 ~ 3 (보스 처치 + 비기 보상 3선택까지)입니다.
+
+> **공개 라벨**: `Prototype v0.1` — 포트폴리오/프로토타입 공개용 빌드입니다. 유료 1.0 상업 출시가 아니라 핵심 전투 루프 · 비주얼 방향 · 운영 디스크플린을 증명하는 빌드라는 점을 명시해 둡니다.
+
+---
+
+## 왜 이 프로젝트인가
+
+**Monochrome: The Eclipse**는 단순한 게임이 아니라, "운영 가능한 프로토타입은 어떻게 생겨야 하는가"를 증명하는 빌드입니다.
+
+- **핵심 전투 루프의 완결성** — 동전 → 패턴 → 스킬 → 적 의도 비교로 이어지는 예측 가능한 의사결정 사이클을 한 턴 안에 압축.
+- **확장 가능한 상태 아키텍처** — Zustand 6슬라이스 + Immer로 도메인을 분리, 런 복구·이벤트 분기·상태이상 시스템이 같은 어휘를 공유.
+- **단일 진실 원칙(SSoT)** — `tokens.css`(디자인)와 `ui-copy-guide.md`(카피)가 일관성을 자동 검증.
+- **3계층 검증 파이프라인** — PR 머지 / 일반 릴리스 / 프로토타입 공개 빌드가 각자 다른 게이트를 통과.
+- **외부 런타임 종속 없음** — 클라이언트 단독 동작, 키 없이 빌드, 정적 호스팅으로 배포.
+
+채용 담당자·리뷰어에게: 이 README는 코드를 열기 전에도 시스템 전체 구조를 파악할 수 있도록 작성되었습니다.
 
 ---
 
