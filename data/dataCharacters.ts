@@ -1,5 +1,19 @@
 import { CharacterClass, StatusEffectType } from "../types";
 import { assetPath } from "../utils/assetPath";
+import { MEMORY_UPGRADE_DATA } from "../constants";
+
+// 캐릭터 선택 화면에서 잠금 카드에 노출되는 해금 조건 안내.
+// 룰 변경 시 한 곳에서 갱신할 수 있도록 view에서 분리.
+export const characterUnlockHints: { [key in CharacterClass]?: string } = {
+  [CharacterClass.ROGUE]: "3회 이상 플레이",
+  [CharacterClass.TANK]: "스테이지 2 도달",
+  [CharacterClass.MAGE]: "총 400 에코 수집",
+};
+
+// 메타 진행에 따른 캐릭터 최대 체력 계산.
+// 화면에서 HP 표기/실제 적용이 동일 공식을 쓰도록 단일 출처.
+export const getCharacterMaxHp = (baseHp: number, maxHpUpgradeLevel: number): number =>
+  baseHp + MEMORY_UPGRADE_DATA.maxHp.effect * maxHpUpgradeLevel;
 
 export const characterData = {
   [CharacterClass.WARRIOR]: {

@@ -871,3 +871,119 @@ export const monsterPatterns: { [key: string]: MonsterPatternDefinition } = {
         }),
     },
 };
+
+// 패시브 ID → 표시용 요약 (이름/설명).
+// CombatIntelPanel의 "패시브/상태" 패널이 사용한다.
+// monsterData[*].passives[] 의 ID와 일치해야 한다 — 누락 시 ID를 그대로 노출하는 폴백이 동작한다.
+export const monsterPassiveSummaries: Record<string, { name: string; description: string }> = {
+  PASSIVE_MARAUDER1_CRUEL_INTERIOR: {
+    name: '잔혹한 내면',
+    description: '추적을 쌓은 뒤 난도질로 연속 피해를 노립니다.',
+  },
+  PASSIVE_MARAUDER2_MUSCLE_GROWTH: {
+    name: '근육 성장',
+    description: '증폭을 쌓고, 파괴전차로 증폭을 피해로 전환합니다.',
+  },
+  PASSIVE_LEADER_HARD_SKIN: {
+    name: '단단한 피부',
+    description: '반격과 방어 기술로 버티며 분쇄 조건을 만듭니다.',
+  },
+  PASSIVE_REAPER_FLOWING_DARKNESS: {
+    name: '흐르는 어둠',
+    description: '저주를 누적해 밤의 약탈 피해를 키웁니다.',
+  },
+  PASSIVE_REAPER_AMBUSH: {
+    name: '기습',
+    description: '동전 흐름을 방해해 다음 턴의 안전한 조합을 흔듭니다.',
+  },
+  PASSIVE_REAPER_VITAL_STRIKE: {
+    name: '급소 타격',
+    description: '저주가 쌓인 대상을 강하게 압박합니다.',
+  },
+  PASSIVE_SHADOWWRAITH_EARDRUM_BREAK: {
+    name: '고막 파괴',
+    description: '대상의 표식이 4 이상이면 출혈을 추가로 부여합니다.',
+  },
+  PASSIVE_DOPPELGANGER_AFTERIMAGE: {
+    name: '잔상',
+    description: '증폭이 3 이상인 공격은 공명을 추가로 남깁니다.',
+  },
+  PASSIVE_UNPLEASANTCUBE_BIND: {
+    name: '휘감기',
+    description: '반격이 3 이상인 공격은 분쇄를 추가로 남깁니다.',
+  },
+  PASSIVE_SUBJECT162_DISGUST: {
+    name: '혐오 유발',
+    description: '대상의 저주가 5 이상이면 저주를 봉인으로 전환합니다.',
+  },
+  PASSIVE_CHIMERA_SAW_TEETH: {
+    name: '톱날 이빨',
+    description: '10 이상의 피해를 주면 출혈을 추가로 부여합니다.',
+  },
+  // Stage 2 — Amplifier / Cultivator / Observer 라인
+  PASSIVE_AMPLIFIER_RUPTURE_SOUND: {
+    name: '파열 음파',
+    description: '증폭이 5 이상일 때 공격에 공명 2를 추가로 남깁니다.',
+  },
+  PASSIVE_AMPLIFIER_BROAD_INTERFERENCE: {
+    name: '광역 간섭',
+    description: '플레이어의 공명이 폭발할 때 방어를 최대 3 무너뜨립니다.',
+  },
+  PASSIVE_AMPLIFIER_COLLAPSE_VIBRATION: {
+    name: '붕괴 진동',
+    description: '증폭이 한계에 닿으면 모든 공격이 +5 추가 피해를 입힙니다.',
+  },
+  PASSIVE_CULTIVATOR_BUTCHER_INSTINCT: {
+    name: '도축 본능',
+    description: '대상의 표식이 4 이상이면 공격 시 출혈 2를 추가로 부여합니다.',
+  },
+  PASSIVE_CULTIVATOR_FRESH_MEAT: {
+    name: '신선한 고기',
+    description: '출혈 중인 대상에게 공격하면 +2 피해를 더 입힙니다.',
+  },
+  PASSIVE_CULTIVATOR_HOOK_RETRIEVAL: {
+    name: '갈고리 회수',
+    description: '다단 공격(2회 이상)에 표식 1을 추가로 부여합니다.',
+  },
+  PASSIVE_OBSERVER_VOID_GAZE: {
+    name: '공허 주시',
+    description: '대상의 저주가 4 이상이면 공격 시 봉인 1을 부여합니다.',
+  },
+  PASSIVE_OBSERVER_MENTAL_COLLAPSE: {
+    name: '정신 붕괴',
+    description: '봉인된 대상에게 +4 추가 피해를 입힙니다.',
+  },
+  PASSIVE_OBSERVER_ABYSS_ECHO: {
+    name: '심연 메아리',
+    description: '대상이 봉인되었을 때 봉인 수치만큼(최대 3) 저주를 되돌립니다.',
+  },
+  // Stage 3 — Apostle / Choir 라인 (보스 단)
+  PASSIVE_APOSTLE_ADAPTIVE_EVOLUTION: {
+    name: '적응 진화',
+    description: '피격할 때마다 증폭 1을 얻습니다. 전투당 최대 3회 누적됩니다.',
+  },
+  PASSIVE_APOSTLE_FLESH_REFLECTION: {
+    name: '육체 반사',
+    description: '자신의 반격이 5 이상이면 모든 공격이 +5 피해를 입힙니다.',
+  },
+  PASSIVE_APOSTLE_TWISTED_REGENERATION: {
+    name: '비틀린 재생',
+    description: '체력 50% 이하일 때 턴 종료마다 5를 회복합니다.',
+  },
+  PASSIVE_CHOIR_ECHO_MULTIPLICATION: {
+    name: '메아리 증식',
+    description: '플레이어의 공명이 폭발한 직후 저주 2를 추가로 부여합니다.',
+  },
+  PASSIVE_CHOIR_UNHOLY_HYMN: {
+    name: '부정 찬가',
+    description: '봉인된 대상에게 +5 추가 피해를 입힙니다.',
+  },
+  PASSIVE_CHOIR_DOOM_FORETELLING: {
+    name: '종말 예고',
+    description: '대상의 누적 디버프 합이 10 이상이면 피해를 1.5배로 증폭합니다.',
+  },
+  PASSIVE_CHOIR_ECLIPSE_PHENOMENON: {
+    name: '월식 현상',
+    description: '체력 50% 이하일 때 모든 공격에 공명 2를 추가로 남깁니다.',
+  },
+};

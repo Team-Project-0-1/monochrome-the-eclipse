@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGameStore } from '../store/gameStore';
 import { CharacterClass, LucideIcon, GameState } from '../types';
-import { characterData, characterActiveSkills } from '../data/dataCharacters';
+import { characterData, characterActiveSkills, characterUnlockHints, getCharacterMaxHp } from '../data/dataCharacters';
 import { Zap, Target, ShieldCheck, Ghost, Layers, BrainCircuit, BookOpen, Map, Swords, ArrowUpCircle, Cpu } from "lucide-react";
 import GameShell from '../components/ui/GameShell';
 import ScreenHeader from '../components/ui/ScreenHeader';
@@ -23,12 +23,6 @@ export const CharacterSelectScreen = () => {
     const testMode = useGameStore(state => state.testMode);
     const setTestMode = useGameStore(state => state.setTestMode);
     const showTestMode = import.meta.env.DEV;
-
-    const unlockHint: { [key: string]: string } = {
-        [CharacterClass.ROGUE]: "3회 이상 플레이",
-        [CharacterClass.TANK]: "스테이지 2 도달",
-        [CharacterClass.MAGE]: "총 400 에코 수집",
-    };
 
     return (
         <GameShell className="character-select-screen" contentClassName="character-select-content max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
@@ -93,7 +87,7 @@ export const CharacterSelectScreen = () => {
 
                                     <div className="mt-6 space-y-3">
                                         <div className="flex flex-wrap gap-2 text-xs font-bold">
-                                            <span className="rounded-md bg-white/10 px-2 py-1 text-gray-100">HP {data.hp + metaProgress.memoryUpgrades.maxHp * 5}</span>
+                                            <span className="rounded-md bg-white/10 px-2 py-1 text-gray-100">HP {getCharacterMaxHp(data.hp, metaProgress.memoryUpgrades.maxHp)}</span>
                                             {weapon && <span className="rounded-md bg-white/10 px-2 py-1 text-gray-100">무기 {weapon}</span>}
                                             {signature && <span className="rounded-md bg-white/10 px-2 py-1 text-gray-100">{signature}</span>}
                                             <span className="rounded-md bg-cyan-400/15 px-2 py-1 text-cyan-200">{activeSkill.name}</span>
@@ -110,7 +104,7 @@ export const CharacterSelectScreen = () => {
                                                 </div>
                                             </div>
                                         ) : (
-                                            <p className="text-sm font-bold text-red-300">{unlockHint[classType] || "잠김"}</p>
+                                            <p className="text-sm font-bold text-red-300">{characterUnlockHints[characterClass] || "잠김"}</p>
                                         )}
                                     </div>
                                 </div>
@@ -137,7 +131,7 @@ export const CharacterSelectScreen = () => {
                             <BrainCircuit className="h-5 w-5 text-cyan-200"/>영구 업그레이드
                         </h3>
                         <div className="space-y-2 text-sm">
-                            <p className="text-xs text-gray-400">메인 메뉴에서 '기억의 제단'을 통해 업그레이드할 수 있습니다.</p>
+                            <p className="text-xs text-gray-400">탐험 중 '휴식' 노드에서 기억의 제단에 들러 업그레이드할 수 있습니다.</p>
                             <div className="flex justify-between rounded-md bg-white/[0.07] p-2"><span className="text-gray-300">최대 체력 증가</span><span className="font-bold text-green-300">+{metaProgress.memoryUpgrades.maxHp * 5} (Lv.{metaProgress.memoryUpgrades.maxHp})</span></div>
                             <div className="flex justify-between rounded-md bg-white/[0.07] p-2"><span className="text-gray-300">기본 공격력 증가</span><span className="font-bold text-red-300">+{metaProgress.memoryUpgrades.baseAtk} (Lv.{metaProgress.memoryUpgrades.baseAtk})</span></div>
                             <div className="flex justify-between rounded-md bg-white/[0.07] p-2"><span className="text-gray-300">기본 방어력 증가</span><span className="font-bold text-blue-300">+{metaProgress.memoryUpgrades.baseDef} (Lv.{metaProgress.memoryUpgrades.baseDef})</span></div>
