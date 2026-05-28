@@ -181,7 +181,7 @@
 
 ## Phase C — 큰 구조 변경 (2026-05-28 추가)
 
-이번 세션에서 폴더/구조 단의 큰 정리 작업을 Phase A/B/C 셋으로 나눠 진행했다. C-1만 완료, C-2/C-3는 사전 작업이 선행되어야 한다.
+폴더/구조 단의 큰 정리 작업을 Phase A/B/C 셋으로 나눠 진행했다. C-1·C-2 완료, C-3는 재평가 결과 보류.
 
 ### C-1. ✅ `src/` 디렉터리 도입 (완료, 커밋 `d1e3f1b`)
 - `App.tsx`/`index.tsx`/`types.ts`/`constants.ts`/`vite-env.d.ts`/`index.css`와 8개 디렉터리(`screens/components/data/hooks/store/utils/content/styles`)를 `src/` 하위로 통합. git mv로 100% rename 인식 → 파일 히스토리 보존.
@@ -189,26 +189,25 @@
 - 부수 정리: `check-text-integrity.mjs`의 평탄화 이전 가정 좀비 코드 제거(`repoDir = appDir의 부모` → 단일 `rootDir`).
 - 검증 9종 통과(typecheck, text-integrity, exploration-route, validate-passives, build, check:stage3-content, check:stage3-assets, check:release-assets, check:prototype-readiness).
 
-### C-2. `src/index.css` 16k줄 분할 — **차단 요인 발견, 사전 작업 필요**
-- **목표**: 단일 16,865줄 `src/index.css`를 화면별 모듈로 분리 (AGENTS.md §followup P3-1의 장기 계획).
-- **2026-05-28 분석으로 발견된 차단 요인**:
-  1. **셀렉터가 4개 cascade 영역에 분산 정의**: 예) `.exploration-screen`/`.exploration-layout`/`.route-signal-board`/`.route-node-card`가 라인 7682(메인), 11539(scanlines/`*`/`::after`), 11593(반응형), 11889(반응형) 4곳에 등장. 순서가 의도된 베이스→오버라이드 구조 — 한 영역만 빼면 cascade 뒤집힘.
-  2. **CSS 스펙상 `@import`는 파일 최상단에만 허용**. 7682 위치에 별도 파일을 inline할 방법이 없음 (PostCSS-import 같은 빌드 도구 필요).
-  3. **`index.tsx`에서 import → cascade 끝으로 이동** → 후속 영역의 오버라이드 의도가 깨지는 시각 회귀 가능.
-  4. **첫 ~500줄은 Tailwind 컴파일 출력**(`--tw-*` 변수). 손글 CSS와 혼합되어 있어 단순 분할이 어려움.
-- **시각 회귀가 `typecheck`/`build`로 잡히지 않으며 dev 스모크 테스트가 유일한 검증**. 16k줄 전체 분할은 단일 세션 작업이 아님.
-- **선행 사전 작업 옵션** (택 1):
-  - **A. Tailwind 정식 도입** (`tailwindcss` devDep + `postcss.config.js` + `tailwind.config.js` + `src/index.css`를 `@tailwind base/components/utilities`로 재작성): 컴파일된 prelude 사라짐. 가장 근본적 정리지만 빌드 파이프라인 자체를 바꾸는 큰 변경.
-  - **B. PostCSS + postcss-import만 도입**: 중간 `@import` 가능해져 분할 작업의 토대 형성. Tailwind 컴파일 결과는 그대로 유지. 가벼운 설정 추가.
-  - **C. dedup 선행 (큰 한 PR)**: 4개 cascade 영역을 한 영역으로 모은다. 시각 회귀 위험 매우 큼 — 모든 화면 dev 스모크 테스트 필수. 추천도 낮음.
-- **추천 진행**: 옵션 A → 화면별 분할 → C-3.
-- **연관**: P1-1 (z-index 토큰 마이그레이션) — 분할 작업과 동시 진행하면 cascade 변경 1회로 해결 가능.
+### C-2. ✅ Tailwind 정식 빌드 도입 + 손글 CSS 분리 (완료, 2026-05-29)
+- **완료**: 선행 옵션 중 A(Tailwind 정식 도입) 채택. 16,865줄 `src/index.css`(Tailwind 컴파일 출력 + 손글 하이브리드)를 분해.
+  - `tailwindcss@3` + `postcss` + `autoprefixer` 도입, `tailwind.config.js` / `postcss.config.js` 추가.
+  - `src/index.css`를 `@tailwind` 디렉티브 엔트리(85줄, `@layer base/utilities` 포함)로 전환 → 빌드 시 유틸리티 재생성.
+  - 손글 컴포넌트 CSS는 `scripts/extract-handwritten-css.mjs`(postcss 파서)로 추출 → `src/styles/components.css`(1221 노드). `index.tsx`에서 마지막에 import → cascade 손글 우선.
+  - 중복이 된 `tailwind-source.css` 삭제.
+- **분류 근거**: `docs/tailwind-migration-classification.md`. drop-audit으로 누락 prefix 7종 적발(duel-/status-effect-/reward-/contrast-button-/contrast-panel/currency-/screen-card-).
+- **검증**: build, cascade order(dist에서 `.flex` < `.combat-screen` = 손글 우선), check:dist, text-integrity, **dev 10화면 육안**, CI 배포(#37·#38) 통과.
+- 커밋: e938090(분류)·4906290(툴체인)·0ad6d02(추출)·798ffa6(정리).
+- **잔여(선택)**: tokens.css 변수를 Tailwind `theme.extend`로 노출해 `bg-face-heads` 같은 토큰 기반 유틸 생성. 화면별 components.css 추가 분할(combat/exploration 등).
 
-### C-3. 모바일/데스크탑 combat HUD 통합
-- **현재 상태**: `src/screens/CombatScreen.tsx`가 데스크탑 HUD를 인라인 JSX로 들고 있고, 모바일은 별도 `src/components/combat/CombatMobileHud.tsx` 구현. 동일 동작이 두 곳에 정의되어 동작 드리프트 위험.
-- **목표**: 단일 구현 + 변형 분기(슬림 vs 풀). 또는 공용 컨테이너 + 차별 컴포넌트.
-- **위험**: 게임 동작 변경 가능성. 모바일 터치 영역(`--touch-min`, `--touch-comfortable`) 토큰 등 시각 영향 큼.
-- **검증**: 데스크탑 + 모바일 viewport에서 실제 전투 1회 완수 (코인 토글/족보 선택/실행/취소/액티브/예비 동전 교체 전체 동선).
+### C-3. ⏸️ 모바일/데스크탑 combat HUD 통합 — 재평가 결과 보류 (2026-05-29)
+- **재평가**: 코드를 직접 검토하니 초기의 "동일 동작이 두 곳에 중복 정의" 진단은 표면적 오독이었다("파일이 두 개 존재 ≠ 로직 중복").
+  - 핸들러(`onCoinClick`/`onTogglePattern`/`onExecuteTurn` 등)는 `CombatScreen`에서 1회 정의해 props로 양쪽에 전달 — 중복 아님.
+  - 원자 컴포넌트(`CoinDisplay`/`ActiveSkillPill`/`ReserveCoinStrip`/`PatternRail`/`CombatTicker`)는 이미 `CombatControls.tsx` 등으로 추출·공유 — 중복 아님.
+  - 실제 중복은 coin-row `map` + tool 배치 JSX **~25줄**뿐. `OutcomeRail` vs `MobileOutcomeSummary`, `PatternRail` 항상표시 vs drawer는 **의도된 반응형 구조 차이**(CSS 미디어쿼리로 안 되는 차이).
+- **결론**: 통합 이득(25줄 중복 제거 + 발생한 적 없는 드리프트 위험 완화) < 비용(게임 핵심 상호작용을 모바일+데스크탑 양 viewport에서 전 동선 dev 검증). **예방적 리팩토링으로 판단해 보류.**
+- **정말 필요할 때 최소 범위**: `playerCoins.map(...)` 13줄만 `<CombatPlayerCoinRow>`로 추출(5 props). tool/command-strip은 실제로 다르므로 분리 유지.
+- TypeScript가 prop 누락을 잡고 두 호출부가 가까워 grep으로 동기화 확인 가능하므로, 드리프트는 코드 컨벤션(상호 참조 주석) 수준으로 관리해도 충분.
 
 ---
 
