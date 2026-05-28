@@ -21,7 +21,7 @@ import {
   PatternType,
   PlayerCharacter,
   StatusEffectType,
-} from '../types';
+} from '../src/types';
 
 type ValidationState = {
   player: PlayerCharacter;
