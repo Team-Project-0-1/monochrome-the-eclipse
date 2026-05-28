@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import { App } from './App';
 import './styles/tokens.css';
 import './index.css';
+import './styles/components.css';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
