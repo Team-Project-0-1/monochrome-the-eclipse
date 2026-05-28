@@ -15,7 +15,7 @@
   backdrop-filter: blur(6px);
   isolation: isolate;
   pointer-events: auto;
-  z-index: 2000;
+  z-index: var(--z-modal-top);
 }
 
 .run-status-modal-card {
@@ -369,7 +369,7 @@
   inset: 0;
   pointer-events: none;
   position: absolute;
-  z-index: 0;
+  z-index: var(--z-base);
 }
 
 .combat-loading {
@@ -4677,7 +4677,7 @@ html[data-large-text="true"] {
   pointer-events: none;
   position: absolute;
   transform: scale(1.01);
-  z-index: 0;
+  z-index: var(--z-base);
 }
 
 .shop-content {
@@ -5575,7 +5575,7 @@ html[data-large-text="true"] {
   opacity: 0.88;
   pointer-events: none;
   position: absolute;
-  z-index: 0;
+  z-index: var(--z-base);
 }
 
 .rest-screen,
@@ -5599,7 +5599,7 @@ html[data-large-text="true"] {
 .rest-scene-bg,
 .event-scene-bg {
   inset: 0;
-  z-index: 0;
+  z-index: var(--z-base);
 }
 
 .rest-scene-bg {
@@ -5626,7 +5626,7 @@ html[data-large-text="true"] {
   top: 7%;
   transform: translateX(-50%);
   width: min(36vw, 28rem);
-  z-index: 0;
+  z-index: var(--z-base);
 }
 
 .rest-ambient-lines {
@@ -6405,7 +6405,7 @@ html[data-large-text="true"] {
   position: absolute;
   right: 8%;
   top: 9%;
-  z-index: 0;
+  z-index: var(--z-base);
 }
 
 .combat-sprite-slot.enemy.is-danger-intent .combat-sprite-avatar,
@@ -7938,7 +7938,7 @@ html[data-large-text="true"] {
 .character-class-card > img {
   filter: grayscale(0.18) contrast(1.18) brightness(1.22) !important;
   opacity: 1 !important;
-  z-index: 0;
+  z-index: var(--z-base);
 }
 
 .character-class-card:disabled > img {
@@ -9733,7 +9733,7 @@ html[data-large-text="true"] {
   position: absolute;
   right: -2rem;
   top: -4rem;
-  z-index: -1;
+  z-index: var(--z-below);
 }
 
 .combat-screen .combat-bottom-hud.combat-card-hand .combat-player-tools {
@@ -10118,7 +10118,7 @@ html[data-large-text="true"] {
     linear-gradient(180deg, transparent 0 72%, rgba(0, 0, 0, 0.28) 100%) !important;
   background-size: 48px 48px, 48px 48px, auto, auto !important;
   opacity: 0.68 !important;
-  z-index: 0 !important;
+  z-index: var(--z-base) !important;
 }
 
 .combat-stage::before,
