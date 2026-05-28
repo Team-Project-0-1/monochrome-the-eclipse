@@ -1,5 +1,5 @@
 // src/index.css(Tailwind 컴파일 출력 + 손글 혼합)에서 손글 컴포넌트 CSS만 추출.
-// Tailwind 유틸리티/preflight와 tailwind-source.css가 복원하는 @layer 원본은 제외한다.
+// Tailwind 유틸리티/preflight와 src/index.css가 복원하는 @layer 원본은 제외한다.
 //
 // 사용법:
 //   node scripts/extract-handwritten-css.mjs          # 카운트/audit만 출력 (파일 안 씀)
@@ -36,7 +36,7 @@ const keepSpecialSelector = (sel) => {
   return ['[data-reduce-motion', '[data-high-contrast', '[data-large-text'].some((a) => s.includes(a));
 };
 
-// tailwind-source.css의 @layer utilities가 복원하는 원본 → 추출 대상 아님(drop OK).
+// src/index.css의 @layer utilities가 복원하는 원본 → 추출 대상 아님(drop OK).
 const SOURCE_KEYFRAMES = ['scan', 'pulse-shadow'];
 
 // dropped 셀렉터가 Tailwind 유틸리티로 "보이는지" 판정용 힌트(audit 노이즈 제거).
@@ -99,7 +99,7 @@ ast.each((node) => {
       if (at.nodes && at.nodes.length) kept.append(at);
     } else if (n === 'keyframes') {
       if (SOURCE_KEYFRAMES.includes(node.params.trim())) {
-        // tailwind-source.css가 복원
+        // src/index.css가 복원
       } else {
         kept.append(node.clone());
         keptKeyframes.push(node.params);
@@ -129,7 +129,7 @@ if (WRITE) {
   mkdirSync(path.dirname(outPath), { recursive: true });
   const header = [
     '/* 손글 컴포넌트 CSS — scripts/extract-handwritten-css.mjs 로 src/index.css에서 추출.',
-    ' * Tailwind 유틸리티/preflight와 @layer 원본(tailwind-source.css가 복원)은 제외됨.',
+    ' * Tailwind 유틸리티/preflight와 @layer 원본(src/index.css가 복원)은 제외됨.',
     ' * 이 파일을 직접 편집해도 되지만, src/index.css 재추출 시 덮어쓰지 않도록 주의. */',
     '',
     '',

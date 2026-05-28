@@ -126,10 +126,9 @@
 - **현재 상태**: 단일 파일 13,000줄.
 - **작업**: `styles/base.css` (Tailwind preflight), `styles/combat.css`, `styles/exploration.css`, `styles/shop.css`, `styles/menu.css`로 분할. `tokens.css`는 이미 분리됨.
 
-### P3-2. Tailwind 빌드 파이프라인 도입
-- **현재 상태**: `tailwind-source.css`가 있지만 PostCSS/Tailwind 빌드 단계가 없어 `index.css`는 정적 컴파일된 파일.
-- **작업**: Vite에 Tailwind PostCSS 플러그인 추가, 빌드 시 매번 컴파일되게 함. tokens.css의 변수를 Tailwind `theme.extend`로 노출하면 `bg-face-heads` 같은 유틸 클래스도 토큰 기반이 됨.
-- **위험**: 기존 컴파일된 index.css의 커스텀 CSS를 보존하면서 마이그레이션 필요.
+### P3-2. ✅ Tailwind 빌드 파이프라인 도입 (완료, 2026-05-29)
+- **완료**: tailwindcss@3 + postcss + autoprefixer 도입. `src/index.css`는 `@tailwind` 디렉티브 엔트리로 전환되어 빌드 시 유틸리티가 재생성됨. 손글 컴포넌트 CSS는 `scripts/extract-handwritten-css.mjs`로 추출해 `src/styles/components.css`로 분리, index.tsx에서 마지막에 import(cascade 손글 우선). 중복이던 `tailwind-source.css`는 삭제.
+- **잔여**: tokens.css 변수를 `theme.extend`로 노출해 `bg-face-heads` 같은 토큰 기반 유틸을 만드는 작업은 후속(선택).
 
 ### P3-3. 컬러 일렉트라/색맹 시뮬레이션 테스트
 - **현재 상태**: 색 대비/색맹 환경 미검증.

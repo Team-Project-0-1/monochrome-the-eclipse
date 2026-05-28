@@ -1,5 +1,5 @@
 /* 손글 컴포넌트 CSS — scripts/extract-handwritten-css.mjs 로 src/index.css에서 추출.
- * Tailwind 유틸리티/preflight와 @layer 원본(tailwind-source.css가 복원)은 제외됨.
+ * Tailwind 유틸리티/preflight와 @layer 원본(src/index.css가 복원)은 제외됨.
  * 이 파일을 직접 편집해도 되지만, src/index.css 재추출 시 덮어쓰지 않도록 주의. */
 
 
