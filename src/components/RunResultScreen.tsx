@@ -166,7 +166,7 @@ const RunResultScreen: React.FC<RunResultScreenProps> = ({
 
           <div className="mt-4 rounded-md border border-white/10 bg-black/28 p-3 text-xs leading-relaxed text-slate-300">
             <div className="mb-1 font-bold uppercase tracking-[0.16em] text-slate-500">런 기록</div>
-            <p>STAGE {currentStage} · {currentTurn}층 · 최근 경로: {routeText}</p>
+            <p>스테이지 {currentStage} · {currentTurn}층 · 최근 경로: {routeText}</p>
             <p className="mt-1">예비 동전 {reserveCoins.length}/{MAX_RESERVE_COINS} · 최고 도달 층 {metaProgress.highestStage} · 누적 에코 {metaProgress.totalEchoCollected}</p>
           </div>
         </Panel>
