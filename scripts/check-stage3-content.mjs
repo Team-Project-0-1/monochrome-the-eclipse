@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const appDir = path.resolve(__dirname, "..");
 const repoDir = path.resolve(appDir, "..");
 const strict = process.argv.includes("--strict");
-const templatePath = path.join(appDir, "content", "stage3", "stage3-content-template.json");
+const templatePath = path.join(appDir, "src", "content", "stage3", "stage3-content-template.json");
 const failures = [];
 
 const allowedRoles = new Set(["warrior", "assassin", "mage", "utility", "hybrid", "buff"]);
@@ -290,7 +290,7 @@ if (!existsSync(templatePath)) {
   walkForTbd(data);
 }
 
-const combatRewards = readText(path.join("utils", "combatRewards.ts"));
+const combatRewards = readText(path.join("src", "utils", "combatRewards.ts"));
 [
   "stage3_secret_technique_flash",
   "stage3_secret_technique_veil",

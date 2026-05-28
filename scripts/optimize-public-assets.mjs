@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const publicDir = path.join(rootDir, 'public');
-const manifestPath = path.join(rootDir, 'utils', 'generatedAssetManifest.ts');
+const manifestPath = path.join(rootDir, 'src', 'utils', 'generatedAssetManifest.ts');
 
 const toPosix = (value) => value.split(path.sep).join('/');
 
