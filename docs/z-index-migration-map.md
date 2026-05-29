@@ -68,7 +68,17 @@
 
 검증: 브라우저 `getComputedStyle` 주입 측정 — 10곳 효과값 전부 보존. hud-card 26·overhead-vitals/enemy-strip 27·motion-arc 28·enemy-overhead-stack 29·clash-meter/clash-compare/coin-slot-badge 20·shop-header 토큰 20(미디어 게이트). foot-status-tray만 **31**(위 발견대로 그림자 31 규칙이 효과값), 나머지 9곳은 매핑값 그대로(pass).
 
-누계: 값일치 21 + 전용토큰 신설(#7·#9 4 + #8 10) = 비-trivial 54 중 **35곳 전환**, **19곳 잔존**.
+### stage-bg-raised 신설 (2026-05-30 세션, #10, 회귀 0)
+
+raw 2(6곳)는 전부 "각자 로컬 bg(1) 바로 위로 한 칸 올린 요소"라 의미가 균일 → §10 단일 토큰 `--z-stage-bg-raised`(2)로 매핑(맵 절차가 예시로 든 바로 그 토큰). 6곳 모두 서로 다른 stacking context(모달·루트맵·휴식·이벤트·캐릭터선택·전투 overhead)라 교차 경쟁 없음 → 값-역할 불일치 없이 단일 토큰으로 충분.
+
+| raw | 신설 토큰 (값) | 곳 | 셀렉터 |
+|---|---|---|---|
+| `2` | `var(--z-stage-bg-raised)` (2) | 6 | `.run-status-modal-header`, `.route-node-lock-badge`, `.rest-actor`, `.event-player-figure`, `.character-class-card > .relative`, 모바일 `.combat-enemy-strip`(overhead-stack 내) |
+
+검증: 브라우저 computed — 단일/직접 셀렉터 5곳 모두 2 보존, 미디어 게이트 1곳(모바일 enemy-strip)은 토큰값 2로 보존(pass).
+
+누계: 값일치 21 + 전용토큰 신설(#7·#9 4 + #8 10 + #10 6) = 비-trivial 54 중 **41곳 전환**, **13곳 잔존**.
 
 ## ⏸️ 보류 — 값이 바뀌어야 하는 멤버 (별도 결정 필요)
 
@@ -76,12 +86,11 @@
 
 | 보류 raw | 개수 | 가까운 토큰 | load-bearing 근거 / 위험 |
 |---|---|---|---|
-| 2 | 6 | `--z-stage-bg`(1) | ⚠️ `.run-status-modal`(1)/`-header`(2), `.event-player-figure`(2)가 다른 figure(1) 위, `.character-class-card > .relative` 콘텐츠(2)가 오버레이(1) 위. 2→1 시 적층 붕괴 |
 | 4, 5, 8 | 5 | `--z-stage-fx`(3) | 무대 이펙트 세분. 3과의 상대 순서 확인 후에만 |
 | 10, 15, 18 | 4 | `--z-stage-sprite`(12) | 방향 혼재(10↑, 15·18↓). 특히 `.combat-sprite-slot.is-attacking`(18) 하강 시 공격 스프라이트 적층 변화 |
 | 31, 32, 34 | 4 | `--z-stage-banner`(36) | 31~34→36 상승. 순서 의도 확인. **주의**: 31 중 1곳은 `.combat-foot-status-tray` 오버라이드(6851행)로, #8의 그림자 28을 덮어 효과값을 지배 — 이 버킷 처리 시 함께 본다 |
 
-> ~~70, 75, 76~~ (#7), ~~85~~ (#9), ~~20, 26, 27, 28, 29~~ (#8) → 전용 토큰 신설로 해소 (위 ✅ 완료 참조). 보류 합계 33 → **19곳**.
+> ~~70, 75, 76~~ (#7), ~~85~~ (#9), ~~20, 26, 27, 28, 29~~ (#8), ~~2~~ (#10) → 전용 토큰 신설로 해소 (위 ✅ 완료 참조). 보류 합계 33 → **13곳**.
 
 ## 보류 해소 절차 (다음 세션)
 

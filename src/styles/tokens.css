@@ -191,6 +191,7 @@
   --z-below:      -1;
   --z-base:        0;
   --z-stage-bg:    1;
+  --z-stage-bg-raised: 2; /* 로컬 bg(1) 바로 위로 올린 요소 — run-status-modal-header, route-node-lock-badge, rest-actor, event-player-figure, character-class-card>.relative, 모바일 enemy-strip(overhead-stack 내). 각자 다른 stacking context, 값만 공유 */
   --z-stage-fx:    3;
   --z-stage-sprite: 12;
   --z-stage-overlay-low: 20; /* .combat-clash-meter/-compare — 중앙 클래시(캐노니컬 오버레이 22 아래) */

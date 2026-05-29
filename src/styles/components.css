@@ -32,7 +32,7 @@
   background: rgba(2, 6, 23, 0.99);
   flex: 0 0 auto;
   position: relative;
-  z-index: 2;
+  z-index: var(--z-stage-bg-raised);
 }
 
 .run-status-modal-body {
@@ -3827,7 +3827,7 @@
   right: 0.75rem;
   text-transform: uppercase;
   top: 0.75rem;
-  z-index: 2;
+  z-index: var(--z-stage-bg-raised);
 }
 
 .combat-synergy-strip {
@@ -5697,7 +5697,7 @@ html[data-large-text="true"] {
   left: 37%;
   position: absolute;
   width: min(34vw, 26rem);
-  z-index: 2;
+  z-index: var(--z-stage-bg-raised);
 }
 
 .rest-actor img,
@@ -5918,7 +5918,7 @@ html[data-large-text="true"] {
   left: 12%;
   opacity: 0.74;
   width: min(24vw, 19rem);
-  z-index: 2;
+  z-index: var(--z-stage-bg-raised);
 }
 
 .event-player-figure img,
@@ -7965,7 +7965,7 @@ html[data-large-text="true"] {
 }
 
 .character-class-card > .relative {
-  z-index: 2;
+  z-index: var(--z-stage-bg-raised);
 }
 
 .character-class-card h3 {
@@ -10667,7 +10667,7 @@ html[data-large-text="true"] {
     right: 0.28rem;
     top: 0;
     width: auto !important;
-    z-index: 2;
+    z-index: var(--z-stage-bg-raised);
   }
 
   .combat-enemy-overhead-stack .combat-mini-coins {
