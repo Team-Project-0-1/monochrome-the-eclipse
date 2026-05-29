@@ -80,6 +80,11 @@ export const MemoryAltarScreen = () => {
                       <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs font-bold text-slate-300">Lv. {currentLevel}</span>
                     </div>
                     <p className="mt-1 text-sm leading-relaxed text-slate-300">{data.description}</p>
+                    <p className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-slate-400">
+                      <span>현재 <span className="text-slate-200">+{currentLevel * data.effect}</span></span>
+                      <ArrowRight className="h-3 w-3 text-blue-300/70" aria-hidden />
+                      <span>강화 후 <span className="text-blue-200">+{(currentLevel + 1) * data.effect}</span></span>
+                    </p>
                   </div>
                   <button
                     type="button"
