@@ -77,9 +77,14 @@
 - **작업**: `HealthBar.tsx`를 정식 컴포넌트로 두고 `CombatOverheadVitals`를 그 위에 작은 변형(슬림 헤드 + 짧은 트랙)으로 재작성. 또는 반대로.
 - **검증**: 탐험 → 전투 진입 시 같은 시각 언어가 이어지는지.
 
-### P1-3. ShopScreen 데드 가이드 픽스
-- **현재 상태**: 25.09.05 리액트 피드백 리포트에 "상점/이벤트/휴식 선택 시 UI가 사라지고 게임 진행이 멈춤" S급 버그 미해결로 기록.
-- **작업**: 본 이슈가 현재 코드에서도 재현되는지 manual repro → 재현되면 root cause 추적. (이번 dev 서버 점검에서는 상점/휴식까지 진입하지 않았음)
+### P1-3. S급 버그(상점/이벤트/휴식 UI 사라짐) 재현 검증 — ✅ 재현 불가 (2026-05-29)
+- **결론**: 25.09.05 리액트 피드백 리포트의 "상점/이벤트/휴식 선택 시 UI가 사라지고 게임 진행이 멈춤" S급 버그는 **현재 코드에서 재현되지 않음**.
+- **검증 방법**: dev 빌드에서 Zustand 스토어를 일시 노출(`window.__gameStore`, 검증 후 즉시 제거)하고 `setGameState`/`selectNode`로 SHOP·REST·EVENT에 직접 진입. 화면별 `#root` 렌더 여부 + console error 점검.
+  - SHOP: 정상 렌더(보급소 UI 전체), console error 0.
+  - REST: 정상 렌더(휴식처 UI), console error 0.
+  - EVENT: 실제 이벤트(`event_supplies`) 로드 → 선택 → 결과 → 계속 → EXPLORATION 복귀까지 전 구간 정상, console error 0, 진행 멈춤 없음.
+- **근본 원인(가설)**: 25.09.05 이후 대규모 리팩터링(데이터 폴더 이동, `src/` 채택, 각 화면 `if (!player)` 가드 추가 등) 과정에서 해소된 것으로 추정. App.tsx `renderGame()` default 케이스가 잘못된 상태에 "알 수 없는 화면 상태"를 표시하므로, 과거 "빈 화면"은 잘못된 상태가 아니라 렌더 예외(throw)였을 가능성이 큼.
+- **회귀 방어 적용 완료(2026-05-29)**: App.tsx에 **Error Boundary 부재** 문제를 해소. `src/components/ErrorBoundary.tsx` 신규 추가 후 App.tsx에서 화면 트리(`renderGame()` 등)를 감쌈 → 어떤 화면에서든 렌더 예외가 나도 트리 전체 언마운트(=동일 "UI 사라짐") 대신 폴백 UI("메뉴로 돌아가기"/"새로고침")를 표시. dev에서 ShopScreen 강제 throw로 폴백 표시·메뉴 복구 검증 완료.
 
 ### P1-4. CharacterStatus의 사이드 톤 색상 토큰화
 - **현재 상태**: `CharacterStatus.tsx`가 `bg-gray-800/90 border-blue-700/50 text-blue-100`(player) / `border-red-700/50`(enemy) 등 raw Tailwind 사용.
@@ -165,9 +170,9 @@
 
 ## 알려진 외부 이슈 (기획서/피드백 보고서 기반)
 
-### EXT-1. 상점/이벤트/휴식 진입 시 UI 멈춤 (S급 미해결, 25.09.05)
+### EXT-1. 상점/이벤트/휴식 진입 시 UI 멈춤 (S급, 25.09.05) — ✅ 현재 코드 재현 불가
 - 출처: 구글 드라이브 "리액트 피드백 리포트" (`1CWcY9SfH3HCkhiY9NzsS-BU1jl06b1Dlr7HkOgMxPck`)
-- **재현 미확인**. 현재 코드에서 발생 여부 → P1-3로 후속 추적.
+- **2026-05-29 검증: 현재 코드에서 재현되지 않음** (P1-3 참조). 회귀 방어용 Error Boundary 적용 완료(`src/components/ErrorBoundary.tsx` + App.tsx).
 
 ### EXT-2. 미니보스 방어력 누적이 너무 강함 (유저 테스트 다수 지적)
 - 출처: "모노크롬 클로드 버전 테스트" 스프레드시트
