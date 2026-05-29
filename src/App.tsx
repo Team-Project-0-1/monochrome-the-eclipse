@@ -21,6 +21,7 @@ import SkillReplacementModal from './components/modals/SkillReplacementModal';
 import KeywordTooltip from "./components/KeywordTooltip";
 import TutorialCoachmark from "./components/TutorialCoachmark";
 import AudioController from "./components/AudioController";
+import ErrorBoundary from "./components/ErrorBoundary";
 import { validateContentManifest } from "./utils/contentValidation";
 
 export const App: React.FC = () => {
@@ -33,6 +34,7 @@ export const App: React.FC = () => {
   const forgetSkill = useGameStore(state => state.forgetSkill);
   const tooltip = useGameStore(state => state.tooltip);
   const hideTooltip = useGameStore(state => state.hideTooltip);
+  const setGameState = useGameStore(state => state.setGameState);
   const gameOptions = useGameStore(state => state.gameOptions);
 
   useEffect(() => {
@@ -103,30 +105,32 @@ export const App: React.FC = () => {
   return (
     <>
       <AudioController />
-      <AnimatePresence>
-        {tooltip && <KeywordTooltip />}
-      </AnimatePresence>
-      {tooltip && (
-        <div
-          className="fixed inset-0"
-          style={{ zIndex: 'var(--z-hud-raised)' }}
-          onClick={hideTooltip}
-        />
-      )}
+      <ErrorBoundary onReset={() => { hideTooltip(); setGameState(GameState.MENU); }}>
+        <AnimatePresence>
+          {tooltip && <KeywordTooltip />}
+        </AnimatePresence>
+        {tooltip && (
+          <div
+            className="fixed inset-0"
+            style={{ zIndex: 'var(--z-hud-raised)' }}
+            onClick={hideTooltip}
+          />
+        )}
 
-      {renderGame()}
-      <TutorialCoachmark />
+        {renderGame()}
+        <TutorialCoachmark />
 
-      {player && (
-        <InventoryPanel
-          isOpen={isInventoryOpen}
-          onClose={() => setInventoryOpen(false)}
-          player={player}
-          unlockedPatterns={unlockedPatterns}
-          onForgetSkill={forgetSkill}
-        />
-      )}
-      <SkillReplacementModal />
+        {player && (
+          <InventoryPanel
+            isOpen={isInventoryOpen}
+            onClose={() => setInventoryOpen(false)}
+            player={player}
+            unlockedPatterns={unlockedPatterns}
+            onForgetSkill={forgetSkill}
+          />
+        )}
+        <SkillReplacementModal />
+      </ErrorBoundary>
     </>
   );
 };
