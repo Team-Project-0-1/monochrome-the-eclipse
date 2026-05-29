@@ -100,9 +100,8 @@
 - **현재 상태**: 우하단 절대 위치라 모바일 좁은 화면에서 본문과 겹친다.
 - **작업**: `(max-width: 767px)`에서 figure 숨김 또는 본문 아래로 이동.
 
-### P2-6. RestScreen 3개 버튼 위계 강조
-- **현재 상태**: 회복/제단/건너뛰기 3 버튼의 시각 위계가 거의 동일. 추천 동선이 약함.
-- **작업**: 체력 % 기준으로 추천 버튼에 highlight + 보조 라벨("권장").
+### P2-6. ✅ RestScreen 3개 버튼 위계 강조 (완료, 2026-05-30)
+- **완료**: 체력 60% 이하면 회복, 그 외엔 기억 조각 보유 시 제단을 추천 버튼으로 강조(amber 글로우 + '권장' 배지). 임계 60%는 회복량(maxHp*0.4)이 상한에 잘리지 않는 구간과 일치. RestScreen.tsx에 recommendedChoice 로직, components.css에 .is-recommended/.rest-choice-badge 추가(기존 .rest-choice 규칙 미수정 → 회귀 차단). check 전체 PASS.
 
 ### P2-7. ✅ MemoryAltarScreen 다음 효과 차이 표시 (완료, 2026-05-30)
 - **완료**: 업그레이드 카드 설명 아래에 '현재 +N → 강화 후 +M' 누적 델타 라인 추가(MemoryAltarScreen.tsx). 누적 보너스 = 레벨 × effect, map 콜백 스코프의 currentLevel·data.effect만 사용한 표시 전용 변경. check 전체 PASS.
