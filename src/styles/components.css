@@ -396,7 +396,7 @@
 .combat-flash {
   background: #dc2626;
   pointer-events: none;
-  z-index: 80;
+  z-index: var(--z-coachmark);
 }
 
 .combat-stage {
@@ -12904,7 +12904,7 @@ html[data-large-text="true"] {
   right: auto;
   top: 1rem;
   transform: none !important;
-  z-index: 92;
+  z-index: var(--z-focus-banner);
 }
 
 @media (max-width: 767px) {
