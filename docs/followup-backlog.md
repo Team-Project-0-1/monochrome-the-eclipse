@@ -23,38 +23,20 @@
 
 ## P1 — 다음 다음 세션, 영향도 큼
 
-### P1-0. 이미지 자산 폴더 통합 (3곳 분산 해소)
-- **현재 상태**: 같은 종류 이미지가 3개 위치에 흩어져 있다.
-  - `assets/monsters/{portraits,sprites}/` — 프로젝트 루트 (잔재 의심, 코드 참조 여부 확인 필요)
-  - `public/assets/{audio,backgrounds,characters,icons,items,monsters}/` — 메인 사용처. 카테고리 정리는 잘 돼 있음
-  - `public/sprites/{characters,monsters}/` — 추가 잔재
-- **왜 문제**: 같은 이름의 파일이 중복 존재하면 어느 쪽이 단일 진실인지 모호. 빌드 시 둘 다 dist에 포함되어 사이즈 낭비. 새 자산 추가 시 어디에 둘지 매번 고민.
-- **작업**:
-  1. `assets/` (root)와 `public/sprites/` 내 파일을 grep으로 코드 참조 확인 (`Grep "assets/monsters" "public/sprites"`).
-  2. 사용되지 않는 잔재라면 삭제.
-  3. 둘 다 사용 중이면 `public/assets/` 하위로 통합 + 코드 import 경로 일괄 교체.
-  4. `scripts/check-stage3-assets.mjs` 같은 자산 검증 스크립트도 새 경로로 갱신.
-- **단일 출처 후 구조 (제안)**:
+### P1-0. 이미지 자산 폴더 통합 — ✅ 실질 해소 (2026-05-30 검증, 백로그가 stale였음)
+- **결론**: 백로그가 지목한 "3곳 분산" 문제는 **이미 이전 세션에서 해소**됐고 백로그에만 반영이 안 돼 있었다. 잔재 폴더 2곳(루트 `assets/`, `public/sprites/`)은 삭제됐고 단일 출처는 `public/assets/`다.
+- **검증 증거 (2026-05-30)**:
+  - `git ls-files`: 루트 `assets/` → 0개, `public/sprites/` → 0개, `public/assets/` → **215개**(유일 출처). 두 잔재 폴더는 디스크에도 부재(`Test-Path` False).
+  - 의도적 삭제 기록: `src/utils/generatedAssetManifest.ts:4` 주석 — "public/sprites/ 폴더가 어디서도 호출되지 않는 잔재였고, 함께 삭제됨"(`optimize-public-assets.mjs` 생성, 자동 리뷰 PR #9 맥락).
+  - 경로 정합성: 코드의 `assetPath("assets/...")`는 Vite가 루트로 서빙하는 `public/`에 매핑 → 모든 참조가 `public/assets/`로 해소. `check:stage3-assets`·`check:release-assets`·`check:asset-tooling` 전부 **PASS**.
+- **남은 선택 항목(권장 안 함)**: 캐릭터 일러스트가 `public/assets/characters/*.png`에 평면 배치돼 있어, 아래 "제안 구조"의 `characters/portraits/` 중첩과 다르다. 그러나 이는 미용적 차이일 뿐(중복·분산 아님)이고, 적용하면 `dataCharacters.ts` import 4곳 + 자동생성 `generatedAssetManifest.ts` 재생성을 건드려 **회귀 위험 有 / 기능 이득 0**. 손대지 않는 것을 권장.
+- **원안 메모(히스토리)**: 초안은 "3개 위치 분산(루트 `assets/`, `public/assets/`, `public/sprites/`), 중복 파일로 단일 진실 모호, 250여개 파일 일괄 이동" 작업이었다. 제안했던 이상적 구조:
   ```
   public/assets/
-    audio/
-    backgrounds/
-    characters/
-      portraits/   ← 캐릭터 일러스트
-      sprites/     ← 스프라이트시트
-    icons/
-      combat/
-      status/
-    items/
-    monsters/
-      portraits/
-      sprites/
-      stage2-generated/
-      stage3-generated/
-  public/
-    icon-192.png, icon-512.png, mono.png ...  ← PWA 자산만 루트 유지
+    audio/ backgrounds/ characters/{portraits,sprites}/ icons/{combat,status}/ items/
+    monsters/{portraits,sprites,stage2-generated,stage3-generated}/
+  public/  ← PWA 자산(icon-192/512, mono 등)만 루트 유지
   ```
-- **위험**: 250여개 파일과 다수 import. 한 PR로 큰 변경 → 별도 PR로 분리 진행 권장.
 
 ### P1-1. z-index 토큰 마이그레이션 — ✅ 완료 (2026-05-30)
 - **결과**: `src/styles/components.css`(CSS 추출 후 실제 파일)의 모든 raw 숫자 `z-index`를 `tokens.css` §10 `--z-*` 토큰으로 전환 완료. 전수 스캔 `z-index:\s*[0-9]` → 0개.
