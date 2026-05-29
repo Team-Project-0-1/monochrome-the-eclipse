@@ -25,7 +25,7 @@
   max-width: min(64rem, calc(100vw - 1.5rem));
   pointer-events: auto;
   position: relative;
-  z-index: 1;
+  z-index: var(--z-stage-bg);
 }
 
 .run-status-modal-header {
@@ -386,7 +386,7 @@
 .combat-camera {
   overflow: hidden;
   transform-origin: 50% 52%;
-  z-index: 1;
+  z-index: var(--z-stage-bg);
 }
 
 .combat-camera.is-resolving .combat-backdrop {
@@ -401,7 +401,7 @@
 
 .combat-stage {
   overflow: hidden;
-  z-index: 1;
+  z-index: var(--z-stage-bg);
 }
 
 .combat-backdrop {
@@ -964,7 +964,7 @@
   pointer-events: none;
   position: absolute;
   width: min(38vw, 520px);
-  z-index: 12;
+  z-index: var(--z-stage-sprite);
 }
 
 .combat-sprite-slot.is-attacking {
@@ -1929,7 +1929,7 @@
   position: absolute;
   top: 47%;
   width: 7rem;
-  z-index: 36;
+  z-index: var(--z-stage-banner);
 }
 
 .combat-effect-anchor.player {
@@ -4052,7 +4052,7 @@
   bottom: 0;
   position: absolute;
   top: 0;
-  z-index: 1;
+  z-index: var(--z-stage-bg);
 }
 
 .mini-map-turn-label {
@@ -4065,7 +4065,7 @@
   padding: 0.08rem 0.18rem;
   position: absolute;
   transform: translate(-50%, -50%);
-  z-index: 3;
+  z-index: var(--z-stage-fx);
 }
 
 .mini-map-turn-label.is-current {
@@ -5637,7 +5637,7 @@ html[data-large-text="true"] {
   height: 1px;
   left: 11%;
   right: 9%;
-  z-index: 1;
+  z-index: var(--z-stage-bg);
 }
 
 .rest-content {
@@ -5910,7 +5910,7 @@ html[data-large-text="true"] {
   top: 16%;
   transform: rotate(-2deg);
   width: min(42vw, 34rem);
-  z-index: 1;
+  z-index: var(--z-stage-bg);
 }
 
 .event-player-figure {
@@ -6414,7 +6414,7 @@ html[data-large-text="true"] {
 .combat-sprite-slot.enemy.is-danger-intent .combat-sprite-ground,
 .combat-sprite-slot.enemy.is-danger-intent .combat-foot-status-tray {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-stage-bg);
 }
 
 @keyframes enemy-danger-aura {
@@ -7676,7 +7676,7 @@ html[data-large-text="true"] {
   opacity: 0.28;
   pointer-events: none;
   position: absolute;
-  z-index: 1;
+  z-index: var(--z-stage-bg);
 }
 
 .game-shell-content,
@@ -7952,7 +7952,7 @@ html[data-large-text="true"] {
 
 .character-class-card > div.absolute.inset-0 {
   background: linear-gradient(90deg, rgba(7, 8, 11, 0.44), rgba(7, 8, 11, 0.18), rgba(7, 8, 11, 0)) !important;
-  z-index: 1;
+  z-index: var(--z-stage-bg);
 }
 
 .character-class-card::after {
@@ -7961,7 +7961,7 @@ html[data-large-text="true"] {
   inset: 0;
   pointer-events: none;
   position: absolute;
-  z-index: 1;
+  z-index: var(--z-stage-bg);
 }
 
 .character-class-card > .relative {
@@ -8949,7 +8949,7 @@ html[data-large-text="true"] {
   .rest-story,
   .rest-choice-panel {
     position: relative;
-    z-index: 3;
+    z-index: var(--z-stage-fx);
   }
 
   .rest-actor {
@@ -8958,7 +8958,7 @@ html[data-large-text="true"] {
     opacity: 0.34;
     right: -1rem !important;
     transform: none !important;
-    z-index: 1;
+    z-index: var(--z-stage-bg);
   }
 
   .rest-choice-panel {
@@ -10133,7 +10133,7 @@ html[data-large-text="true"] {
   background:
     linear-gradient(90deg, rgba(4, 7, 11, 0.48), transparent 23%, transparent 77%, rgba(4, 7, 11, 0.52)),
     linear-gradient(180deg, rgba(3, 6, 11, 0.18), transparent 34%, rgba(0, 0, 0, 0.36));
-  z-index: 3;
+  z-index: var(--z-stage-fx);
 }
 
 .combat-stage::after {
@@ -10446,7 +10446,7 @@ html[data-large-text="true"] {
 
 .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip > * {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-stage-bg);
 }
 
 .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip.is-selected::before {
@@ -11638,7 +11638,7 @@ html[data-large-text="true"] {
     pointer-events: none;
     position: absolute;
     right: 0.5rem;
-    z-index: 36;
+    z-index: var(--z-stage-banner);
   }
 
   .combat-mobile-hud > * {
