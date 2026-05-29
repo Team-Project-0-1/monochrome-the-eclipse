@@ -193,6 +193,11 @@
   --z-stage-bg:    1;
   --z-stage-bg-raised: 2; /* 로컬 bg(1) 바로 위로 올린 요소 — run-status-modal-header, route-node-lock-badge, rest-actor, event-player-figure, character-class-card>.relative, 모바일 enemy-strip(overhead-stack 내). 각자 다른 stacking context, 값만 공유 */
   --z-stage-fx:    3;
+  --z-stage-fx-raised: 4; /* .combat-stage::after — 무대 fx ::before(3) 바로 위 */
+  --z-minimap-node: 4; /* .mini-map-node 미니맵 노드 — stage 무관, 값만 공유 */
+  --z-rest-panel:  5; /* .rest-choice-panel 휴식 선택 패널 — stage 무관, 값만 공유 */
+  --z-stage-label: 8; /* .combat-stage-label — 무대 상단 라벨, fx 위·sprite(12) 아래 */
+  --z-pattern-detail: 8; /* .combat-pattern-detail 패턴칩 호버 팝오버 — stage 무관, 값만 공유 */
   --z-stage-sprite: 12;
   --z-stage-overlay-low: 20; /* .combat-clash-meter/-compare — 중앙 클래시(캐노니컬 오버레이 22 아래) */
   --z-shop-header: 20; /* .shop-header 상점 sticky 헤더 — stage 무관, 값만 공유 */

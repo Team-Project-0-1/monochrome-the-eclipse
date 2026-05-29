@@ -485,7 +485,7 @@
   text-transform: uppercase;
   top: 1rem;
   transform: translateX(-50%);
-  z-index: 8;
+  z-index: var(--z-stage-label);
 }
 
 .combat-hud-card,
@@ -3908,7 +3908,7 @@
   position: absolute;
   transform: translateY(0.3rem) scale(0.98);
   transition: opacity 140ms ease, transform 140ms ease;
-  z-index: 8;
+  z-index: var(--z-pattern-detail);
 }
 
 .combat-pattern-chip:hover .combat-pattern-detail,
@@ -4083,7 +4083,7 @@
   position: absolute;
   transform: translate(-50%, -50%);
   width: var(--mini-map-node-size);
-  z-index: 4;
+  z-index: var(--z-minimap-node);
 }
 
 .mini-map-node svg {
@@ -5752,7 +5752,7 @@ html[data-large-text="true"] {
   display: grid;
   gap: 0.65rem;
   padding: 0.85rem;
-  z-index: 5;
+  z-index: var(--z-rest-panel);
 }
 
 .rest-status-card {
@@ -10160,7 +10160,7 @@ html[data-large-text="true"] {
     linear-gradient(180deg, transparent 52%, rgba(4, 6, 10, 0.58) 100%);
   mix-blend-mode: screen;
   opacity: 0.72;
-  z-index: 4;
+  z-index: var(--z-stage-fx-raised);
 }
 
 .combat-horizon {
