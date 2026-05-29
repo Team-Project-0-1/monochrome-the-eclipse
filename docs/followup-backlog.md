@@ -29,7 +29,7 @@
   - `git ls-files`: 루트 `assets/` → 0개, `public/sprites/` → 0개, `public/assets/` → **215개**(유일 출처). 두 잔재 폴더는 디스크에도 부재(`Test-Path` False).
   - 의도적 삭제 기록: `src/utils/generatedAssetManifest.ts:4` 주석 — "public/sprites/ 폴더가 어디서도 호출되지 않는 잔재였고, 함께 삭제됨"(`optimize-public-assets.mjs` 생성, 자동 리뷰 PR #9 맥락).
   - 경로 정합성: 코드의 `assetPath("assets/...")`는 Vite가 루트로 서빙하는 `public/`에 매핑 → 모든 참조가 `public/assets/`로 해소. `check:stage3-assets`·`check:release-assets`·`check:asset-tooling` 전부 **PASS**.
-- **남은 선택 항목(권장 안 함)**: 캐릭터 일러스트가 `public/assets/characters/*.png`에 평면 배치돼 있어, 아래 "제안 구조"의 `characters/portraits/` 중첩과 다르다. 그러나 이는 미용적 차이일 뿐(중복·분산 아님)이고, 적용하면 `dataCharacters.ts` import 4곳 + 자동생성 `generatedAssetManifest.ts` 재생성을 건드려 **회귀 위험 有 / 기능 이득 0**. 손대지 않는 것을 권장.
+- **남은 선택 항목(권장 안 함)**: 캐릭터 일러스트가 `public/assets/characters/*.png`에 평면 배치돼 있어, 아래 "제안 구조"의 `characters/portraits/` 중첩과 다르다. 그러나 이는 미용적 차이일 뿐(중복·분산 아님)이고, 적용하면 `dataCharacters.ts` import 4곳 + 자동생성 `generatedAssetManifest.ts` 재생성을 건드려 **회귀 위험 있음 / 기능 이득 0**. 손대지 않는 것을 권장.
 - **원안 메모(히스토리)**: 초안은 "3개 위치 분산(루트 `assets/`, `public/assets/`, `public/sprites/`), 중복 파일로 단일 진실 모호, 250여개 파일 일괄 이동" 작업이었다. 제안했던 이상적 구조:
   ```
   public/assets/
