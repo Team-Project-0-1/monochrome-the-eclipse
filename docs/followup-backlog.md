@@ -56,9 +56,11 @@
   ```
 - **위험**: 250여개 파일과 다수 import. 한 PR로 큰 변경 → 별도 PR로 분리 진행 권장.
 
-### P1-1. `index.css` 13,000줄 z-index 토큰 마이그레이션 (잔여 28종)
-- **현재 상태**: TSX 3곳만 토큰 사용. `index.css`에는 여전히 `z-index: 70/76/85/100/101/2000` 등 raw 숫자.
-- **작업**: 모든 `z-index: <num>;` 선언을 토큰 `var(--z-stage-*)`/`var(--z-hud)`/`var(--z-modal-*)` 등으로 교체. 6단계(아래 표) 매핑.
+### P1-1. z-index 토큰 마이그레이션 — ✅ 완료 (2026-05-30)
+- **결과**: `src/styles/components.css`(CSS 추출 후 실제 파일)의 모든 raw 숫자 `z-index`를 `tokens.css` §10 `--z-*` 토큰으로 전환 완료. 전수 스캔 `z-index:\s*[0-9]` → 0개.
+- **방침**: "현재 화면 보존" — 값 이동 0(순수 리네임/값일치). collapse 위험(load-bearing 국소 레이어링) 구간은 **값별 전용 토큰 신설**로 해소. 같은 값을 서로 다른 서브시스템이 공유하면 역할별 분리 토큰(#8·#11·#12·#13).
+- **검증**: 버킷별 `npm run build`(EXIT=0 + raw 잔존 grep 0) + 브라우저 `getComputedStyle` 주입으로 효과값 보존 확인. 커밋 1023a4c·fe4dd5a·474abc3·b89e1fb·fd48b4b(+이전 세션 trivial/값일치). 상세 맵: `docs/z-index-migration-map.md`.
+- **원안 메모(히스토리)**: 초안은 "`index.css` 13,000줄, 잔여 28종"으로 기록됐으나 이후 CSS가 `components.css`/`tokens.css`로 추출됨. 아래 6단계 표는 당시 매핑 초안(실제 토큰은 tokens.css §10이 권위 있음).
 
 | 현재 값 범위 | 토큰 |
 |---|---|
