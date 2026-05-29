@@ -20,6 +20,14 @@ export const RestScreen = () => {
   const healedHp = Math.min(player.maxHp, player.currentHp + healAmount);
   const missingHp = Math.max(0, player.maxHp - player.currentHp);
   const canHeal = missingHp > 0;
+  // 회복량(maxHp*0.4)이 상한에 잘리지 않고 온전히 적용되는 60% 이하에서 회복을 권장,
+  // 그 외(거의 만피 등)에는 영구 성장인 제단을 우선 권장한다.
+  const recommendedChoice: 'heal' | 'altar' | null =
+    canHeal && player.currentHp / player.maxHp <= 0.6
+      ? 'heal'
+      : resources.memoryPieces > 0
+        ? 'altar'
+        : null;
   const restSceneStyle = {
     '--rest-bg-image': assetCssUrl('assets/backgrounds/rest-camp.png'),
     '--rest-mobile-bg-image': assetCssUrl('assets/backgrounds/mobile-event-rest.png'),
@@ -92,19 +100,28 @@ export const RestScreen = () => {
             </div>
           </div>
 
-          <button type="button" className="rest-choice primary" onClick={chooseHeal} disabled={!canHeal}>
+          <button
+            type="button"
+            className={`rest-choice primary${recommendedChoice === 'heal' ? ' is-recommended' : ''}`}
+            onClick={chooseHeal}
+            disabled={!canHeal}
+          >
             <span className="rest-choice-icon"><HeartPulse className="h-5 w-5" /></span>
             <span>
-              <strong>체력 회복</strong>
+              <strong>체력 회복{recommendedChoice === 'heal' && <span className="rest-choice-badge">권장</span>}</strong>
               <small>{canHeal ? `${player.currentHp} → ${healedHp} HP` : '이미 최대 체력입니다'}</small>
             </span>
             <ArrowRight className="h-5 w-5" />
           </button>
 
-          <button type="button" className="rest-choice" onClick={chooseAltar}>
+          <button
+            type="button"
+            className={`rest-choice${recommendedChoice === 'altar' ? ' is-recommended' : ''}`}
+            onClick={chooseAltar}
+          >
             <span className="rest-choice-icon"><Landmark className="h-5 w-5" /></span>
             <span>
-              <strong>기억의 제단</strong>
+              <strong>기억의 제단{recommendedChoice === 'altar' && <span className="rest-choice-badge">권장</span>}</strong>
               <small>기억 조각 {resources.memoryPieces}개 보유</small>
             </span>
             <ArrowRight className="h-5 w-5" />
