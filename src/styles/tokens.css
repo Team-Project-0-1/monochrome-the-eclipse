@@ -211,6 +211,10 @@
   --z-stage-overlay-vitals: 27; /* .combat-overhead-vitals, .combat-enemy-strip */
   --z-stage-overlay-fx: 28; /* .combat-foot-status-tray, .combat-motion-arc/-impact-burst/-class-effect */
   --z-stage-overlay-top: 29; /* .combat-enemy-overhead-stack — 오버레이 최상단 */
+  --z-stage-foot-tray: 31; /* .combat-foot-status-tray — 테마 오버라이드(6851행)가 base overlay-fx(28)를 덮어 31로 상승 */
+  --z-stage-bottom-hud: 32; /* .combat-bottom-hud 하단 HUD 컨테이너 */
+  --z-stage-result-banner: 34; /* .combat-result-banner 전투 결과 배너 */
+  --z-stage-assist-strip: 34; /* .combat-assist-strip 보조 힌트 스트립 — result-banner와 값 공유, 다른 역할 */
   --z-stage-banner: 36;
 
   --z-hud:         50;

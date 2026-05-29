@@ -1348,7 +1348,7 @@
   text-align: center;
   top: 38%;
   transform: translate(-50%, -50%);
-  z-index: 34;
+  z-index: var(--z-stage-result-banner);
 }
 
 .combat-result-banner strong {
@@ -2622,7 +2622,7 @@
   pointer-events: none;
   position: absolute;
   right: 1rem;
-  z-index: 32;
+  z-index: var(--z-stage-bottom-hud);
 }
 
 .combat-bottom-hud.is-focus {
@@ -5429,7 +5429,7 @@ html[data-large-text="true"] {
   pointer-events: none;
   position: absolute;
   transform: translateX(-50%);
-  z-index: 34;
+  z-index: var(--z-stage-assist-strip);
 }
 
 .combat-assist-strip span {
@@ -6852,7 +6852,7 @@ html[data-large-text="true"] {
   bottom: 2.65rem;
   gap: 0.42rem;
   max-width: 84%;
-  z-index: 31;
+  z-index: var(--z-stage-foot-tray);
 }
 
 .combat-foot-status-tray .combat-status-pill {
