@@ -509,7 +509,7 @@
   position: absolute;
   top: 1rem;
   width: min(27vw, 310px);
-  z-index: 26;
+  z-index: var(--z-stage-overlay-card);
 }
 
 .combat-hud-card.player {
@@ -628,7 +628,7 @@
   position: absolute;
   top: -2.4rem;
   width: min(15.5rem, 68%);
-  z-index: 27;
+  z-index: var(--z-stage-overlay-vitals);
 }
 
 .combat-overhead-vitals.player {
@@ -805,7 +805,7 @@
   max-width: 74%;
   pointer-events: auto;
   position: absolute;
-  z-index: 28;
+  z-index: var(--z-stage-overlay-fx);
 }
 
 .combat-foot-status-tray.player {
@@ -841,7 +841,7 @@
   top: 2.85rem;
   transform: none;
   width: max-content;
-  z-index: 27;
+  z-index: var(--z-stage-overlay-vitals);
 }
 
 .combat-sprite-slot.enemy .combat-enemy-strip {
@@ -1151,7 +1151,7 @@
   top: 49%;
   transform: translate(-50%, -50%);
   width: min(25rem, 70vw);
-  z-index: 20;
+  z-index: var(--z-stage-overlay-low);
 }
 
 .combat-stage.player-attacking .combat-clash-meter,
@@ -1176,7 +1176,7 @@
   top: 49%;
   transform: translate(-50%, -50%);
   width: min(28rem, 58vw);
-  z-index: 20;
+  z-index: var(--z-stage-overlay-low);
 }
 
 .combat-stage.player-attacking .combat-clash-compare,
@@ -1384,7 +1384,7 @@
 .combat-class-effect {
   pointer-events: none;
   position: absolute;
-  z-index: 28;
+  z-index: var(--z-stage-overlay-fx);
 }
 
 .combat-motion-arc {
@@ -5080,7 +5080,7 @@ html[data-large-text="true"] {
   .shop-header {
     position: sticky;
     top: 0.6rem;
-    z-index: 20;
+    z-index: var(--z-shop-header);
   }
 
   .shop-exit-button {
@@ -6271,7 +6271,7 @@ html[data-large-text="true"] {
   right: 10%;
   top: -5.25rem;
   width: min(15.5rem, 68%);
-  z-index: 29;
+  z-index: var(--z-stage-overlay-top);
 }
 
 .combat-enemy-overhead-stack .combat-overhead-vitals {
@@ -12532,7 +12532,7 @@ html[data-large-text="true"] {
   pointer-events: none;
   position: absolute;
   top: -0.16rem;
-  z-index: 20;
+  z-index: var(--z-coin-badge);
 }
 
 .coin-display-slot.is-used .coin-slot-badge,

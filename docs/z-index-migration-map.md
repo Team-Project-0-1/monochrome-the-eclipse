@@ -50,7 +50,25 @@
 
 검증: 브라우저 computed `getComputedStyle` 주입 측정 — 네 셀렉터 모두 76/75/70/85 정확 보존(pass). `--z-tooltip`(74)은 실제 툴팁 용도로 보존, 이 그룹에선 미사용.
 
-누계: trivial(이전) + 값일치 21 + 전용토큰 신설 4 = 비-trivial 54 중 **25곳 전환**, **29곳 잔존**.
+### stage-overlay 전용 토큰 (2026-05-30 세션, #8, 회귀 0)
+
+20·26·27·28·29 버킷(10곳)은 캐노니컬 `--z-stage-overlay`(22)와 값이 달라 토큰 1개로 통일하면 적층이 무너진다. **값 보존 + 역할 분리** 경로로 §10에 전용 토큰 7개를 신설하고 1:1 매핑(값 이동 0). 특히 20은 무대(클래시)·상점 헤더·코인 배지 3개 서브시스템이 *값만 공유*(각자 다른 stacking context라 실제로 경쟁 안 함)라 역할별 3토큰으로 분리.
+
+| raw | 신설 토큰 (값) | 곳 | 비고 |
+|---|---|---|---|
+| `20` | `var(--z-stage-overlay-low)` (20) | 2 (`.combat-clash-meter`, `.combat-clash-compare`) | 중앙 클래시 — 오버레이(22) 아래 |
+| `20` | `var(--z-shop-header)` (20) | 1 (`.shop-header`) | 상점 sticky 헤더(`max-width:767px` 게이트). stage 무관 |
+| `20` | `var(--z-coin-badge)` (20) | 1 (`.coin-slot-badge`) | 코인 슬롯 배지. stage 무관 |
+| `26` | `var(--z-stage-overlay-card)` (26) | 1 (`.combat-hud-card`) | |
+| `27` | `var(--z-stage-overlay-vitals)` (27) | 2 (`.combat-overhead-vitals`, `.combat-enemy-strip`) | |
+| `28` | `var(--z-stage-overlay-fx)` (28) | 2 (`.combat-foot-status-tray`, `.combat-motion-arc`/`-impact-burst`/`-class-effect`) | ⚠️ 아래 발견 참조 |
+| `29` | `var(--z-stage-overlay-top)` (29) | 1 (`.combat-enemy-overhead-stack`) | 오버레이 최상단 |
+
+⚠️ **발견 — `.combat-foot-status-tray`의 28은 그림자(shadowed) 선언**: 6851행 테마 오버라이드 블록이 같은 셀렉터에 `z-index: 31`(raw)을 *더 나중에* 선언 → 동일 specificity라 캐스케이드상 **효과값은 31**(보류 `31/32/34` 버킷 소속, 미수정). 799행의 28은 가려진 선언이므로 토큰 치환은 순수 리네임(효과 불변). 즉 이 셀렉터의 raw 31은 여전히 보류로 남는다.
+
+검증: 브라우저 `getComputedStyle` 주입 측정 — 10곳 효과값 전부 보존. hud-card 26·overhead-vitals/enemy-strip 27·motion-arc 28·enemy-overhead-stack 29·clash-meter/clash-compare/coin-slot-badge 20·shop-header 토큰 20(미디어 게이트). foot-status-tray만 **31**(위 발견대로 그림자 31 규칙이 효과값), 나머지 9곳은 매핑값 그대로(pass).
+
+누계: 값일치 21 + 전용토큰 신설(#7·#9 4 + #8 10) = 비-trivial 54 중 **35곳 전환**, **19곳 잔존**.
 
 ## ⏸️ 보류 — 값이 바뀌어야 하는 멤버 (별도 결정 필요)
 
@@ -61,10 +79,9 @@
 | 2 | 6 | `--z-stage-bg`(1) | ⚠️ `.run-status-modal`(1)/`-header`(2), `.event-player-figure`(2)가 다른 figure(1) 위, `.character-class-card > .relative` 콘텐츠(2)가 오버레이(1) 위. 2→1 시 적층 붕괴 |
 | 4, 5, 8 | 5 | `--z-stage-fx`(3) | 무대 이펙트 세분. 3과의 상대 순서 확인 후에만 |
 | 10, 15, 18 | 4 | `--z-stage-sprite`(12) | 방향 혼재(10↑, 15·18↓). 특히 `.combat-sprite-slot.is-attacking`(18) 하강 시 공격 스프라이트 적층 변화 |
-| 20, 26, 27, 28, 29 | 10 | `--z-stage-overlay`(22) | ⚠️ **가장 위험**. 26~29 1단위 인접 = 의도된 미세 순서. 겹침 확인 후 중간 토큰 분리 검토. 가장 마지막에 |
-| 31, 32, 34 | 4 | `--z-stage-banner`(36) | 31~34→36 상승. 순서 의도 확인 |
+| 31, 32, 34 | 4 | `--z-stage-banner`(36) | 31~34→36 상승. 순서 의도 확인. **주의**: 31 중 1곳은 `.combat-foot-status-tray` 오버라이드(6851행)로, #8의 그림자 28을 덮어 효과값을 지배 — 이 버킷 처리 시 함께 본다 |
 
-> ~~70, 75, 76~~ (#7), ~~85~~ (#9) → 전용 토큰 신설로 해소 (위 ✅ 완료 참조). 보류 합계 33 → **29곳**.
+> ~~70, 75, 76~~ (#7), ~~85~~ (#9), ~~20, 26, 27, 28, 29~~ (#8) → 전용 토큰 신설로 해소 (위 ✅ 완료 참조). 보류 합계 33 → **19곳**.
 
 ## 보류 해소 절차 (다음 세션)
 
@@ -73,7 +90,7 @@
    - 안 겹치면 단일 토큰 통일 OK(육안 확인 후).
    - 겹치고 순서 중요하면 `tokens.css`에 중간 토큰 추가(예: `--z-stage-bg-raised: 2`) 후 매핑.
 3. 치환 → `npm run build` → 영향 화면 `npm run dev` 육안(특히 두 요소가 겹치는 상태) → 커밋(1 그룹 = 1 commit).
-4. 20대 그룹(20,26~29)은 가장 마지막에, 가장 신중하게.
+4. ~~20대 그룹(20,26~29)~~ → #8에서 전용 토큰으로 해소 완료. 남은 보류는 `2` / `4,5,8` / `10,15,18` / `31,32,34`.
 
 ## 셀렉터 빠른 조회
 
