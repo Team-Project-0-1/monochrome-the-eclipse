@@ -968,7 +968,7 @@
 }
 
 .combat-sprite-slot.is-attacking {
-  z-index: 18;
+  z-index: var(--z-stage-sprite-attacking);
 }
 
 .combat-sprite-slot.player.is-attacking {
@@ -5095,7 +5095,7 @@ html[data-large-text="true"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     position: sticky;
     top: 6.5rem;
-    z-index: 18;
+    z-index: var(--z-shop-resource-strip);
   }
 
   .shop-resource-strip > div:first-child {
@@ -5150,7 +5150,7 @@ html[data-large-text="true"] {
   .event-choice-panel {
     position: sticky;
     bottom: 0.6rem;
-    z-index: 15;
+    z-index: var(--z-event-choice-panel);
   }
 
   .event-choice-list {
@@ -7688,7 +7688,7 @@ html[data-large-text="true"] {
 .combat-reward-screen > section,
 .memory-altar-screen > .relative {
   position: relative;
-  z-index: 10;
+  z-index: var(--z-content);
 }
 
 .game-card-panel,
