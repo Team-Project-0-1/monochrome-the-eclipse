@@ -11,6 +11,10 @@ interface ErrorBoundaryState {
 }
 
 class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  // @types/react 미설치 환경 — 클래스 컴포넌트(이 파일 유일)에서만 React.Component 상속 멤버
+  // 타입이 유실되므로 사용 멤버만 국소 선언한다. @types/react 정식 도입 시 두 declare 제거 가능.
+  declare props: ErrorBoundaryProps;
+  declare setState: (state: Partial<ErrorBoundaryState>) => void;
   state: ErrorBoundaryState = { hasError: false, error: null };
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
