@@ -204,6 +204,7 @@
   --z-intel-modal: 75; /* .combat-intel-modal — 인텔 바가 여는 dialog 패널 */
   --z-intel-bar:   76; /* .combat-intel-bar — 자기 모달(75) 위에 떠 있는 헤더 nav */
   --z-coachmark:   80;
+  --z-skill-detail: 85; /* .combat-active-skill-detail 호버 팝오버. coachmark(80) 위·focus-banner(92) 아래 */
   --z-focus-banner: 92;
 
   --z-modal-backdrop: 100;

@@ -3977,7 +3977,7 @@
   transform: translateY(0.25rem);
   transition: opacity 140ms ease, transform 140ms ease;
   width: min(21rem, 72vw);
-  z-index: 85;
+  z-index: var(--z-skill-detail);
 }
 
 .combat-active-skill:hover .combat-active-skill-detail,
