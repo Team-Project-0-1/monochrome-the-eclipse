@@ -2058,7 +2058,7 @@
   top: 0.72rem;
   transform: translateX(-50%);
   width: min(58rem, calc(100% - 2rem));
-  z-index: 76;
+  z-index: var(--z-intel-bar);
 }
 
 .combat-intel-snapshot {
@@ -2160,7 +2160,7 @@
   top: 3.55rem;
   transform: translateX(-50%);
   width: min(64rem, calc(100% - 2rem));
-  z-index: 75;
+  z-index: var(--z-intel-modal);
 }
 
 .combat-intel-modal-head {
@@ -3092,7 +3092,7 @@
   position: absolute;
   top: 0.75rem;
   transform: translateX(-50%);
-  z-index: 70;
+  z-index: var(--z-focus-banner-base);
 }
 
 .combat-focus-banner span {

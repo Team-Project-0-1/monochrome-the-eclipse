@@ -199,7 +199,10 @@
   --z-hud:         50;
   --z-hud-raised:  58;
 
+  --z-focus-banner-base: 70; /* .combat-focus-banner(.is-focus 기본). is-notice는 --z-focus-banner(92) */
   --z-tooltip:     74;
+  --z-intel-modal: 75; /* .combat-intel-modal — 인텔 바가 여는 dialog 패널 */
+  --z-intel-bar:   76; /* .combat-intel-bar — 자기 모달(75) 위에 떠 있는 헤더 nav */
   --z-coachmark:   80;
   --z-focus-banner: 92;
 
