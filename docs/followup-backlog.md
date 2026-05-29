@@ -86,9 +86,10 @@
 - **근본 원인(가설)**: 25.09.05 이후 대규모 리팩터링(데이터 폴더 이동, `src/` 채택, 각 화면 `if (!player)` 가드 추가 등) 과정에서 해소된 것으로 추정. App.tsx `renderGame()` default 케이스가 잘못된 상태에 "알 수 없는 화면 상태"를 표시하므로, 과거 "빈 화면"은 잘못된 상태가 아니라 렌더 예외(throw)였을 가능성이 큼.
 - **회귀 방어 적용 완료(2026-05-29)**: App.tsx에 **Error Boundary 부재** 문제를 해소. `src/components/ErrorBoundary.tsx` 신규 추가 후 App.tsx에서 화면 트리(`renderGame()` 등)를 감쌈 → 어떤 화면에서든 렌더 예외가 나도 트리 전체 언마운트(=동일 "UI 사라짐") 대신 폴백 UI("메뉴로 돌아가기"/"새로고침")를 표시. dev에서 ShopScreen 강제 throw로 폴백 표시·메뉴 복구 검증 완료.
 
-### P1-4. CharacterStatus의 사이드 톤 색상 토큰화
-- **현재 상태**: `CharacterStatus.tsx`가 `bg-gray-800/90 border-blue-700/50 text-blue-100`(player) / `border-red-700/50`(enemy) 등 raw Tailwind 사용.
-- **작업**: `--color-player`/`--color-enemy` 토큰으로 통일. body 클래스(reducedMotion 등)와의 호환 보장.
+### P1-4. CharacterStatus의 사이드 톤 색상 토큰화 — ✅ 완료 (2026-05-30)
+- **전제 정정**: 초안은 "raw Tailwind 토큰화"였으나 실제로는 `.entity-status-card`의 `!important` 규칙(`components.css:7742` blanket 시안 테두리 + `:7729` card-pattern 배경)이 TSX의 `border-blue-700/50`·`bg-gray-800/90`·`text-blue-100`(및 red 짝)을 전부 덮어 **죽은 코드**였다. 그 결과 player·enemy 양쪽 카드가 똑같이 시안 테두리로 렌더돼 "player=cyan/enemy=red" 언어가 적 쪽에서 깨져 있었음.
+- **작업 내용**: `CharacterStatus.tsx`에 `is-player`/`is-enemy` 모디파이어 클래스 도입, 죽은 Tailwind 색 클래스 제거, 초상화 div에 `entity-status-portrait` 클래스 부여. `components.css`에 `.entity-status-card.is-player → border-color: var(--color-player)`, `.is-enemy → var(--color-enemy)`, 초상화 배경 `--color-player-soft`/`--color-enemy-soft` 규칙 추가(명시도 0,2,0 + `!important`로 blanket 시안을 정확히 덮음).
+- **결과(브라우저 computed style 검증)**: 적 카드 테두리 시안→레드(`rgb(248,113,113)`=`--color-enemy`)로 복원, 아군 시안(`--color-player`) 유지·토큰화. 텍스트는 변경 전부터 `--cr-bone`(`rgb(244,241,231)`)이라 죽은 코드 제거는 가시 변화 0.
 
 ---
 

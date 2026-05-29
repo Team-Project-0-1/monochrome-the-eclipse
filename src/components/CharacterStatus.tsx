@@ -74,18 +74,14 @@ const CharacterStatus = ({ character, isPlayer = false, prediction }: CharacterS
 
   const temporaryDefense = Number(character.temporaryDefense) || 0;
 
-  const containerClass = isPlayer
-    ? "bg-gray-800/90 border-blue-700/50 text-blue-100"
-    : "bg-gray-800/90 border-red-700/50 text-red-100";
-
-  const iconBgClass = isPlayer ? "bg-blue-900" : "bg-red-900";
+  const sideClass = isPlayer ? "is-player" : "is-enemy";
 
   const predictedDamage = isPlayer ? prediction?.damageToPlayer : prediction?.damageToEnemy;
 
   return (
     <motion.div
       animate={shakeControls}
-      className={`entity-status-card p-4 rounded-lg border shadow-xl ${containerClass} relative backdrop-blur-sm`}
+      className={`entity-status-card ${sideClass} p-4 rounded-lg border shadow-xl relative backdrop-blur-sm`}
     >
        <motion.div
         className="absolute inset-0 rounded-lg pointer-events-none z-0"
@@ -94,7 +90,7 @@ const CharacterStatus = ({ character, isPlayer = false, prediction }: CharacterS
       <div className="relative z-10">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className={`h-14 w-14 overflow-hidden rounded-md ${iconBgClass} shadow-md ring-1 ring-white/10`}>
+            <div className="entity-status-portrait h-14 w-14 overflow-hidden rounded-md shadow-md ring-1 ring-white/10">
               {portraitSrc ? (
                 <img src={portraitSrc} alt="" className="h-full w-full object-cover object-center" loading="lazy" decoding="async" />
               ) : (

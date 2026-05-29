@@ -8058,6 +8058,23 @@ html[data-large-text="true"] {
   font-size: 1.35rem !important;
 }
 
+/* 사이드 정체성: 아군=시안, 적=레드. 위 blanket cyan(7742)을 .is-*로 덮는다 */
+.entity-status-card.is-player {
+  border-color: var(--color-player) !important;
+}
+
+.entity-status-card.is-enemy {
+  border-color: var(--color-enemy) !important;
+}
+
+.entity-status-portrait {
+  background: var(--color-player-soft);
+}
+
+.entity-status-card.is-enemy .entity-status-portrait {
+  background: var(--color-enemy-soft);
+}
+
 .combat-screen {
   height: 100dvh;
   overflow: hidden;
