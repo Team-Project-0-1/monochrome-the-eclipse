@@ -5299,7 +5299,7 @@ html[data-large-text="true"] {
   padding: 0.95rem;
   position: fixed;
   right: 1rem;
-  z-index: 60;
+  z-index: var(--z-hud-raised);
 }
 
 .tutorial-coachmark.tutorial-menu {
