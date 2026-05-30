@@ -44,6 +44,9 @@ jobs:
           VITE_BASE_PATH: /monochrome-the-eclipse/
         run: npm run prototype:check
 
+      - name: Validate Pages artifact
+        run: node scripts/check-pages-base.mjs
+
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
