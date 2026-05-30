@@ -119,9 +119,10 @@
 - **현재 상태**: 색 대비/색맹 환경 미검증.
 - **작업**: Chrome DevTools의 Vision Deficiencies 시뮬레이션으로 protanopia/deuteranopia/tritanopia에서 게임 상태 구분 가능한지 확인.
 
-### P3-4. 키보드 전체 내비게이션
-- **현재 상태**: Enter 단축키 외엔 키보드 동선 미흡. 동전 슬롯에 tabIndex 부여는 추가했지만 다른 인터랙티브 요소(패턴 카드, 액티브 스킬, IntelBar 버튼)는 검증 필요.
-- **작업**: 전 화면 Tab 순서 검토 + focus ring 정합성 + Enter/Space 동작 일관화.
+### P3-4. ✅ 키보드 전체 내비게이션 (완료, 2026-05-30)
+- **완료**: 전 화면 정적 감사 결과 전투 인터랙티브 요소(패턴 카드·액티브 스킬·IntelBar·예비 동전·모바일 HUD)와 `CoinDisplay`는 이미 시맨틱 `<button>` 또는 `role`/`tabIndex`/`onKeyDown`(Enter/Space)으로 키보드 접근 가능했다. 실제 갭은 둘뿐이었다: (1) `SkillDescription` 키워드가 `focus:outline-none`만 있어 Tab 포커스 위치가 안 보임 → 앱 공통 관용구 `focus-visible:ring-2 focus-visible:ring-cyan-300` 링 부여, (2) 키워드 툴팁이 Enter/Space로 열리지만 키보드로 닫을 경로가 없음 → 툴팁 활성 동안에만 window Escape 리스너를 붙여 닫기 추가(인벤토리 모달 등 다른 레이어 비간섭).
+- **검증**: dev 브라우저에서 키워드 Tab 포커스 시 `:focus-visible` 활성 + 시안 2px 링(box-shadow rgb(103,232,249)) 확인, Escape keydown으로 툴팁·백드롭만 제거되고 인벤토리 모달은 유지됨을 DOM으로 확인. npm run check 통과(커밋 f19c19f).
+- **잔여**: 사운드 옵션 슬라이더 `<details>` 키보드 접근성은 P3-5로 별도 추적.
 
 ### P3-5. 사운드 옵션 슬라이더 키보드 접근성
 - **현재 상태**: `MenuScreen` 오디오 슬라이더는 `<details>`로 접혀 있어 키보드 사용자가 발견하기 어려움.
