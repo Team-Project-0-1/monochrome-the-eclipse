@@ -91,9 +91,8 @@
 ### P2-3. ✅ NodeSelection 위험/보상 정량화 (완료, 2026-05-30)
 - **완료**: 노드 카드 위험/기대 보상 칸에 1~5 등급 미터(채워진 핍 개수) 추가로 경로 간 비교 직관화. 등급은 nodePresentation.ts의 정적 riskLevel/rewardLevel(표시 전용, 게임 로직 미변경): REST 1/1 · SHOP 1/2 · COMBAT 2/2 · EVENT 3/3 · MINIBOSS 4/4 · BOSS 5/5. 미확인(불명) 노드는 거짓 등급 대신 '?'로 표기(오도 방지). aria-label "위험도 N/5"로 스크린리더 대응. RatingMeter는 NodeSelection.tsx 로컬 컴포넌트. check 전체 PASS.
 
-### P2-4. 튜토리얼 코치마크 위치 동적 조정
-- **현재 상태**: 코치마크가 고정 위치에 떠서 핵심 UI(캐릭터/적/카드)를 가린다(이번 전투 진입 시 화면 중앙을 덮음).
-- **작업**: 화면 폭/높이에 따라 좌상단/우상단/하단 중 가장 덜 가리는 위치로 자동 배치. 또는 사용자가 드래그로 옮길 수 있게.
+### P2-4. ✅ 튜토리얼 코치마크 위치 동적 조정 (완료, 2026-05-30)
+- **완료**: 전투 코치마크(`.tutorial-combat`)를 top-center → top-right(intel bar 아래)로 이동해 중앙(스프라이트·이클립스)과 하단 족보 카드 가림 해소. `left: 50%; transform: translateX(-50%)` → `left: auto; right: 1rem; top: 4rem; transform: none`. intel bar가 `min(58rem)`로 중앙 정렬·캡되어 우상단이 비고, 적 인텐트 카드 위에 간격을 두고 안착. short-landscape에서 다시 top-center로 되돌리던 오버라이드는 같은 중앙 가림을 재발시켜 제거(데스크톱 기본값이 cascade로 적용). 모바일 규칙(전체폭·intel bar 아래)은 좌표를 전부 재정의하므로 무영향 유지 → CSS 전용 반응형으로 JS 측정/드래그 없이 뷰포트 적응. 브라우저 검증(데스크톱 1440폭, 적 인텐트 카드와 간격 확보) + computed style(top 64px·right 16px·transform none) + check 전체 PASS.
 
 ### P2-5. ✅ EventScreen `event-player-figure` 모바일 겹침 (완료, 2026-05-30)
 - **완료**: `(max-width: 767px)`에서 우하단 장식 figure를 `display:none`으로 숨겨 본문 겹침 해소. figure는 aria-hidden + position:absolute + pointer-events:none인 순수 장식이라 숨김 시 기능/접근성/레이아웃 영향 0. 같은 브레이크포인트의 죽은 `opacity:0.28` 규칙도 제거. 가로 모드(폭>767) 소형 figure 규칙은 별도라 유지. check 전체 PASS.
