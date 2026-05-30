@@ -403,6 +403,38 @@
   z-index: var(--z-coachmark);
 }
 
+/* reducedMotion 전용 피격 피드백: 화면 가장자리 inset 글로우를 짧게 페이드.
+ * transform/위치 이동이 없어 전정계 안전(흔들림/플래시 대체). */
+.combat-edge-pulse {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--z-coachmark);
+  animation: combat-edge-pulse 0.55s ease-out;
+}
+
+.combat-edge-pulse.is-enemy {
+  box-shadow: inset 0 0 0 0.35rem var(--color-enemy);
+}
+
+.combat-edge-pulse.is-player {
+  box-shadow: inset 0 0 0 0.35rem var(--color-player);
+}
+
+@keyframes combat-edge-pulse {
+  0% { opacity: 0; }
+  30% { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+
+/* 이 펄스는 reducedMotion 전용 피드백이므로, 전역 reduced-motion 애니메이션 차단
+ * (animation-duration: 0.01ms !important)에서 예외로 둔다. opacity만 변하고 위치/크기
+ * 이동이 없어 전정계 안전 — WCAG의 reduced-motion 허용 범위. 명시도(0,2,1)로 차단을 덮는다. */
+body.is-reduced-motion .combat-edge-pulse,
+html[data-reduce-motion="true"] .combat-edge-pulse {
+  animation-duration: 0.55s !important;
+}
+
 .combat-stage {
   overflow: hidden;
   z-index: var(--z-stage-bg);

@@ -79,7 +79,7 @@ export const CombatScreen: React.FC = () => {
 
   const screenShakeControls = useAnimation();
   const screenFlashControls = useAnimation();
-  const { presentedEffects, resultBanner } = useCombatEffectTimeline({
+  const { presentedEffects, resultBanner, edgePulse } = useCombatEffectTimeline({
     combatEffects,
     screenShakeControls,
     screenFlashControls,
@@ -215,6 +215,15 @@ export const CombatScreen: React.FC = () => {
         animate={screenFlashControls}
         initial={{ opacity: 0 }}
       />
+
+      {/* reducedMotion 전용 비-공간적 피격 피드백: 화면 가장자리 펄스(key로 매 피격 재생). */}
+      {edgePulse && (
+        <div
+          key={edgePulse.id}
+          className={`combat-edge-pulse is-${edgePulse.tone}`}
+          aria-hidden="true"
+        />
+      )}
 
       <AnimatePresence>
         {isFocusMode || activeSkillNotice ? (

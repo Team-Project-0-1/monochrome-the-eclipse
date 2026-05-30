@@ -24,6 +24,8 @@ export const useCombatEffectTimeline = ({
 }: UseCombatEffectTimelineArgs) => {
   const [presentedEffects, setPresentedEffects] = useState<CombatEffectData[]>([]);
   const [resultBanner, setResultBanner] = useState<CombatResultBanner | null>(null);
+  // reducedMotion일 때 카메라 흔들림 대신 쓰는 비-공간적 피격 피드백 신호(화면 가장자리 펄스).
+  const [edgePulse, setEdgePulse] = useState<{ id: number; tone: 'player' | 'enemy' } | null>(null);
   const processedEffectIds = useRef<Set<number>>(new Set());
   const effectTimers = useRef<number[]>([]);
 
@@ -38,13 +40,20 @@ export const useCombatEffectTimeline = ({
 
     if (combatEffects.length === 0) {
       setResultBanner(null);
+      setEdgePulse(null);
     }
   }, [combatEffects]);
 
   const playCameraBeat = (effect: CombatEffectData) => {
-    // reducedMotion이 켜진 경우 카메라 베트(흔들림/플래시)를 완전히 생략한다.
-    // 결과 배너 등 가독성 정보는 유지된다.
-    if (reducedMotion) return;
+    // reducedMotion이 켜지면 카메라 베트(흔들림/플래시)를 생략하되, 피격 피드백이
+    // 사라지지 않도록 비-공간적(전정계 안전) 화면 가장자리 펄스로 대체한다.
+    // 피격 대상이 플레이어면 위험(적색)톤, 적이면 플레이어(시안)톤.
+    if (reducedMotion) {
+      if (isPositiveDamage(effect)) {
+        setEdgePulse({ id: effect.id, tone: effect.target === 'player' ? 'enemy' : 'player' });
+      }
+      return;
+    }
 
     if (isPositiveDamage(effect)) {
       const heavyPlayerHit = effect.target === 'player' && getEffectAmount(effect) > 10;
@@ -100,5 +109,5 @@ export const useCombatEffectTimeline = ({
     });
   }, [combatEffects, screenFlashControls, screenShakeControls]);
 
-  return { presentedEffects, resultBanner };
+  return { presentedEffects, resultBanner, edgePulse };
 };
