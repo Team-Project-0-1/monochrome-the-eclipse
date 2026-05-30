@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { CharacterClass, LucideIcon, GameState } from '../types';
 import { characterData, characterActiveSkills, characterUnlockHints, getCharacterMaxHp } from '../data/dataCharacters';
@@ -23,6 +23,22 @@ export const CharacterSelectScreen = () => {
     const testMode = useGameStore(state => state.testMode);
     const setTestMode = useGameStore(state => state.setTestMode);
     const showTestMode = import.meta.env.DEV;
+
+    const characterClasses = Object.keys(characterData) as CharacterClass[];
+    const isClassUnlocked = (characterClass: CharacterClass) =>
+        (showTestMode && testMode) || metaProgress.unlockedCharacters.includes(characterClass);
+
+    // 미리보기 중인 캐릭터는 화면 한정 임시 상태이므로 스토어가 아닌 로컬 state로 둔다.
+    // hover/focus/click이 이 값만 바꾸고, 실제 출정은 별도 버튼이 담당한다(클릭=즉시시작 분리).
+    const [activeClass, setActiveClass] = useState<CharacterClass>(
+        () => characterClasses.find(c => metaProgress.unlockedCharacters.includes(c)) ?? characterClasses[0]
+    );
+
+    const activeData = characterData[activeClass];
+    const activeSkill = characterActiveSkills[activeClass];
+    const ActiveIcon = playerClassIcons[activeClass] as LucideIcon;
+    const activeUnlocked = isClassUnlocked(activeClass);
+    const activeMaxHp = getCharacterMaxHp(activeData.hp, metaProgress.memoryUpgrades.maxHp);
 
     return (
         <GameShell className="character-select-screen" contentClassName="character-select-content max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
@@ -50,18 +66,27 @@ export const CharacterSelectScreen = () => {
                         const characterClass = classType as CharacterClass;
                         const TypedIcon = playerClassIcons[characterClass] as LucideIcon;
                         const activeSkill = characterActiveSkills[characterClass];
-                        const isUnlocked = (showTestMode && testMode) || metaProgress.unlockedCharacters.includes(characterClass);
+                        const isUnlocked = isClassUnlocked(characterClass);
+                        const isActive = activeClass === characterClass;
                         const weapon = 'weapon' in data ? data.weapon : undefined;
                         const signature = 'signature' in data ? data.signature : undefined;
 
                         return (
                             <button
                                 key={classType}
-                                onClick={() => isUnlocked && selectCharacter(characterClass)}
-                                disabled={!isUnlocked}
+                                type="button"
+                                onClick={() => setActiveClass(characterClass)}
+                                onMouseEnter={() => setActiveClass(characterClass)}
+                                onFocus={() => setActiveClass(characterClass)}
+                                aria-pressed={isActive}
                                 data-testid={`character-card-${characterClass.toLowerCase()}`}
                                 className={`character-class-card group relative min-h-[280px] overflow-hidden rounded-lg border text-left shadow-xl transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300
-                                    ${isUnlocked ? "border-white/12 bg-gray-900 hover:-translate-y-0.5 hover:border-cyan-300/70 hover:shadow-cyan-950/30" : "border-gray-700 bg-gray-800 opacity-70 cursor-not-allowed"}`}
+                                    ${isUnlocked ? "bg-gray-900" : "bg-gray-800 opacity-70"}
+                                    ${isActive
+                                        ? "-translate-y-0.5 border-cyan-300 ring-2 ring-cyan-300/70 shadow-cyan-950/30"
+                                        : isUnlocked
+                                            ? "border-white/12 hover:-translate-y-0.5 hover:border-cyan-300/70 hover:shadow-cyan-950/30"
+                                            : "border-gray-700"}`}
                             >
                                 <img
                                     src={data.portraitSrc}
@@ -114,6 +139,71 @@ export const CharacterSelectScreen = () => {
                 </div>
 
                 <aside className="flex flex-col gap-4">
+                    <Panel className="overflow-hidden p-0" tone="cyan" data-testid="character-detail-panel">
+                        <div className="relative h-36">
+                            <img
+                                src={activeData.portraitSrc}
+                                alt={`${activeData.name} 캐릭터 아트`}
+                                className={`absolute inset-0 h-full w-full object-cover object-[center_22%] ${activeUnlocked ? '' : 'grayscale'}`}
+                                loading="lazy"
+                                decoding="async"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/75 to-transparent" />
+                            {!activeUnlocked && (
+                                <span className="absolute right-3 top-3 rounded-full bg-black/70 px-2 py-1 text-xs font-black text-red-300">잠김</span>
+                            )}
+                            <div className="absolute inset-x-0 bottom-0 flex items-center gap-3 p-4">
+                                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/55 text-cyan-200">
+                                    <ActiveIcon className="h-5 w-5" />
+                                </span>
+                                <div className="min-w-0">
+                                    <h3 className="truncate text-xl font-black leading-tight text-white">{activeData.name}</h3>
+                                    <p className="truncate text-xs text-gray-300">{activeData.title}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-3 p-4">
+                            <div className="flex flex-wrap gap-2 text-xs font-bold">
+                                <span className="rounded-md bg-white/10 px-2 py-1 text-gray-100">HP {activeMaxHp}</span>
+                                <span className="rounded-md bg-white/10 px-2 py-1 text-gray-100">무기 {activeData.weapon}</span>
+                                <span className="rounded-md bg-white/10 px-2 py-1 text-gray-100">{activeData.signature}</span>
+                            </div>
+
+                            <div className="rounded-md border border-white/10 bg-black/20 p-2.5">
+                                <EffectSummary text={activeData.innatePassives[0]} compact chipLimit={4} showCue cueLabel="패시브" />
+                            </div>
+
+                            <div className="rounded-md border border-white/10 bg-black/20 p-2.5">
+                                <div className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-cyan-200">
+                                    <Cpu size={13} />
+                                    액티브 · {activeSkill.name}
+                                </div>
+                                <EffectSummary text={activeSkill.description} compact hideHeadline chipLimit={4} showCue cueLabel="용도" />
+                            </div>
+
+                            {activeUnlocked ? (
+                                <ActionButton
+                                    variant="primary"
+                                    className="w-full"
+                                    onClick={() => selectCharacter(activeClass)}
+                                    data-testid="start-with-character"
+                                >
+                                    이 캐릭터로 시작
+                                </ActionButton>
+                            ) : (
+                                <div className="space-y-2">
+                                    <ActionButton variant="primary" className="w-full" disabled data-testid="start-with-character">
+                                        이 캐릭터로 시작
+                                    </ActionButton>
+                                    <p className="text-center text-xs font-bold text-red-300">
+                                        {characterUnlockHints[activeClass] || "잠김"}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    </Panel>
+
                     <Panel className="p-4">
                         <h3 className="mb-3 flex items-center gap-2 border-b border-white/10 pb-3 text-lg font-bold text-gray-100">
                             <Layers className="h-5 w-5 text-gray-300"/>진행 상황

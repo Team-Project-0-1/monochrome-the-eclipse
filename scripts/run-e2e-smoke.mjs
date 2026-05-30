@@ -174,6 +174,7 @@ const runFlow = async (browser, baseUrl, name, viewport, errors) => {
   screenshots.push(await capture(page, name, '02-character'));
 
   await page.getByTestId('character-card-warrior').click({ timeout: 5000 });
+  await page.getByTestId('start-with-character').click({ timeout: 5000 });
   await page.locator('.exploration-screen').waitFor({ timeout: 10000 });
   await closeTutorial(page);
   overflows.exploration = await assertNoOverflow(page, errors, name, 'exploration');
