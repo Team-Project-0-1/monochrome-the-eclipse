@@ -96,9 +96,8 @@
 - **현재 상태**: 코치마크가 고정 위치에 떠서 핵심 UI(캐릭터/적/카드)를 가린다(이번 전투 진입 시 화면 중앙을 덮음).
 - **작업**: 화면 폭/높이에 따라 좌상단/우상단/하단 중 가장 덜 가리는 위치로 자동 배치. 또는 사용자가 드래그로 옮길 수 있게.
 
-### P2-5. EventScreen `event-player-figure` 모바일 겹침
-- **현재 상태**: 우하단 절대 위치라 모바일 좁은 화면에서 본문과 겹친다.
-- **작업**: `(max-width: 767px)`에서 figure 숨김 또는 본문 아래로 이동.
+### P2-5. ✅ EventScreen `event-player-figure` 모바일 겹침 (완료, 2026-05-30)
+- **완료**: `(max-width: 767px)`에서 우하단 장식 figure를 `display:none`으로 숨겨 본문 겹침 해소. figure는 aria-hidden + position:absolute + pointer-events:none인 순수 장식이라 숨김 시 기능/접근성/레이아웃 영향 0. 같은 브레이크포인트의 죽은 `opacity:0.28` 규칙도 제거. 가로 모드(폭>767) 소형 figure 규칙은 별도라 유지. check 전체 PASS.
 
 ### P2-6. ✅ RestScreen 3개 버튼 위계 강조 (완료, 2026-05-30)
 - **완료**: 체력 60% 이하면 회복, 그 외엔 기억 조각 보유 시 제단을 추천 버튼으로 강조(amber 글로우 + '권장' 배지). 임계 60%는 회복량(maxHp*0.4)이 상한에 잘리지 않는 구간과 일치. RestScreen.tsx에 recommendedChoice 로직, components.css에 .is-recommended/.rest-choice-badge 추가(기존 .rest-choice 규칙 미수정 → 회귀 차단). check 전체 PASS.
