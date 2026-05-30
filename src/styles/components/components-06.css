@@ -1,0 +1,1863 @@
+
+@media (max-width: 767px) {
+  .combat-screen .combat-bottom-hud.combat-card-hand {
+    bottom: 0.5rem !important;
+    gap: 0.42rem !important;
+    grid-template-columns: 1fr !important;
+    left: 0.5rem !important;
+    max-height: none !important;
+    right: 0.5rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-player-tools {
+    grid-template-columns: 1fr !important;
+    max-height: none;
+    overflow: hidden;
+    padding: 0.42rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+    align-items: stretch;
+    display: flex !important;
+    max-height: 3.45rem;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 0.3rem !important;
+    scroll-snap-type: x mandatory;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip {
+    flex: 0 0 calc(100% - 0.15rem) !important;
+    scroll-snap-align: start;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+    max-height: none;
+    overflow: hidden;
+    padding: 0.38rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-used-count {
+    display: none !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .combat-screen .combat-player-tools > .combat-pattern-rail {
+    grid-template-columns: 1fr !important;
+  }
+
+  .combat-screen .combat-player-tools .combat-pattern-chip {
+    align-items: start;
+    height: auto;
+    min-height: 4.1rem;
+  }
+
+  .combat-pattern-summary .effect-chip-row {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .combat-pattern-summary .effect-chip {
+    flex: 0 1 auto;
+    max-width: 100%;
+  }
+
+  .combat-pattern-summary .effect-chip > span,
+  .combat-pattern-summary .effect-chip > b {
+    min-width: 0;
+    max-width: 5.5rem;
+  }
+
+  .combat-sprite-slot.player {
+    left: 0 !important;
+    width: 55vw !important;
+  }
+
+  .combat-sprite-slot.enemy {
+    right: 0 !important;
+    width: 55vw !important;
+  }
+
+  .shop-scene-bg {
+    transform: none;
+  }
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand {
+  gap: 0.5rem !important;
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, 18.5rem) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-player-tools {
+  gap: 0.44rem !important;
+  grid-template-columns: minmax(15.75rem, 17rem) minmax(0, 1fr) !important;
+  max-height: min(13.4rem, 33dvh);
+  padding: 0.48rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row {
+  min-height: 3.85rem;
+  padding: 0.42rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row .w-16 {
+  width: clamp(2.85rem, 3.65vw, 3.45rem);
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row .h-16 {
+  height: clamp(2.85rem, 3.65vw, 3.45rem);
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-adjust-tools {
+  min-height: 2.05rem;
+  padding: 0.22rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+  gap: 0.42rem;
+  grid-auto-rows: minmax(2.78rem, auto);
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)) !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  padding: 0.42rem 0.48rem 1.55rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip {
+  min-height: 2.78rem !important;
+  padding: 0.28rem 0.42rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+  gap: 0.34rem !important;
+  max-height: min(13.4rem, 33dvh);
+  padding: 0.48rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-vs {
+  display: none !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-summary {
+  gap: 0.32rem !important;
+  padding: 0.4rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-tags {
+  margin-top: 0.14rem;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers {
+  gap: 0.2rem !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers span {
+  min-height: 1.78rem;
+  padding: 0.16rem 0.18rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers small {
+  font-size: 0.52rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers b {
+  font-size: 0.74rem !important;
+  margin-top: 0.08rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-command-row {
+  gap: 0.34rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-log-ticker,
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-execute-button {
+  min-height: 2rem !important;
+}
+
+@media (max-width: 767px) {
+  .combat-screen .combat-bottom-hud.combat-card-hand {
+    gap: 0.34rem !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-player-tools {
+    gap: 0.34rem !important;
+    grid-template-columns: 1fr !important;
+    max-height: none;
+    padding: 0.34rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-player-control-row {
+    gap: 0.34rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row {
+    min-height: 3.36rem;
+    padding: 0.24rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row .w-16 {
+    width: min(2.78rem, 14.2vw);
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row .h-16 {
+    height: min(2.78rem, 14.2vw);
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-adjust-tools {
+    min-height: 1.78rem !important;
+    padding: 0.16rem 0.22rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+    max-height: 3.36rem;
+    min-height: 3.36rem;
+    padding: 0.26rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip {
+    min-height: 2.78rem !important;
+    padding: 0.22rem 0.34rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip strong {
+    font-size: 0.68rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip span {
+    font-size: 0.56rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+    gap: 0.24rem !important;
+    padding: 0.3rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-main,
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-vs {
+    display: none !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-summary {
+    padding: 0.24rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers span {
+    min-height: 1.48rem !important;
+    padding: 0.1rem 0.12rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers b {
+    font-size: 0.72rem !important;
+    margin-top: 0 !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-command-row {
+    gap: 0.28rem !important;
+    grid-template-columns: minmax(0, 1fr) 7.4rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-log-ticker,
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-execute-button {
+    min-height: 1.86rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-execute-button {
+    height: 1.86rem !important;
+    min-width: 0 !important;
+  }
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-player-tools {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+  grid-template-columns: repeat(auto-fill, minmax(10.35rem, 12.5rem)) !important;
+  padding: 0 !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-used-count {
+  display: none !important;
+}
+
+@media (max-width: 767px) {
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-player-tools {
+    padding: 0 !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+    padding: 0 !important;
+  }
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand {
+  align-items: end !important;
+  gap: 0.72rem !important;
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, 18.5rem) !important;
+  pointer-events: none;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand > * {
+  pointer-events: auto;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-player-tools {
+  align-items: end;
+  display: grid !important;
+  gap: 0.72rem !important;
+  grid-template-columns: minmax(17rem, 18.2rem) minmax(0, 1fr) !important;
+  max-height: none;
+  min-height: 9.8rem;
+  overflow: visible;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-player-control-row {
+  background:
+    linear-gradient(180deg, rgba(9, 11, 17, 0.9), rgba(8, 10, 15, 0.96)),
+    linear-gradient(135deg, rgba(244, 241, 231, 0.06) 0 1px, transparent 1px 14px);
+  border: 1px solid rgba(114, 239, 255, 0.28);
+  border-radius: 10px;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.46), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  padding: 0.48rem;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+  align-items: end;
+  display: flex !important;
+  gap: 0.62rem;
+  justify-content: center;
+  min-height: 9.8rem;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  padding: 0 0.35rem 0.1rem !important;
+  scrollbar-width: thin;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip {
+  align-items: stretch;
+  aspect-ratio: 0.72;
+  background:
+    linear-gradient(180deg, rgba(245, 242, 232, 0.075), rgba(245, 242, 232, 0.02)),
+    linear-gradient(145deg, rgba(26, 30, 41, 0.98), rgba(8, 10, 15, 0.98)) !important;
+  border: 1px solid rgba(244, 241, 231, 0.26) !important;
+  border-radius: 11px !important;
+  box-shadow: 0 18px 26px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  display: grid !important;
+  flex: 0 0 clamp(7.3rem, 10vw, 8.8rem) !important;
+  gap: 0.34rem !important;
+  grid-template-columns: 1fr !important;
+  grid-template-rows: auto 1fr auto;
+  height: auto !important;
+  min-height: 9.2rem !important;
+  overflow: hidden;
+  padding: 0.52rem !important;
+  position: relative;
+  text-align: left;
+  transform-origin: 50% 100%;
+  width: auto !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip:nth-child(odd) {
+  transform: rotate(-1.4deg);
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip:nth-child(even) {
+  transform: rotate(1.2deg) translateY(-0.12rem);
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip:hover:not(:disabled),
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip.is-selected {
+  border-color: rgba(114, 239, 255, 0.9) !important;
+  box-shadow: 0 20px 34px rgba(0, 0, 0, 0.52), 0 0 0 1px rgba(114, 239, 255, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-0.42rem) scale(1.03);
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip:disabled {
+  filter: grayscale(0.6);
+  opacity: 0.52;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-card-corner,
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-card-count,
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-card-face {
+  align-items: center;
+  background: rgba(5, 7, 11, 0.78);
+  border: 1px solid rgba(244, 241, 231, 0.18);
+  border-radius: 999px;
+  color: rgba(244, 241, 231, 0.82);
+  display: inline-flex;
+  font-size: 0.58rem;
+  font-weight: 950;
+  line-height: 1;
+  min-height: 1.2rem;
+  padding: 0.24rem 0.38rem;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-card-corner {
+  justify-self: start;
+  max-width: 5.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-card-count {
+  position: absolute;
+  right: 0.46rem;
+  top: 0.46rem;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-icon-img {
+  align-self: center;
+  height: 2.8rem !important;
+  justify-self: center;
+  width: 2.8rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-text {
+  align-self: end;
+  display: grid;
+  gap: 0.16rem;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-text strong {
+  color: #fff9e8;
+  font-size: 0.82rem !important;
+  line-height: 1.12;
+  white-space: normal !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-text > span {
+  font-size: 0.62rem !important;
+  line-height: 1.1;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+  min-height: 9.8rem;
+}
+
+@media (max-width: 767px) {
+  .combat-screen .combat-bottom-hud.combat-card-hand {
+    gap: 0.42rem !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-player-tools {
+    gap: 0.42rem !important;
+    grid-template-columns: 1fr !important;
+    min-height: 0;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-player-control-row {
+    padding: 0.34rem;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+    justify-content: flex-start;
+    max-height: 6.8rem;
+    min-height: 6.8rem;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 0.16rem 0.1rem 0.2rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip {
+    flex-basis: 7.2rem !important;
+    min-height: 6.25rem !important;
+    padding: 0.38rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-icon-img {
+    height: 1.62rem !important;
+    width: 1.62rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+    min-height: 0;
+  }
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand {
+  bottom: clamp(0.8rem, 1.7vh, 1.1rem) !important;
+  gap: clamp(0.8rem, 1.2vw, 1rem) !important;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 19.5rem) !important;
+  left: clamp(1rem, 2vw, 2rem) !important;
+  right: clamp(1rem, 2vw, 2rem) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand::before {
+  background:
+    linear-gradient(180deg, rgba(5, 7, 11, 0), rgba(5, 7, 11, 0.68)),
+    radial-gradient(ellipse at 48% 100%, rgba(244, 241, 231, 0.12), transparent 42rem);
+  bottom: -1.1rem;
+  content: "";
+  left: -2rem;
+  pointer-events: none;
+  position: absolute;
+  right: -2rem;
+  top: -4rem;
+  z-index: var(--z-below);
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-player-tools {
+  align-items: end;
+  gap: clamp(0.75rem, 1vw, 0.95rem) !important;
+  grid-template-columns: minmax(16.25rem, 17.5rem) minmax(0, 1fr) !important;
+  min-height: 12.2rem;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-player-control-row,
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+  background:
+    linear-gradient(180deg, rgba(14, 16, 22, 0.96), rgba(5, 7, 11, 0.98)) !important;
+  border: 1px solid rgba(244, 241, 231, 0.16) !important;
+  border-radius: 10px !important;
+  box-shadow:
+    0 22px 38px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-player-control-row {
+  padding: 0.55rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row {
+  background:
+    linear-gradient(180deg, rgba(244, 241, 231, 0.055), rgba(244, 241, 231, 0.018)) !important;
+  border-color: rgba(244, 241, 231, 0.13) !important;
+  border-radius: 9px !important;
+  min-height: 4.6rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+  align-items: end;
+  display: flex !important;
+  gap: clamp(0.6rem, 0.85vw, 0.86rem) !important;
+  justify-content: center;
+  min-height: 12.2rem;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  padding: 0.35rem 0.35rem 0.25rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip {
+  aspect-ratio: auto !important;
+  background:
+    radial-gradient(circle at 50% 27%, rgba(244, 241, 231, 0.13), transparent 3.4rem),
+    linear-gradient(180deg, rgba(36, 39, 48, 0.99), rgba(13, 15, 21, 0.99)) !important;
+  border: 1px solid rgba(235, 224, 198, 0.24) !important;
+  border-radius: 13px !important;
+  box-shadow:
+    0 18px 28px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09) !important;
+  color: #f6f0df;
+  display: grid !important;
+  flex: 0 0 clamp(8.35rem, 9.2vw, 9.35rem) !important;
+  grid-template-columns: 1fr !important;
+  grid-template-rows: auto 3.75rem minmax(0, 1fr);
+  height: 11.65rem !important;
+  min-height: 0 !important;
+  padding: 0.62rem !important;
+  transform: none !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip.is-heads {
+  background:
+    radial-gradient(circle at 50% 27%, rgba(245, 111, 111, 0.2), transparent 3.5rem),
+    linear-gradient(180deg, rgba(45, 32, 35, 0.99), rgba(16, 13, 18, 0.99)) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip.is-tails {
+  background:
+    radial-gradient(circle at 50% 27%, rgba(96, 165, 250, 0.22), transparent 3.5rem),
+    linear-gradient(180deg, rgba(28, 37, 53, 0.99), rgba(10, 13, 21, 0.99)) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip.is-selected,
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip:hover:not(:disabled) {
+  border-color: rgba(243, 201, 78, 0.92) !important;
+  box-shadow:
+    0 22px 36px rgba(0, 0, 0, 0.56),
+    0 0 0 1px rgba(243, 201, 78, 0.34),
+    0 0 28px rgba(243, 201, 78, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  transform: translateY(-0.35rem) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-card-topline {
+  align-items: center;
+  display: flex;
+  gap: 0.35rem;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-card-corner,
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-card-count,
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-card-face {
+  background: rgba(3, 5, 9, 0.72) !important;
+  border-color: rgba(244, 241, 231, 0.16) !important;
+  color: rgba(244, 241, 231, 0.82) !important;
+  font-size: 0.58rem !important;
+  letter-spacing: 0 !important;
+  min-height: 1.12rem !important;
+  padding: 0.22rem 0.38rem !important;
+  position: static !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-card-face {
+  gap: 0.18rem;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-card-face small {
+  color: rgba(244, 241, 231, 0.56);
+  font-size: 0.44rem;
+  font-weight: 950;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip.is-heads .combat-card-face {
+  border-color: rgba(251, 107, 107, 0.32) !important;
+  color: #ffd1d1 !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip.is-tails .combat-card-face {
+  border-color: rgba(110, 231, 249, 0.34) !important;
+  color: #c8f7ff !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip > .combat-card-count {
+  display: none !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-art {
+  align-items: center;
+  align-self: center;
+  background:
+    radial-gradient(circle, rgba(244, 241, 231, 0.14), transparent 62%),
+    linear-gradient(180deg, rgba(244, 241, 231, 0.05), rgba(244, 241, 231, 0.015));
+  border: 1px solid rgba(244, 241, 231, 0.12);
+  border-radius: 50%;
+  display: inline-flex;
+  height: 3.2rem;
+  justify-content: center;
+  justify-self: center;
+  width: 3.2rem;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-icon-img {
+  height: 2.25rem !important;
+  width: 2.25rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-text {
+  align-content: end;
+  display: grid;
+  gap: 0.24rem !important;
+  min-height: 0;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-text > strong {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: #fff7df !important;
+  display: -webkit-box;
+  font-size: 0.86rem !important;
+  font-weight: 950;
+  line-height: 1.16 !important;
+  min-height: 2rem;
+  overflow: hidden;
+  white-space: normal !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-kind {
+  color: rgba(244, 241, 231, 0.62) !important;
+  font-size: 0.62rem !important;
+  font-weight: 850 !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-text > span:not(.combat-pattern-kind) {
+  display: none !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-summary {
+  min-width: 0;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-summary .effect-summary-cue {
+  display: none !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-summary .effect-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.22rem;
+  max-height: 2.1rem;
+  overflow: hidden;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-summary .effect-chip:nth-child(n + 3) {
+  display: none !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-summary .effect-chip {
+  border-radius: 999px;
+  font-size: 0.58rem;
+  max-width: 100%;
+  min-height: 1.02rem;
+  padding: 0.12rem 0.28rem;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-summary .effect-chip > span {
+  max-width: 3.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+  min-height: 11.4rem !important;
+  padding: 0.58rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+  background:
+    radial-gradient(circle at 80% 0%, rgba(243, 201, 78, 0.12), transparent 9rem),
+    linear-gradient(180deg, rgba(22, 23, 29, 0.98), rgba(7, 8, 12, 0.99)) !important;
+  border-color: rgba(235, 224, 198, 0.22) !important;
+  border-radius: 12px !important;
+  box-shadow:
+    0 22px 38px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-summary {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  gap: 0.42rem !important;
+  padding: 0 !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-main {
+  background: rgba(244, 241, 231, 0.045);
+  border: 1px solid rgba(244, 241, 231, 0.11);
+  border-radius: 9px;
+  padding: 0.48rem;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-tags {
+  display: flex;
+  gap: 0.34rem;
+  margin-top: 0.24rem;
+  overflow: hidden;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-tags b {
+  background: rgba(5, 7, 11, 0.72) !important;
+  border-color: rgba(243, 201, 78, 0.26) !important;
+  border-radius: 999px !important;
+  padding: 0.24rem 0.42rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers {
+  gap: 0.32rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers span {
+  background: rgba(244, 241, 231, 0.052) !important;
+  border-color: rgba(244, 241, 231, 0.12) !important;
+  border-radius: 9px !important;
+  min-height: 2.1rem;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-command-row {
+  align-items: stretch;
+  gap: 0.45rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-log-ticker {
+  background: rgba(5, 7, 11, 0.62) !important;
+  border-color: rgba(244, 241, 231, 0.11) !important;
+  border-radius: 9px !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-execute-button {
+  border-radius: 9px !important;
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
+}
+
+@media (max-width: 767px) {
+  .combat-screen .combat-bottom-hud.combat-card-hand {
+    bottom: 0.5rem !important;
+    gap: 0.42rem !important;
+    grid-template-columns: 1fr !important;
+    left: 0.6rem !important;
+    right: 0.6rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-player-tools {
+    gap: 0.42rem !important;
+    grid-template-columns: 1fr !important;
+    min-height: 0;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-player-control-row {
+    padding: 0.34rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row {
+    min-height: 3.72rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+    justify-content: flex-start;
+    min-height: 8rem !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding: 0.2rem 0.08rem 0.32rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip {
+    flex-basis: 6.45rem !important;
+    grid-template-rows: auto 2.55rem minmax(0, 1fr);
+    height: 7.62rem !important;
+    padding: 0.42rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-art {
+    height: 2.22rem;
+    width: 2.22rem;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-icon-img {
+    height: 1.55rem !important;
+    width: 1.55rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-text > strong {
+    font-size: 0.72rem !important;
+    min-height: 1.62rem;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-summary .effect-chip-row {
+    max-height: 1.35rem;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+    min-height: 0 !important;
+    padding: 0.36rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-main {
+    display: none !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers {
+    gap: 0.22rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers span {
+    min-height: 1.56rem !important;
+  }
+}
+
+.combat-screen {
+  --combat-bone: #f5ead2;
+  --combat-bone-muted: rgba(245, 234, 210, 0.68);
+  --combat-ink: #07090f;
+  --combat-panel: #11141c;
+  --combat-panel-deep: #05070c;
+  --combat-gold: #f1c84c;
+  --combat-cyan: #6ee7f9;
+  --combat-red: #fb6b6b;
+}
+
+.combat-screen::after {
+  background:
+    linear-gradient(90deg, rgba(245, 234, 210, 0.022) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(245, 234, 210, 0.014) 1px, transparent 1px),
+    radial-gradient(circle at 50% 48%, transparent 0 23rem, rgba(0, 0, 0, 0.22) 38rem),
+    linear-gradient(180deg, transparent 0 72%, rgba(0, 0, 0, 0.28) 100%) !important;
+  background-size: 48px 48px, 48px 48px, auto, auto !important;
+  opacity: 0.68 !important;
+  z-index: var(--z-base) !important;
+}
+
+.combat-stage::before,
+.combat-stage::after {
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.combat-stage::before {
+  background:
+    linear-gradient(90deg, rgba(4, 7, 11, 0.48), transparent 23%, transparent 77%, rgba(4, 7, 11, 0.52)),
+    linear-gradient(180deg, rgba(3, 6, 11, 0.18), transparent 34%, rgba(0, 0, 0, 0.36));
+  z-index: var(--z-stage-fx);
+}
+
+.combat-stage::after {
+  background:
+    radial-gradient(ellipse at 24% 68%, rgba(110, 231, 249, 0.12), transparent 18rem),
+    radial-gradient(ellipse at 78% 66%, rgba(251, 107, 107, 0.12), transparent 18rem),
+    linear-gradient(180deg, transparent 52%, rgba(4, 6, 10, 0.58) 100%);
+  mix-blend-mode: screen;
+  opacity: 0.72;
+  z-index: var(--z-stage-fx-raised);
+}
+
+.combat-horizon {
+  background:
+    linear-gradient(90deg, transparent, rgba(245, 234, 210, 0.5), transparent) !important;
+  box-shadow: 0 0 22px rgba(245, 234, 210, 0.16);
+  opacity: 0.48 !important;
+}
+
+.combat-floor {
+  opacity: 0.78;
+}
+
+.combat-sprite-ground {
+  background:
+    radial-gradient(ellipse at center, rgba(245, 234, 210, 0.34), rgba(245, 234, 210, 0.08) 36%, transparent 69%) !important;
+  border-radius: 50%;
+  bottom: 5.4% !important;
+  height: 0.62rem !important;
+  opacity: 0.88;
+  transform: perspective(240px) rotateX(62deg);
+  width: 72% !important;
+}
+
+.combat-sprite-ground.player {
+  box-shadow:
+    0 0 26px rgba(110, 231, 249, 0.32),
+    0 0 70px rgba(110, 231, 249, 0.12) !important;
+}
+
+.combat-sprite-ground.enemy {
+  box-shadow:
+    0 0 28px rgba(251, 107, 107, 0.34),
+    0 0 76px rgba(251, 107, 107, 0.14) !important;
+}
+
+.combat-sprite-slot.player .combat-sprite-avatar,
+.combat-sprite-slot.player .combat-portrait-fallback {
+  filter:
+    drop-shadow(0 18px 18px rgba(0, 0, 0, 0.72))
+    drop-shadow(0 0 22px rgba(110, 231, 249, 0.16));
+}
+
+.combat-sprite-slot.enemy .combat-sprite-avatar,
+.combat-sprite-slot.enemy .combat-portrait-fallback {
+  filter:
+    drop-shadow(0 18px 20px rgba(0, 0, 0, 0.74))
+    drop-shadow(0 0 24px rgba(251, 107, 107, 0.18));
+}
+
+.combat-screen .combat-intel-bar {
+  background:
+    linear-gradient(180deg, rgba(17, 20, 28, 0.98), rgba(5, 7, 12, 0.98)),
+    linear-gradient(90deg, rgba(110, 231, 249, 0.08), transparent 28%, transparent 72%, rgba(241, 200, 76, 0.08)) !important;
+  border: 1px solid rgba(245, 234, 210, 0.2) !important;
+  border-radius: 11px !important;
+  box-shadow:
+    0 20px 34px rgba(0, 0, 0, 0.46),
+    0 0 0 1px rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  gap: 0.38rem !important;
+  padding: 0.28rem !important;
+}
+
+.combat-screen .combat-intel-snapshot,
+.combat-screen .combat-intel-buttons button {
+  background:
+    linear-gradient(180deg, rgba(245, 234, 210, 0.055), rgba(245, 234, 210, 0.018)) !important;
+  border-color: rgba(245, 234, 210, 0.13) !important;
+  border-radius: 8px !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.combat-screen .combat-intel-snapshot span {
+  color: rgba(245, 234, 210, 0.58) !important;
+  font-size: 0.62rem !important;
+  font-weight: 900 !important;
+}
+
+.combat-screen .combat-intel-snapshot b {
+  color: #fff7df !important;
+  text-shadow: 0 1px 9px rgba(0, 0, 0, 0.72);
+}
+
+.combat-screen .combat-intel-snapshot.is-next {
+  background:
+    linear-gradient(180deg, rgba(241, 200, 76, 0.16), rgba(241, 200, 76, 0.04)),
+    linear-gradient(180deg, rgba(16, 18, 25, 0.98), rgba(6, 8, 13, 0.98)) !important;
+  border-color: rgba(241, 200, 76, 0.5) !important;
+}
+
+.combat-screen .combat-intel-buttons button {
+  color: rgba(245, 234, 210, 0.72) !important;
+}
+
+.combat-screen .combat-intel-buttons button:hover,
+.combat-screen .combat-intel-buttons button.is-active {
+  background:
+    linear-gradient(180deg, rgba(110, 231, 249, 0.18), rgba(110, 231, 249, 0.06)) !important;
+  border-color: rgba(110, 231, 249, 0.42) !important;
+  color: #f8fdff !important;
+}
+
+.combat-overhead-vitals,
+.combat-sprite-slot.enemy .combat-enemy-overhead-stack .combat-enemy-strip {
+  background:
+    radial-gradient(circle at 22% 0%, rgba(245, 234, 210, 0.09), transparent 7rem),
+    linear-gradient(180deg, rgba(17, 20, 28, 0.98), rgba(5, 7, 12, 0.98)) !important;
+  border-color: rgba(245, 234, 210, 0.2) !important;
+  border-radius: 10px !important;
+  box-shadow:
+    0 18px 30px rgba(0, 0, 0, 0.48),
+    0 0 0 1px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.combat-overhead-vitals::before,
+.combat-sprite-slot.enemy .combat-enemy-overhead-stack .combat-enemy-strip::before {
+  background: linear-gradient(90deg, transparent, rgba(245, 234, 210, 0.28), transparent);
+  content: "";
+  height: 1px;
+  left: 0.65rem;
+  position: absolute;
+  right: 0.65rem;
+  top: 0;
+}
+
+.combat-overhead-vitals.player {
+  border-left: 3px solid rgba(110, 231, 249, 0.9) !important;
+}
+
+.combat-overhead-vitals.enemy,
+.combat-sprite-slot.enemy .combat-enemy-overhead-stack .combat-enemy-strip {
+  border-right: 3px solid rgba(251, 107, 107, 0.9) !important;
+}
+
+.combat-overhead-name {
+  letter-spacing: 0 !important;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.78);
+}
+
+.combat-overhead-head b {
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(245, 234, 210, 0.12);
+  border-radius: 999px;
+  color: #fff7df !important;
+  padding: 0.16rem 0.36rem;
+}
+
+.combat-overhead-hp-track {
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 16.6%),
+    rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(245, 234, 210, 0.1);
+  height: 0.44rem !important;
+  padding: 1px;
+}
+
+.combat-overhead-hp-track .combat-hp-fill {
+  background:
+    var(--hp-fill-color, linear-gradient(90deg, #21d873, #b8f86b 72%, #f5ead2)) !important;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--hp-fill-color, #4ade80) 42%, transparent);
+}
+
+.combat-sprite-slot.enemy .combat-enemy-overhead-stack .combat-enemy-strip {
+  gap: 0.48rem !important;
+  padding: 0.38rem 0.46rem !important;
+}
+
+.combat-enemy-overhead-stack .enemy-intent-icon {
+  background:
+    radial-gradient(circle at 40% 30%, rgba(255, 255, 255, 0.14), transparent 52%),
+    linear-gradient(180deg, rgba(127, 29, 29, 0.86), rgba(32, 8, 12, 0.96)) !important;
+  border-color: rgba(251, 107, 107, 0.48) !important;
+  box-shadow: 0 0 14px rgba(251, 107, 107, 0.14);
+}
+
+.combat-enemy-overhead-stack .enemy-intent-title {
+  color: #fff7df !important;
+  font-weight: 950 !important;
+}
+
+.combat-enemy-overhead-stack .enemy-intent-chip {
+  background: rgba(2, 3, 6, 0.52) !important;
+  border-color: rgba(245, 234, 210, 0.13) !important;
+}
+
+.combat-enemy-overhead-stack .combat-mini-coins {
+  background: rgba(2, 3, 6, 0.42);
+  border: 1px solid rgba(245, 234, 210, 0.1);
+  border-radius: 999px;
+  padding: 0.16rem;
+}
+
+.combat-mini-coin {
+  box-shadow:
+    0 5px 10px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.combat-mini-coin.is-used {
+  box-shadow:
+    0 0 0 2px rgba(241, 200, 76, 0.32),
+    0 0 18px rgba(241, 200, 76, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
+}
+
+.combat-foot-status-tray {
+  gap: 0.42rem !important;
+  max-width: min(22rem, 78%) !important;
+}
+
+.combat-foot-status-tray .combat-status-pill {
+  background:
+    linear-gradient(180deg, rgba(12, 16, 24, 0.98), rgba(3, 5, 9, 0.97)) !important;
+  border-radius: 9px !important;
+  box-shadow:
+    0 16px 24px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  min-width: 4.9rem !important;
+}
+
+.combat-foot-status-tray .combat-status-pill::after {
+  background: linear-gradient(90deg, rgba(245, 234, 210, 0.18), transparent);
+  content: "";
+  height: 1px;
+  left: 0.5rem;
+  position: absolute;
+  right: 0.5rem;
+  top: 0.24rem;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-player-control-row {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(110, 231, 249, 0.09), transparent 7rem),
+    linear-gradient(180deg, rgba(16, 19, 27, 0.98), rgba(5, 7, 12, 0.98)) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row {
+  background:
+    linear-gradient(180deg, rgba(245, 234, 210, 0.055), rgba(245, 234, 210, 0.018)),
+    radial-gradient(ellipse at center, rgba(110, 231, 249, 0.08), transparent 12rem) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -18px 28px rgba(0, 0, 0, 0.22);
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row > .relative {
+  border-radius: 999px;
+  padding: 0.14rem 0.08rem 0;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row .w-16 {
+  filter:
+    drop-shadow(0 9px 9px rgba(0, 0, 0, 0.42))
+    drop-shadow(0 0 8px rgba(245, 234, 210, 0.06));
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row .border-4 {
+  border-width: 3px !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -6px 12px rgba(0, 0, 0, 0.22);
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row .text-xs {
+  color: rgba(245, 234, 210, 0.56) !important;
+  font-size: 0.64rem !important;
+  font-weight: 850 !important;
+  margin-top: 0.16rem !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip {
+  overflow: hidden;
+  position: relative;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip::before,
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip::before {
+  border: 1px solid rgba(245, 234, 210, 0.1);
+  border-radius: 10px;
+  inset: 0.32rem;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip::after {
+  background:
+    linear-gradient(120deg, transparent 0 22%, rgba(255, 255, 255, 0.12) 32%, transparent 44%),
+    radial-gradient(circle at 50% 22%, rgba(245, 234, 210, 0.1), transparent 3.8rem);
+  inset: 0;
+  opacity: 0.62;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip > * {
+  position: relative;
+  z-index: var(--z-stage-bg);
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip.is-selected::before {
+  border-color: rgba(241, 200, 76, 0.42);
+  box-shadow: inset 0 0 18px rgba(241, 200, 76, 0.1);
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip.is-selected::after {
+  opacity: 0.86;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-art {
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.36),
+    0 10px 18px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip.is-heads .combat-pattern-art {
+  border-color: rgba(251, 107, 107, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.36),
+    0 0 18px rgba(251, 107, 107, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip.is-tails .combat-pattern-art {
+  border-color: rgba(110, 231, 249, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.36),
+    0 0 18px rgba(110, 231, 249, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+  background:
+    radial-gradient(circle at 86% 0%, rgba(241, 200, 76, 0.16), transparent 8rem),
+    linear-gradient(180deg, rgba(18, 20, 27, 0.98), rgba(5, 7, 12, 0.99)) !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip::before {
+  background: linear-gradient(90deg, transparent, rgba(245, 234, 210, 0.26), transparent);
+  content: "";
+  height: 1px;
+  left: 0.75rem;
+  pointer-events: none;
+  position: absolute;
+  right: 0.75rem;
+  top: 0;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-main,
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-vs,
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers span,
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-log-ticker {
+  background:
+    linear-gradient(180deg, rgba(245, 234, 210, 0.058), rgba(245, 234, 210, 0.018)) !important;
+  border-color: rgba(245, 234, 210, 0.13) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-execute-button:not(:disabled) {
+  background:
+    linear-gradient(180deg, #f8d567, #b9821e) !important;
+  border-color: rgba(255, 233, 166, 0.74) !important;
+  color: #151008 !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+@media (max-width: 767px) {
+  .combat-screen::after {
+    background-size: 34px 34px, 34px 34px, auto, auto !important;
+    opacity: 0.48 !important;
+  }
+
+  .combat-stage::before {
+    background:
+      linear-gradient(90deg, rgba(4, 7, 11, 0.28), transparent 20%, transparent 80%, rgba(4, 7, 11, 0.28)),
+      linear-gradient(180deg, rgba(3, 6, 11, 0.08), transparent 32%, rgba(0, 0, 0, 0.3));
+  }
+
+  .combat-screen .combat-intel-bar {
+    border-radius: 9px !important;
+    gap: 0.28rem !important;
+    padding: 0.24rem !important;
+  }
+
+  .combat-screen .combat-intel-snapshot span {
+    font-size: 0.56rem !important;
+  }
+
+  .combat-screen .combat-intel-snapshot b {
+    font-size: 0.66rem !important;
+  }
+
+  .combat-overhead-vitals {
+    border-radius: 8px !important;
+    padding: 0.26rem 0.38rem 0.34rem !important;
+  }
+
+  .combat-overhead-head b {
+    font-size: 0.58rem !important;
+    padding: 0.12rem 0.28rem;
+  }
+
+  .combat-overhead-hp-track {
+    height: 0.38rem !important;
+  }
+
+  .combat-sprite-slot.enemy .combat-enemy-overhead-stack .combat-enemy-strip {
+    border-right-width: 2px !important;
+    padding: 0.24rem !important;
+  }
+
+  .combat-enemy-overhead-stack .combat-mini-coins {
+    justify-content: center !important;
+    padding: 0.12rem !important;
+  }
+
+  .combat-foot-status-tray {
+    bottom: 1.75rem !important;
+    max-width: 68% !important;
+  }
+
+  .combat-foot-status-tray .combat-status-pill {
+    min-height: 1.78rem !important;
+    min-width: 4.2rem !important;
+    padding: 0.2rem 0.34rem !important;
+  }
+
+  .combat-foot-status-tray .combat-status-icon-img {
+    height: 1.18rem !important;
+    width: 1.18rem !important;
+  }
+
+  .combat-foot-status-tray .combat-status-text b {
+    font-size: 0.58rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip::before {
+    inset: 0.24rem;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row .text-xs {
+    font-size: 0.58rem !important;
+  }
+}
+
+.combat-overhead-vitals {
+  overflow: hidden;
+  position: absolute !important;
+}
+
+.combat-enemy-overhead-stack .combat-overhead-vitals {
+  position: static !important;
+}
+
+.combat-sprite-slot.enemy .combat-enemy-overhead-stack .combat-enemy-strip {
+  position: relative !important;
+}
+
+@media (max-width: 767px) {
+  .combat-enemy-overhead-stack {
+    right: 8% !important;
+    width: min(10.2rem, 50vw) !important;
+  }
+
+  .combat-enemy-overhead-stack .combat-mini-coins {
+    gap: 0.12rem !important;
+    overflow: hidden !important;
+  }
+
+  .combat-enemy-overhead-stack .combat-mini-coin {
+    height: 1.28rem !important;
+    width: 1.28rem !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .combat-enemy-overhead-stack {
+    display: block !important;
+    padding-top: 0.68rem;
+  }
+
+  .combat-enemy-overhead-stack .combat-overhead-vitals {
+    margin-top: 0 !important;
+  }
+
+  .combat-sprite-slot.enemy .combat-enemy-overhead-stack .combat-enemy-strip {
+    background:
+      linear-gradient(180deg, rgba(18, 20, 27, 0.98), rgba(5, 7, 12, 0.98)) !important;
+    border: 1px solid rgba(245, 234, 210, 0.18) !important;
+    border-radius: 999px !important;
+    box-shadow:
+      0 10px 18px rgba(0, 0, 0, 0.42),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    justify-self: end;
+    padding: 0.12rem 0.18rem !important;
+    position: absolute !important;
+    right: 0.28rem;
+    top: 0;
+    width: auto !important;
+    z-index: var(--z-stage-bg-raised);
+  }
+
+  .combat-enemy-overhead-stack .combat-mini-coins {
+    background: transparent !important;
+    border: 0 !important;
+    gap: 0.1rem !important;
+    padding: 0 !important;
+  }
+
+  .combat-enemy-overhead-stack .combat-mini-coin {
+    border-width: 1px !important;
+    height: 1.18rem !important;
+    width: 1.18rem !important;
+  }
+
+  .combat-enemy-overhead-stack .combat-mini-coin svg {
+    height: 0.66rem !important;
+    width: 0.66rem !important;
+  }
+
+  .combat-overhead-vitals.enemy {
+    padding-top: 1.08rem !important;
+  }
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+  background:
+    radial-gradient(ellipse at center bottom, rgba(245, 234, 210, 0.06), transparent 18rem),
+    linear-gradient(90deg, transparent, rgba(245, 234, 210, 0.025) 18%, rgba(245, 234, 210, 0.025) 82%, transparent);
+  border-radius: 16px;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip:not(.is-selected):disabled {
+  opacity: 0.48;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip:not(.is-selected):disabled::after {
+  opacity: 0.24;
+}
+
+@media (max-width: 767px) {
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+    background:
+      linear-gradient(90deg, rgba(245, 234, 210, 0.035), transparent 16%, transparent 84%, rgba(245, 234, 210, 0.035));
+    border-radius: 11px;
+  }
+}
+
+.combat-sprite-slot.enemy.is-danger-intent::before {
+  background:
+    radial-gradient(ellipse at 50% 68%, rgba(248, 113, 113, 0.26), transparent 58%),
+    radial-gradient(ellipse at 50% 78%, rgba(127, 29, 29, 0.32), transparent 66%) !important;
+  bottom: 7% !important;
+  filter: blur(5px) !important;
+  left: 18% !important;
+  opacity: 0.72;
+  right: 12% !important;
+  top: 28% !important;
+}
+
+@media (max-width: 767px) {
+  .combat-sprite-slot.enemy.is-danger-intent::before {
+    bottom: 8% !important;
+    left: 12% !important;
+    opacity: 0.58;
+    right: 4% !important;
+    top: 36% !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+    gap: 0.52rem !important;
+    scroll-padding-left: 0 !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip {
+    flex-basis: calc((100% - 1.04rem) / 3) !important;
+    min-width: 0 !important;
+  }
+}
+
+.combat-screen .combat-intel-bar {
+  background:
+    linear-gradient(180deg, rgba(15, 17, 23, 0.9), rgba(5, 7, 12, 0.86)) !important;
+  border-color: rgba(245, 234, 210, 0.14) !important;
+  box-shadow:
+    0 12px 22px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055) !important;
+}
+
+.combat-screen .combat-intel-snapshot,
+.combat-screen .combat-intel-buttons button {
+  background: rgba(245, 234, 210, 0.045) !important;
+  border-color: rgba(245, 234, 210, 0.095) !important;
+}
+
+.combat-screen .combat-intel-snapshot.is-next {
+  background:
+    linear-gradient(180deg, rgba(241, 200, 76, 0.14), rgba(241, 200, 76, 0.035)) !important;
+  border-color: rgba(241, 200, 76, 0.38) !important;
+}
+
+.combat-overhead-vitals,
+.combat-sprite-slot.enemy .combat-enemy-overhead-stack .combat-enemy-strip {
+  box-shadow:
+    0 12px 22px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand::before {
+  background:
+    linear-gradient(180deg, rgba(5, 7, 11, 0), rgba(5, 7, 11, 0.52)),
+    radial-gradient(ellipse at 48% 100%, rgba(244, 241, 231, 0.075), transparent 40rem) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-player-control-row,
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+  box-shadow:
+    0 16px 26px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip {
+  box-shadow:
+    0 14px 22px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip.is-selected,
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip:hover:not(:disabled) {
+  transform: translateY(-0.22rem) !important;
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip:not(.is-selected):disabled {
+  opacity: 0.38;
+}
+
+@media (max-width: 767px) {
+  .combat-screen .combat-intel-bar {
+    gap: 0.22rem !important;
+    padding: 0.2rem !important;
+    top: 0.45rem !important;
+  }
+
+  .combat-screen .combat-intel-snapshot {
+    min-height: 1.45rem !important;
+    padding: 0 0.4rem !important;
+  }
+
+  .combat-screen .combat-intel-buttons button {
+    min-height: 1.6rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand {
+    bottom: 0.38rem !important;
+    gap: 0.34rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-player-tools {
+    gap: 0.34rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-player-control-row {
+    padding: 0.3rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row {
+    min-height: 3.42rem !important;
+    padding: 0.24rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row .w-16 {
+    width: min(2.9rem, 14.5vw) !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row .h-16 {
+    height: min(2.9rem, 14.5vw) !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+    min-height: 7.1rem !important;
+    padding: 0.12rem 0 0.22rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip {
+    grid-template-rows: auto 2.08rem minmax(0, 1fr) !important;
+    height: 6.9rem !important;
+    padding: 0.38rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-art {
+    height: 1.96rem !important;
+    width: 1.96rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-icon-img {
+    height: 1.34rem !important;
+    width: 1.34rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-text > strong {
+    font-size: 0.68rem !important;
+    min-height: 1.46rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+    padding: 0.32rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers span {
+    min-height: 1.42rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-log-ticker {
+    min-height: 1.72rem !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .combat-screen .combat-bottom-hud.combat-card-hand {
+    bottom: 0.32rem !important;
+    gap: 0.28rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-player-tools {
+    gap: 0.28rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-player-control-row {
+    padding: 0.25rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row {
+    min-height: 3.15rem !important;
+    padding: 0.2rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row .w-16 {
+    width: min(2.68rem, 13.8vw) !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row .h-16 {
+    height: min(2.68rem, 13.8vw) !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row svg {
+    height: 1.04rem !important;
+    width: 1.04rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-coin-row .text-xs {
+    font-size: 0.52rem !important;
+    margin-top: 0.1rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-adjust-tools {
+    gap: 0.22rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-active-skill,
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-swap-button {
+    min-height: 1.8rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-rail {
+    min-height: 6.22rem !important;
+    padding: 0.08rem 0 0.16rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-chip {
+    grid-template-rows: auto 1.76rem minmax(0, 1fr) !important;
+    height: 6.02rem !important;
+    padding: 0.32rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-card-corner,
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-card-count,
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-card-face {
+    font-size: 0.5rem !important;
+    min-height: 0.94rem !important;
+    padding: 0.14rem 0.28rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-art {
+    height: 1.66rem !important;
+    width: 1.66rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-icon-img {
+    height: 1.12rem !important;
+    width: 1.12rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-text {
+    gap: 0.14rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-text > strong {
+    font-size: 0.62rem !important;
+    line-height: 1.08 !important;
+    min-height: 1.28rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-kind {
+    font-size: 0.52rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-summary .effect-chip-row {
+    max-height: 1.08rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-pattern-summary .effect-chip {
+    font-size: 0.48rem !important;
+    min-height: 0.88rem !important;
+    padding: 0.08rem 0.2rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+    gap: 0.22rem !important;
+    padding: 0.26rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-summary {
+    gap: 0.2rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-vs {
+    min-height: 1.32rem !important;
+    padding: 0.22rem 0.36rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-vs span {
+    display: none !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-vs strong {
+    font-size: 0.66rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers {
+    gap: 0.18rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers span {
+    min-height: 1.12rem !important;
+    padding: 0.1rem 0.18rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers small {
+    display: none !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-decision-numbers b {
+    font-size: 0.72rem !important;
+    line-height: 1 !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-command-row {
+    gap: 0.28rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-log-ticker {
+    min-height: 1.42rem !important;
+    padding: 0.2rem 0.34rem !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-log-label {
+    display: none !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-log-line.primary {
+    font-size: 0.66rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-log-line.secondary {
+    display: none !important;
+  }
+
+  .combat-screen .combat-bottom-hud.combat-card-hand .combat-execute-button {
+    min-height: 1.92rem !important;
+    padding: 0 0.76rem !important;
+  }
+}
+
+.combat-screen .combat-bottom-hud.combat-card-hand .combat-command-strip {
+  grid-template-rows: minmax(0, 1fr) auto !important;
+}
+
+.combat-outcome-rail {
+  align-self: stretch;
+  color: rgba(244, 241, 231, 0.92);
+  display: grid;
+  gap: 0.42rem;
+  min-height: 0;
+}
+
+.combat-outcome-head {
+  align-items: start;
+  display: flex;
+  gap: 0.55rem;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+.combat-outcome-head div {
+  display: grid;
+  gap: 0.08rem;
+  min-width: 0;
+}
+
+.combat-outcome-head span,
+.combat-outcome-node small {
+  color: rgba(244, 241, 231, 0.56);
+  font-size: 0.58rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.combat-outcome-head strong {
+  color: #f4f1e7;
+  font-size: 1.02rem;
+  font-weight: 950;
+  line-height: 1.04;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.combat-outcome-head p {
+  color: rgba(244, 241, 231, 0.7);
+  font-size: 0.66rem;
+  font-weight: 800;
+  line-height: 1.18;
+  margin: 0;
+  max-width: 8.4rem;
+  text-align: right;
+}
