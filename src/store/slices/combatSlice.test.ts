@@ -1,13 +1,15 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import type { StoreApi } from 'zustand/vanilla';
 import { createTestStore } from '../../test/store';
-import { makePlayer, makeEnemy, makeCoins, H, T } from '../../test/fixtures';
+import { makePlayer, makeEnemy, makeCoins, makeDetectedPattern, H, T } from '../../test/fixtures';
 import type { GameStore } from '../gameStore';
 import type { PendingCombatReward } from './combatSlice';
 import type { CombatRewardChoice } from '../../utils/combatRewards';
-import { CharacterClass, CoinFace, GameState, type Coin } from '../../types';
+import { CharacterClass, CoinFace, GameState, PatternType, type Coin } from '../../types';
 import { characterActiveSkills } from '../../data/dataCharacters';
 import { playerSkillUnlocks } from '../../data/dataSkills';
+import { detectPatterns } from '../../utils/gameLogic';
+import { determineEnemyIntent } from '../../utils/combatLogic';
 
 const coin = (id: number): Coin => ({ face: null, locked: false, id });
 
@@ -241,5 +243,136 @@ describe('combatSlice — coins & log & guards', () => {
     });
     store.getState().executeTurn();
     expect(store.getState().combatTurn).toBe(1);
+  });
+
+  // Integration: the slice must drive a full turn through the 8 combatLogic
+  // functions without throwing. Enemy at 999 HP + baseAtk 0 keeps both alive →
+  // the "combat continues" branch (no setTimeout, no reward). The death/reward
+  // branch needs a deterministic one-turn kill (getPlayerAbility damage
+  // alignment) and is deferred to a future selectNode→executeTurn test.
+  it('executeTurn advances a full turn when both sides survive', () => {
+    const enemyCoins = makeCoins([H, T, H, T, H]);
+    const enemy = makeEnemy({
+      key: 'infectedDog',
+      currentHp: 999,
+      maxHp: 999,
+      baseAtk: 0,
+      coins: enemyCoins,
+      detectedPatterns: detectPatterns(enemyCoins),
+    });
+    const playerCoins = makeCoins([H, H, H, H, H]);
+    const detected = detectPatterns(playerCoins);
+    store.setState({
+      player: makePlayer({ currentHp: 100, maxHp: 100 }),
+      enemy,
+      enemyIntent: determineEnemyIntent(enemy),
+      playerCoins,
+      detectedPatterns: detected,
+      selectedPatterns: [detected[0]],
+      combatTurn: 1,
+      gameState: GameState.COMBAT, // executeTurn is only ever called mid-combat
+      combatLog: [],
+      combatEffects: [],
+      unlockedPatterns: [],
+    });
+    store.getState().executeTurn();
+    const s = store.getState();
+    expect(s.combatTurn).toBe(2); // turn advanced
+    expect(s.selectedPatterns).toEqual([]); // cleared for next turn
+    expect(s.gameState).toBe(GameState.COMBAT); // both survived → combat-continues branch, no REWARD/GAME_OVER flip
+    expect(s.pendingCombatReward).toBeNull();
+  });
+});
+
+describe('combatSlice.togglePattern', () => {
+  const pairPattern = (indices: number[], id = 'p1') =>
+    makeDetectedPattern({ id, type: PatternType.PAIR, face: CoinFace.HEADS, count: 2, indices });
+
+  it('selects a detected pattern and records its used coin indices', () => {
+    store.setState({ selectedPatterns: [], detectedPatterns: [pairPattern([0, 1])] });
+    store.getState().togglePattern(PatternType.PAIR, CoinFace.HEADS);
+    const s = store.getState();
+    expect(s.selectedPatterns).toHaveLength(1);
+    expect(s.usedCoinIndices).toEqual([0, 1]);
+  });
+
+  it('toggles a selected pattern back off when no other instance is available', () => {
+    const p = pairPattern([0, 1]);
+    store.setState({ selectedPatterns: [p], detectedPatterns: [p] });
+    store.getState().togglePattern(PatternType.PAIR, CoinFace.HEADS);
+    const s = store.getState();
+    expect(s.selectedPatterns).toHaveLength(0);
+    expect(s.usedCoinIndices).toEqual([]);
+  });
+});
+
+describe('combatSlice.flipAllCoins', () => {
+  it('rerolls unlocked coins, preserves locked ones, and clears the selection', () => {
+    const coins = makeCoins([H, T, H, T, H]);
+    coins[2].locked = true;
+    coins[2].face = CoinFace.HEADS;
+    store.setState({
+      player: makePlayer(),
+      playerCoins: coins,
+      selectedPatterns: [makeDetectedPattern({ type: PatternType.PAIR, indices: [0, 1] })],
+      usedCoinIndices: [0, 1],
+    });
+    store.getState().flipAllCoins();
+    const s = store.getState();
+    expect(s.playerCoins[2].face).toBe(CoinFace.HEADS); // locked coin preserved
+    expect(s.playerCoins[2].locked).toBe(true);
+    s.playerCoins.forEach((c) => expect([CoinFace.HEADS, CoinFace.TAILS]).toContain(c.face));
+    expect(s.selectedPatterns).toEqual([]);
+    expect(s.usedCoinIndices).toEqual([]);
+  });
+
+  it('no-ops without a player', () => {
+    store.setState({ player: null, playerCoins: makeCoins([H, T]) });
+    store.getState().flipAllCoins();
+    expect(store.getState().playerCoins).toHaveLength(2);
+  });
+});
+
+describe('combatSlice.handleActiveSkillCoinClick', () => {
+  it('ROGUE rogue_flip: toggles the clicked coin, sets cooldown, returns to idle', () => {
+    store.setState({
+      player: makePlayer({ class: CharacterClass.ROGUE, activeSkillCooldown: 0 }),
+      playerCoins: makeCoins([H, T, H]),
+      activeSkillState: { phase: 'rogue_flip', selection: [] },
+    });
+    store.getState().handleActiveSkillCoinClick(0);
+    const s = store.getState();
+    expect(s.playerCoins[0].face).toBe(CoinFace.TAILS); // H → T
+    expect(s.activeSkillState.phase).toBe('idle');
+    expect(s.player!.activeSkillCooldown).toBe(characterActiveSkills[CharacterClass.ROGUE].cooldown);
+  });
+
+  it('TANK tank_swap: first click records the selection, second click swaps the two coins', () => {
+    store.setState({
+      player: makePlayer({ class: CharacterClass.TANK, activeSkillCooldown: 0 }),
+      playerCoins: makeCoins([H, T, H]), // index0=H, index1=T
+      activeSkillState: { phase: 'tank_swap_1', selection: [] },
+    });
+    store.getState().handleActiveSkillCoinClick(0);
+    expect(store.getState().activeSkillState.phase).toBe('tank_swap_2');
+    store.getState().handleActiveSkillCoinClick(1);
+    const s = store.getState();
+    expect(s.playerCoins[0].face).toBe(CoinFace.TAILS); // swapped
+    expect(s.playerCoins[1].face).toBe(CoinFace.HEADS);
+    expect(s.activeSkillState.phase).toBe('idle');
+    expect(s.player!.activeSkillCooldown).toBe(characterActiveSkills[CharacterClass.TANK].cooldown);
+  });
+
+  it('MAGE mage_lock: locks the clicked coin, sets cooldown, returns to idle', () => {
+    store.setState({
+      player: makePlayer({ class: CharacterClass.MAGE, activeSkillCooldown: 0 }),
+      playerCoins: makeCoins([H, T, H]),
+      activeSkillState: { phase: 'mage_lock', selection: [] },
+    });
+    store.getState().handleActiveSkillCoinClick(2);
+    const s = store.getState();
+    expect(s.playerCoins[2].locked).toBe(true);
+    expect(s.activeSkillState.phase).toBe('idle');
+    expect(s.player!.activeSkillCooldown).toBe(characterActiveSkills[CharacterClass.MAGE].cooldown);
   });
 });
