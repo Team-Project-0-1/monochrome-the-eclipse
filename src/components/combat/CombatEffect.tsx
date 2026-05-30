@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Heart } from 'lucide-react';
 import { effectConfig, effectIconPaths } from '../../data/dataEffects';
-import { CombatEffect as CombatEffectType, StatusEffectType } from '../../types';
+import { CombatEffect as CombatEffectType } from '../../types';
 import { assetPath } from '../../utils/assetPath';
 
 interface CombatEffectProps {
@@ -51,9 +51,9 @@ const CombatEffect: React.FC<CombatEffectProps> = ({ effect, onComplete }) => {
           </motion.div>
         );
       case 'status': {
-        const config = effectConfig[effect.data.statusType as StatusEffectType];
+        const config = effectConfig[effect.data.statusType];
         if (!config) return null;
-        const iconPath = effectIconPaths[effect.data.statusType as StatusEffectType];
+        const iconPath = effectIconPaths[effect.data.statusType];
         const value = effect.data.value;
         const isBuff = value > 0;
         return (

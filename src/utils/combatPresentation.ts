@@ -91,9 +91,18 @@ export const getIntentPatternLabel = (intent: EnemyIntent | null | undefined, en
   return `${patternLabels[matchingPattern.type]} ${faceLabel(matchingPattern.face)}`;
 };
 
-export const getEffectAmount = (effect: CombatEffectData, key = 'amount') => {
-  const value = Number(effect.data?.[key] ?? effect.data?.value ?? 0);
-  return Number.isFinite(value) ? value : 0;
+export const getEffectAmount = (effect: CombatEffectData): number => {
+  switch (effect.type) {
+    case 'damage':
+    case 'heal':
+    case 'defense':
+      return Number.isFinite(effect.data.amount) ? effect.data.amount : 0;
+    case 'status':
+    case 'temp_stat':
+      return Number.isFinite(effect.data.value) ? effect.data.value : 0;
+    default:
+      return 0;
+  }
 };
 
 export const isPositiveDamage = (effect: CombatEffectData) => (
@@ -103,7 +112,7 @@ export const isPositiveDamage = (effect: CombatEffectData) => (
 export const getSkillMotionToken = (effect?: CombatEffectData): SkillMotionToken => {
   if (!effect || effect.type !== 'skill') return 'skill';
 
-  const name = String(effect.data?.name ?? '');
+  const name = effect.data.name;
   if (/방어|막|갑주|유지|재정비|후퇴|교체|고정|회복|보호|수비/.test(name)) return 'guard';
   if (/각성|해방|파멸|전탄|폭풍|저주|이클립스|궁극/.test(name)) return 'ultimate';
   if (/추적|사격|탄환|일격|돌진|타격|강타|참격|공격|베기|소리|굽쇠/.test(name)) return 'strike';
@@ -116,7 +125,7 @@ export const getEffectBanner = (effect: CombatEffectData): CombatResultBanner | 
     return {
       id: effect.id,
       tone: effect.target === 'player' ? 'player' : 'enemy',
-      title: String(effect.data?.name ?? '기술 발동'),
+      title: effect.data.name || '기술 발동',
       detail: effect.target === 'player' ? '플레이어 기술' : '적 행동',
     };
   }
@@ -143,9 +152,8 @@ export const getEffectBanner = (effect: CombatEffectData): CombatResultBanner | 
   }
 
   if (effect.type === 'status') {
-    const statusType = effect.data?.statusType as StatusEffectType | undefined;
-    const label = statusType ? statusLabels[statusType] : '상태 변화';
-    const value = getEffectAmount(effect, 'value');
+    const label = statusLabels[effect.data.statusType] ?? '상태 변화';
+    const value = getEffectAmount(effect);
     return {
       id: effect.id,
       tone: 'status',

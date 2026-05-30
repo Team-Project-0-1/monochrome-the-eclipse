@@ -4,7 +4,7 @@ import { GameStore } from '../gameStore';
 import { SkillReplacementState, CombatEffect, TooltipState, TooltipContent } from '../../types';
 import { defaultAudioOptions } from '../../utils/audioManifest';
 
-export type EffectPayload = Omit<CombatEffect, 'id'>;
+export type { EffectPayload } from '../../types';
 export type GameOptionKey = keyof GameOptions;
 export type BooleanGameOptionKey = {
   [K in keyof GameOptions]: GameOptions[K] extends boolean ? K : never

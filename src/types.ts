@@ -303,12 +303,22 @@ export interface CombatLogMessage {
     type: 'player' | 'enemy' | 'system' | 'roll' | 'damage' | 'defense' | 'heal' | 'status';
 }
 
-export interface CombatEffect {
-  id: number;
-  type: 'damage' | 'status' | 'skill' | 'heal' | 'defense' | 'temp_stat';
+type CombatEffectVariant<T extends string, D> = {
+  type: T;
   target: 'player' | 'enemy';
-  data: any; // e.g., { amount: 10 } for damage, { statusType: 'BLEED', value: 2 } for status
-}
+  data: D;
+};
+
+export type EffectPayload =
+  | CombatEffectVariant<'damage', { amount: number }>
+  | CombatEffectVariant<'heal', { amount: number }>
+  | CombatEffectVariant<'defense', { amount: number }>
+  | CombatEffectVariant<'status', { statusType: StatusEffectType; value: number }>
+  | CombatEffectVariant<'skill', { name: string }>
+  | CombatEffectVariant<'temp_stat', { stat: 'attack' | 'defense'; value: number; duration: number }>;
+
+// id added for live combat effects; intersection distributes over the union and preserves discrimination.
+export type CombatEffect = EffectPayload & { id: number };
 
 export interface SkillReplacementState {
     isModalOpen: boolean;
