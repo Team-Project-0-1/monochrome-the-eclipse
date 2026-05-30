@@ -6092,10 +6092,9 @@ html[data-large-text="true"] {
     width: 90%;
   }
 
+  /* 모바일 좁은 폭에서 본문과 겹치므로 장식 figure 숨김 */
   .event-player-figure {
-    bottom: 18rem;
-    left: -0.5rem;
-    width: 48vw;
+    display: none;
   }
 
   .event-dialogue {
@@ -8970,10 +8969,6 @@ html[data-large-text="true"] {
 
   .event-content {
     padding-bottom: 1rem;
-  }
-
-  .event-player-figure {
-    opacity: 0.28;
   }
 
   .rest-content {
