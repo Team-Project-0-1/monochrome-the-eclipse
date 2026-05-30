@@ -52,6 +52,7 @@ Root directory: .
 Build command: npm run prototype:check
 Build output: dist
 VITE_BASE_PATH=/monochrome-the-eclipse/
+VITE_STAGE3_PUBLIC_SAFE_MODE=1
 ```
 
 ### Cloudflare Pages preferred
@@ -69,7 +70,10 @@ Install command: npm ci
 Build command: npm run prototype:check
 Build output directory: dist
 VITE_BASE_PATH=/
+VITE_STAGE3_PUBLIC_SAFE_MODE=1
 ```
+
+Unset `VITE_STAGE3_PUBLIC_SAFE_MODE` only for owner/internal art-review builds where the Stage 3 generated monster and background assets are allowed to ship in `dist/`.
 
 ## Smoke Test After Deploy
 

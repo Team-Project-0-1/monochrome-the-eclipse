@@ -13,7 +13,7 @@
     "check:exploration-route": "node scripts/check-exploration-route.mjs",
     "check:stage3-content": "node scripts/check-stage3-content.mjs",
     "check:stage3-assets": "node scripts/check-stage3-assets.mjs",
-    "check:pages-build": "vite build --base=/monochrome-the-eclipse/ && node scripts/prune-optimized-pngs.mjs && node scripts/check-dist-budget.mjs && node scripts/check-pages-base.mjs",
+    "check:pages-build": "vite build --base=/monochrome-the-eclipse/ && node scripts/prune-optimized-pngs.mjs && node scripts/prune-stage3-public-safe-assets.mjs && node scripts/check-dist-budget.mjs && node scripts/check-pages-base.mjs",
     "typecheck": "tsc --noEmit",
     "validate:passives": "node scripts/run-passive-validation.mjs",
     "check:release-assets": "node scripts/check-release-assets.mjs",
@@ -24,7 +24,7 @@
     "check": "npm run check:text-integrity && npm run check:stage3-content && npm run check:stage3-assets && npm run check:exploration-route && npm run typecheck && npm run validate:passives && npm run check:release-assets && npm run build && npm run check:dist",
     "release:check": "npm run check:asset-tooling && npm run optimize:assets && npm run security:audit && npm run check",
     "prototype:check": "npm run release:check && npm run check:prototype-readiness",
-    "build": "vite build && node scripts/prune-optimized-pngs.mjs",
+    "build": "vite build && node scripts/prune-optimized-pngs.mjs && node scripts/prune-stage3-public-safe-assets.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

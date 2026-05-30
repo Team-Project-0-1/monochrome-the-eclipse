@@ -10,8 +10,12 @@ import {
   MonsterPhaseDefinition,
 } from "../types";
 import { assetPath } from "../utils/assetPath";
+import { isStage3PublicSafeMode } from "../utils/stage3PublicSafeMode";
 
 const monsterSpriteAnimations = { idle: 0, attack: 1, skill: 2, death: 3 };
+const stage3GeneratedAssetPath = (path: string): string | undefined => (
+    isStage3PublicSafeMode ? undefined : assetPath(path)
+);
 
 export const getMonsterPhase = (enemy: EnemyCharacter): MonsterPhaseDefinition | null => {
     const phases = monsterData[enemy.key]?.phases ?? [];
@@ -228,8 +232,8 @@ export const monsterData: MonsterData = {
         ],
         tier: "normal",
         assetKey: "annihilationAmplifier",
-        portraitSrc: assetPath("assets/monsters/stage3-generated/stage3_annihilation_amplifier_portrait.png"),
-        spriteSheetSrc: assetPath("assets/monsters/stage3-generated/stage3_annihilation_amplifier_spritesheet.png"),
+        portraitSrc: stage3GeneratedAssetPath("assets/monsters/stage3-generated/stage3_annihilation_amplifier_portrait.png"),
+        spriteSheetSrc: stage3GeneratedAssetPath("assets/monsters/stage3-generated/stage3_annihilation_amplifier_spritesheet.png"),
         spriteFrameSize: 256,
         spriteAnimations: monsterSpriteAnimations,
         passives: [
@@ -250,8 +254,8 @@ export const monsterData: MonsterData = {
         ],
         tier: "normal",
         assetKey: "fleshCultivator",
-        portraitSrc: assetPath("assets/monsters/stage3-generated/stage3_flesh_cultivator_portrait.png"),
-        spriteSheetSrc: assetPath("assets/monsters/stage3-generated/stage3_flesh_cultivator_spritesheet.png"),
+        portraitSrc: stage3GeneratedAssetPath("assets/monsters/stage3-generated/stage3_flesh_cultivator_portrait.png"),
+        spriteSheetSrc: stage3GeneratedAssetPath("assets/monsters/stage3-generated/stage3_flesh_cultivator_spritesheet.png"),
         spriteFrameSize: 256,
         spriteAnimations: monsterSpriteAnimations,
         passives: [
@@ -272,8 +276,8 @@ export const monsterData: MonsterData = {
         ],
         tier: "normal",
         assetKey: "abyssObserver",
-        portraitSrc: assetPath("assets/monsters/stage3-generated/stage3_abyss_observer_portrait.png"),
-        spriteSheetSrc: assetPath("assets/monsters/stage3-generated/stage3_abyss_observer_spritesheet.png"),
+        portraitSrc: stage3GeneratedAssetPath("assets/monsters/stage3-generated/stage3_abyss_observer_portrait.png"),
+        spriteSheetSrc: stage3GeneratedAssetPath("assets/monsters/stage3-generated/stage3_abyss_observer_spritesheet.png"),
         spriteFrameSize: 256,
         spriteAnimations: monsterSpriteAnimations,
         passives: [
@@ -295,8 +299,8 @@ export const monsterData: MonsterData = {
         ],
         tier: "miniboss",
         assetKey: "apostleOfFlesh",
-        portraitSrc: assetPath("assets/monsters/stage3-generated/stage3_apostle_of_flesh_portrait.png"),
-        spriteSheetSrc: assetPath("assets/monsters/stage3-generated/stage3_apostle_of_flesh_spritesheet.png"),
+        portraitSrc: stage3GeneratedAssetPath("assets/monsters/stage3-generated/stage3_apostle_of_flesh_portrait.png"),
+        spriteSheetSrc: stage3GeneratedAssetPath("assets/monsters/stage3-generated/stage3_apostle_of_flesh_spritesheet.png"),
         spriteFrameSize: 256,
         spriteAnimations: monsterSpriteAnimations,
         passives: [
@@ -320,8 +324,8 @@ export const monsterData: MonsterData = {
         ],
         tier: "boss",
         assetKey: "eclipseChoir",
-        portraitSrc: assetPath("assets/monsters/stage3-generated/stage3_eclipse_choir_portrait.png"),
-        spriteSheetSrc: assetPath("assets/monsters/stage3-generated/stage3_eclipse_choir_spritesheet.png"),
+        portraitSrc: stage3GeneratedAssetPath("assets/monsters/stage3-generated/stage3_eclipse_choir_portrait.png"),
+        spriteSheetSrc: stage3GeneratedAssetPath("assets/monsters/stage3-generated/stage3_eclipse_choir_spritesheet.png"),
         spriteFrameSize: 256,
         spriteAnimations: monsterSpriteAnimations,
         phases: [

@@ -2,11 +2,7 @@ import {
   CharacterClass,
   EventDefinition,
 } from "../types";
-
-// PR #6 머지 시 isStage3PublicSafeMode 모듈이 main에 없어 import가 dead임.
-// 잔재 모듈 통합(stage3 public-safe mode 작업) PR이 따로 진행되면 이 줄을 import로 교체.
-// 현재는 false로 강제 = 항상 정식 stage3 event 사용.
-const isStage3PublicSafeMode = false;
+import { isStage3PublicSafeMode } from "../utils/stage3PublicSafeMode";
 
 export const eventData: { [key: string]: EventDefinition } = {
   event_supplies: {

@@ -43,7 +43,7 @@ Use this when presenting the project:
 ## Quality Bar
 
 The prototype is shippable when:
-- `npm run prototype:check` passes. For a public URL build, set `VITE_STAGE3_PUBLIC_SAFE_MODE=1` before running the same script — it strips approval-sensitive Stage 3 generated assets and substitutes neutral fallbacks. For an owner/internal art-review build, run the script without that env var.
+- `npm run prototype:check` passes. For a public URL build, set `VITE_STAGE3_PUBLIC_SAFE_MODE=1` before running the same script (PowerShell: `$env:VITE_STAGE3_PUBLIC_SAFE_MODE='1'; npm run prototype:check`) — runtime uses neutral fallbacks and the build prunes approval-sensitive Stage 3 generated assets from `dist/`. For an owner/internal art-review build, run the script without that env var.
 - The first screen clearly labels the build as `Prototype v0.1`.
 - The public copy does not imply a finished paid game.
 - The public-safe build is used unless the generated Stage 3 monster/background assets have owner provenance approval.

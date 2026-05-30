@@ -1,3 +1,5 @@
+import { isStage3PublicSafeMode, stage3PublicSafeBackgroundCss } from './stage3PublicSafeMode';
+
 export interface EventScenePresentation {
   className: string;
   backgroundPath: string;
@@ -5,7 +7,6 @@ export interface EventScenePresentation {
   /**
    * 이미 처리된 CSS 값(예: `linear-gradient(...)`)을 직접 넣고 싶을 때.
    * EventScreen은 scene.backgroundCss가 있으면 그것을, 없으면 assetCssUrl(backgroundPath)를 사용한다.
-   * (stage3 public-safe mode 같은 후속 통합 PR에서 fallback 배경을 주입할 자리)
    */
   backgroundCss?: string;
   kicker: string;
@@ -25,6 +26,11 @@ const survivorShelterBackground = 'assets/backgrounds/event-survivor-shelter.png
 const stage3ResonanceRelayBackground = 'assets/backgrounds/event-stage3-resonance-relay.png';
 const stage3FleshVatBackground = 'assets/backgrounds/event-stage3-flesh-vat.png';
 const stage3EclipseSanctuaryBackground = 'assets/backgrounds/event-stage3-eclipse-sanctuary.png';
+const stage3PublicSafeSceneBase = {
+  className: 'scene-stage3-safe',
+  backgroundPath: defaultEncounterBackground,
+  backgroundCss: stage3PublicSafeBackgroundCss,
+};
 
 const defaultScene: EventScenePresentation = {
   className: 'scene-signal',
@@ -91,7 +97,14 @@ const scenes: Record<string, EventScenePresentation> = {
     line: '깊은 물 아래에서 백색 반점이 일식처럼 깜빡입니다.',
     propLabel: '오래된 우물',
   },
-  event_stage3_resonance_relay: {
+  event_stage3_resonance_relay: isStage3PublicSafeMode ? {
+    ...stage3PublicSafeSceneBase,
+    kicker: '심층 신호',
+    location: '최종 심층',
+    speaker: '심층 중계기',
+    line: '낡은 중계기가 낮은 주파수로 다음 전투의 규칙을 예고합니다.',
+    propLabel: '심층 신호',
+  } : {
     className: 'scene-stage3-relay',
     backgroundPath: stage3ResonanceRelayBackground,
     kicker: 'Resonance Relay',
@@ -100,7 +113,14 @@ const scenes: Record<string, EventScenePresentation> = {
     line: '동전형 공명판이 서로 맞물릴 때마다 탑 안쪽의 신호가 낮게 떨립니다.',
     propLabel: '송신핵',
   },
-  event_stage3_flesh_vat: {
+  event_stage3_flesh_vat: isStage3PublicSafeMode ? {
+    ...stage3PublicSafeSceneBase,
+    kicker: '심층 조율',
+    location: '최종 심층',
+    speaker: '심층 조율실',
+    line: '차가운 조율 장치들이 일정한 리듬으로 켜졌다 꺼집니다.',
+    propLabel: '조율 장치',
+  } : {
     className: 'scene-stage3-vat',
     backgroundPath: stage3FleshVatBackground,
     kicker: 'Flesh Cultivation',
@@ -109,7 +129,14 @@ const scenes: Record<string, EventScenePresentation> = {
     line: '갈고리와 배양액 사이에서 아직 이름 없는 조직이 느리게 호흡합니다.',
     propLabel: '배양 결정',
   },
-  event_stage3_eclipse_sanctuary: {
+  event_stage3_eclipse_sanctuary: isStage3PublicSafeMode ? {
+    ...stage3PublicSafeSceneBase,
+    kicker: '무채 제단',
+    location: '최종 심층',
+    speaker: '봉인된 제단',
+    line: '밝기를 잃은 표식과 봉인된 동전들이 선택을 재촉합니다.',
+    propLabel: '봉인 동전',
+  } : {
     className: 'scene-stage3-sanctuary',
     backgroundPath: stage3EclipseSanctuaryBackground,
     kicker: 'Silent Sanctuary',
