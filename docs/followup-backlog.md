@@ -115,9 +115,11 @@
 - **완료**: tailwindcss@3 + postcss + autoprefixer 도입. `src/index.css`는 `@tailwind` 디렉티브 엔트리로 전환되어 빌드 시 유틸리티가 재생성됨. 손글 컴포넌트 CSS는 `scripts/extract-handwritten-css.mjs`로 추출해 `src/styles/components.css`로 분리, index.tsx에서 마지막에 import(cascade 손글 우선). 중복이던 `tailwind-source.css`는 삭제.
 - **잔여**: tokens.css 변수를 `theme.extend`로 노출해 `bg-face-heads` 같은 토큰 기반 유틸을 만드는 작업은 후속(선택).
 
-### P3-3. 컬러 일렉트라/색맹 시뮬레이션 테스트
-- **현재 상태**: 색 대비/색맹 환경 미검증.
-- **작업**: Chrome DevTools의 Vision Deficiencies 시뮬레이션으로 protanopia/deuteranopia/tritanopia에서 게임 상태 구분 가능한지 확인.
+### P3-3. ✅ 색맹 시뮬레이션 테스트 (완료, 2026-05-30)
+- **방법**: 전 전투/상태 UI 정적 중복 감사 + Machado(2009) 색맹 변환 매트릭스(protan/deutan/tritan, 강도 1.0)를 linear RGB에 적용하고 Lab(D65) 공간 CIE76 ΔE로 핵심 색 쌍의 구분도를 정량 측정.
+- **측정 결과**: 가치 신호 green(이득/safe `#4ade80`) vs red(손해/danger `#f87171`)이 deuteranopia에서 ΔE 9.2까지 붕괴해 색만으로는 사실상 구분 불가. 반면 동전 앞면 red(`#ef4444`)/뒷면 blue(`#3b82f6`)는 모든 색맹 유형에서 ΔE 87 이상으로 견고.
+- **판정**: 색이 무너지는 가치 쌍조차 라이브 UI 모든 사용처에 비색 중복 신호가 함께 존재 — `CombatOutcomeRail`/`CombatReadouts`의 텍스트 라벨(`유리 교환`·`손해 교환`·`적에게`·`내가 받음`), 상태 효과의 ↑/↓ 화살표, `HealthBar`의 숫자 HP와 막대 길이, 적 의도의 경고삼각 vs 방패 아이콘 모양, 동전면의 검/방패 아이콘. 색 단독 전달 지점 없음 → WCAG 1.4.1(Use of Color) 충족, 코드 변경 불필요.
+- **부수 발견**: `CombatPredictionPanel.tsx`는 어디서도 import되지 않는 미사용 죽은 코드(렌더 경로는 `CombatOutcomeRail`/`CombatReadouts`). 별도 정리 후보로만 기록, 본 감사 범위 밖.
 
 ### P3-4. ✅ 키보드 전체 내비게이션 (완료, 2026-05-30)
 - **완료**: 전 화면 정적 감사 결과 전투 인터랙티브 요소(패턴 카드·액티브 스킬·IntelBar·예비 동전·모바일 HUD)와 `CoinDisplay`는 이미 시맨틱 `<button>` 또는 `role`/`tabIndex`/`onKeyDown`(Enter/Space)으로 키보드 접근 가능했다. 실제 갭은 둘뿐이었다: (1) `SkillDescription` 키워드가 `focus:outline-none`만 있어 Tab 포커스 위치가 안 보임 → 앱 공통 관용구 `focus-visible:ring-2 focus-visible:ring-cyan-300` 링 부여, (2) 키워드 툴팁이 Enter/Space로 열리지만 키보드로 닫을 경로가 없음 → 툴팁 활성 동안에만 window Escape 리스너를 붙여 닫기 추가(인벤토리 모달 등 다른 레이어 비간섭).
