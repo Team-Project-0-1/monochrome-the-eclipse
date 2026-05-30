@@ -56,10 +56,11 @@
 | 200+ | `--z-toast` |
 | 2000 | `--z-modal-top` (combat-intel-modal 과도하므로 100~140로 정상화) |
 
-### P1-2. HealthBar 완전 통합 (CombatOverheadVitals와 합치기)
-- **현재 상태**: 색상은 토큰 공유 OK. 그러나 두 개의 독립 구현이 존재 — `CharacterStatus.tsx`(탐험 패널)는 `HealthBar.tsx` 사용, 전투 무대는 `CombatOverheadVitals` 사용.
-- **작업**: `HealthBar.tsx`를 정식 컴포넌트로 두고 `CombatOverheadVitals`를 그 위에 작은 변형(슬림 헤드 + 짧은 트랙)으로 재작성. 또는 반대로.
-- **검증**: 탐험 → 전투 진입 시 같은 시각 언어가 이어지는지.
+### P1-2. HealthBar 색상 언어 통합 (CombatOverheadVitals와 임계 색상 공유) — ✅ 완료 (2026-05-30)
+- **전제 정정**: 초안의 "색상은 토큰 공유 OK"는 사실과 달랐다. 탐험(`HealthBar`)은 `resolveHpColor`로 HP에 따라 safe→trade→danger 토큰을 바꿨지만, 전투(`CombatOverheadVitals`)의 `.combat-hp-fill`은 HP와 무관하게 항상 녹색 그라데이션(`#21d873` 계열, `!important`)이라 저체력에서 두 화면 색상이 어긋났다.
+- **작업 내용**: `HealthBar`에 private였던 `resolveHpColor`를 `combatPresentation.ts`로 단일 정의 추출(export). `HealthBar`는 이를 import만 하도록 변경(동작 불변). `CombatOverheadVitals`는 `resolveHpColor(hp)` 결과를 `--hp-fill-color` 인라인 변수로 주입하고, `.combat-hp-fill` / `.combat-overhead-hp-track .combat-hp-fill`이 `var(--hp-fill-color, 기존그라데이션)`을 소비하도록 수정. 글로우 box-shadow는 `color-mix`로 fill 색조를 추종.
+- **시각 언어 통합 결과**: 전투 체력바 fill도 이제 안전(녹)→거래(호박)→위험(적) 임계 색상을 탐험과 동일 토큰으로 따른다. 슬림 헤드 + 짧은 트랙 + 틱 + 글로우 등 전투 무대 고유 스타일은 유지(완전 DOM 병합은 CSS 셀렉터 대거 이동이 필요해 P2-1 정리와 함께 보류).
+- **검증**: 합성 프로브(메뉴 화면에서 `.combat-overhead-hp-track > .combat-hp-fill` 주입)로 토큰 3색이 단색으로 렌더되고 `!important`를 인라인 변수가 정상 대체함을 computed style로 확인, 변수 미설정 시 그라데이션 폴백 확인. `npm run check` EXIT 0.
 
 ### P1-3. S급 버그(상점/이벤트/휴식 UI 사라짐) 재현 검증 — ✅ 재현 불가 (2026-05-29)
 - **결론**: 25.09.05 리액트 피드백 리포트의 "상점/이벤트/휴식 선택 시 UI가 사라지고 게임 진행이 멈춤" S급 버그는 **현재 코드에서 재현되지 않음**.
