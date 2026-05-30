@@ -613,7 +613,7 @@
 }
 
 .combat-hp-fill {
-  background: linear-gradient(90deg, #22c55e, #bef264);
+  background: var(--hp-fill-color, linear-gradient(90deg, #22c55e, #bef264));
   border-radius: inherit;
   height: 100%;
 }
@@ -10329,8 +10329,8 @@ html[data-large-text="true"] {
 
 .combat-overhead-hp-track .combat-hp-fill {
   background:
-    linear-gradient(90deg, #21d873, #b8f86b 72%, #f5ead2) !important;
-  box-shadow: 0 0 14px rgba(74, 222, 128, 0.38);
+    var(--hp-fill-color, linear-gradient(90deg, #21d873, #b8f86b 72%, #f5ead2)) !important;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--hp-fill-color, #4ade80) 42%, transparent);
 }
 
 .combat-sprite-slot.enemy .combat-enemy-overhead-stack .combat-enemy-strip {

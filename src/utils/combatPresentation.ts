@@ -162,6 +162,21 @@ export const hpPercent = (current: number, max: number) => {
   return Math.max(0, Math.min(100, (current / max) * 100));
 };
 
+/**
+ * HP 비율(0~100)을 디자인 토큰 색상으로 변환한다.
+ * 탐험(HealthBar)과 전투(CombatOverheadVitals)가 공유하는 단일 정의로,
+ * 두 화면이 같은 체력 색상 언어(안전 → 거래 → 위험)를 잇도록 한다.
+ *
+ *   > 60% : safe (초록)
+ *   30~60% : trade (호박)
+ *   <= 30% : danger (적)
+ */
+export const resolveHpColor = (percentage: number): string => {
+  if (percentage > 60) return 'var(--color-tone-safe)';
+  if (percentage > 30) return 'var(--color-tone-trade)';
+  return 'var(--color-tone-danger)';
+};
+
 export const formatTier = (tier: EnemyCharacter['tier']) => {
   if (tier === 'boss') return '보스';
   if (tier === 'miniboss') return '정예';

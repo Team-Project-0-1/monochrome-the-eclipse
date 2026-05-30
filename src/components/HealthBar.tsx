@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Swords } from 'lucide-react';
+import { resolveHpColor } from '../utils/combatPresentation';
 
 interface HealthBarProps {
   current: number;
@@ -9,21 +10,6 @@ interface HealthBarProps {
   predictedDamage?: number;
   isPlayer?: boolean;
 }
-
-/**
- * HP 색상은 디자인 토큰(`--color-tone-*`)을 참조한다.
- * 전투 무대의 `CombatOverheadVitals`와 동일한 임계값/색상을 공유하기 위한 단일 정의.
- *
- * 임계값:
- *   > 60% : safe (초록)
- *   30~60% : trade (호박)
- *   < 30% : danger (적)
- */
-const resolveHpColor = (percentage: number): string => {
-  if (percentage > 60) return 'var(--color-tone-safe)';
-  if (percentage > 30) return 'var(--color-tone-trade)';
-  return 'var(--color-tone-danger)';
-};
 
 const HealthBar = ({
   current,

@@ -11,6 +11,7 @@ import {
   faceClass,
   faceLabel,
   hpPercent,
+  resolveHpColor,
   statusLabels,
 } from '../../utils/combatPresentation';
 import { effectConfig, effectIconPaths } from '../../data/dataEffects';
@@ -87,7 +88,10 @@ export const CombatOverheadVitals: React.FC<{
         )}
       </div>
       <div className="combat-hp-track combat-overhead-hp-track">
-        <div className="combat-hp-fill" style={{ width: `${hp}%` }} />
+        <div
+          className="combat-hp-fill"
+          style={{ width: `${hp}%`, '--hp-fill-color': resolveHpColor(hp) } as React.CSSProperties}
+        />
       </div>
     </aside>
   );
