@@ -5526,11 +5526,11 @@ html[data-large-text="true"] {
 
 .tutorial-coachmark.tutorial-combat {
   bottom: auto;
-  left: 50%;
+  left: auto;
   max-width: min(22rem, calc(100vw - 2rem));
-  right: auto;
-  top: 1rem;
-  transform: translateX(-50%);
+  right: 1rem;
+  top: 4rem;
+  transform: none;
 }
 
 .tutorial-coachmark.tutorial-shop {
@@ -5555,16 +5555,6 @@ html[data-large-text="true"] {
 
   .tutorial-coachmark.tutorial-shop {
     display: none;
-  }
-}
-
-@media (max-height: 520px) and (orientation: landscape) {
-  .tutorial-coachmark.tutorial-combat {
-    bottom: auto;
-    left: 50%;
-    right: auto;
-    top: 0.55rem;
-    transform: translateX(-50%);
   }
 }
 
