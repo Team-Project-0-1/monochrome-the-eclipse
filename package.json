@@ -15,13 +15,15 @@
     "check:stage3-assets": "node scripts/check-stage3-assets.mjs",
     "check:pages-build": "vite build --base=/monochrome-the-eclipse/ && node scripts/prune-optimized-pngs.mjs && node scripts/prune-stage3-public-safe-assets.mjs && node scripts/check-dist-budget.mjs && node scripts/check-pages-base.mjs",
     "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:run": "vitest run",
     "validate:passives": "node scripts/run-passive-validation.mjs",
     "check:release-assets": "node scripts/check-release-assets.mjs",
     "check:dist": "node scripts/check-dist-budget.mjs",
     "check:prototype-readiness": "node scripts/check-prototype-readiness.mjs",
     "security:audit": "npm audit --audit-level=moderate",
     "security:audit:full": "npm audit --audit-level=low",
-    "check": "npm run check:text-integrity && npm run check:stage3-content && npm run check:stage3-assets && npm run check:exploration-route && npm run typecheck && npm run validate:passives && npm run check:release-assets && npm run build && npm run check:dist",
+    "check": "npm run check:text-integrity && npm run check:stage3-content && npm run check:stage3-assets && npm run check:exploration-route && npm run typecheck && npm run test:run && npm run validate:passives && npm run check:release-assets && npm run build && npm run check:dist",
     "release:check": "npm run check:asset-tooling && npm run optimize:assets && npm run security:audit && npm run check",
     "prototype:check": "npm run release:check && npm run check:prototype-readiness",
     "build": "vite build && node scripts/prune-optimized-pngs.mjs && node scripts/prune-stage3-public-safe-assets.mjs",
@@ -41,6 +43,7 @@
     "postcss": "^8.5.15",
     "tailwindcss": "^3.4.19",
     "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "vitest": "^4.1.6"
   }
 }
