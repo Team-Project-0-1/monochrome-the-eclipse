@@ -85,9 +85,8 @@
 - **작업**: 중복 셀렉터 통합 또는 모듈 단위 파일로 분할(`styles/combat.css`, `styles/exploration.css` 등).
 - **위험**: 한 번에 다 하면 회귀 위험 큼. 한 컴포넌트씩.
 
-### P2-2. 캐릭터 선택 카드 비교 패널
-- **현재 상태**: 4종 캐릭터를 한 눈에 비교하는 동선 없음. 카드 클릭이 즉시 선택으로 이어짐.
-- **작업**: 카드 hover/focus 시 우측에 상세 비교 패널, 클릭은 "이 캐릭터로 시작" 명시 버튼으로 분리.
+### P2-2. ✅ 캐릭터 선택 카드 비교 패널 (완료, 2026-05-30)
+- **완료**: 카드 클릭이 즉시 출정으로 이어지던 동선을 두 단계로 분리. 카드 hover(onMouseEnter)/focus/click은 미리보기 상태(`activeClass`)만 갱신하고, 실제 출정은 우측 상세 패널의 '이 캐릭터로 시작' 버튼이 담당. 상세 패널은 활성 캐릭터의 초상화·이름·HP·무기·시그니처·패시브·액티브 스킬을 한곳에 모아 4종 비교를 지원. 잠금 캐릭터도 미리보기로 스펙 확인이 가능하며, 이때 시작 버튼은 비활성 + 해금 힌트를 노출. 미리보기는 화면 한정 임시 상태라 스토어가 아닌 로컬 `useState`(기본값=첫 해금 캐릭터)로 두고, 활성 카드는 ring 강조 + `aria-pressed`로 표시. 카드 onClick의 `selectCharacter` 직접 호출을 제거했으므로 e2e 스모크도 두 단계(카드 클릭 → `start-with-character` 클릭)로 갱신. 검증: dev 브라우저에서 hover/focus/click 패널 전환, 잠금 카드(신제우) 시작 비활성 + '3회 이상 플레이' 힌트, WARRIOR 시작 → 탐험 진입을 확인(`aria-pressed`/active ring/`startDisabled` DOM 검증 포함). check 전체 PASS.
 
 ### P2-3. ✅ NodeSelection 위험/보상 정량화 (완료, 2026-05-30)
 - **완료**: 노드 카드 위험/기대 보상 칸에 1~5 등급 미터(채워진 핍 개수) 추가로 경로 간 비교 직관화. 등급은 nodePresentation.ts의 정적 riskLevel/rewardLevel(표시 전용, 게임 로직 미변경): REST 1/1 · SHOP 1/2 · COMBAT 2/2 · EVENT 3/3 · MINIBOSS 4/4 · BOSS 5/5. 미확인(불명) 노드는 거짓 등급 대신 '?'로 표기(오도 방지). aria-label "위험도 N/5"로 스크린리더 대응. RatingMeter는 NodeSelection.tsx 로컬 컴포넌트. check 전체 PASS.
