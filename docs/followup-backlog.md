@@ -124,9 +124,9 @@
 - **검증**: dev 브라우저에서 키워드 Tab 포커스 시 `:focus-visible` 활성 + 시안 2px 링(box-shadow rgb(103,232,249)) 확인, Escape keydown으로 툴팁·백드롭만 제거되고 인벤토리 모달은 유지됨을 DOM으로 확인. npm run check 통과(커밋 f19c19f).
 - **잔여**: 사운드 옵션 슬라이더 `<details>` 키보드 접근성은 P3-5로 별도 추적.
 
-### P3-5. 사운드 옵션 슬라이더 키보드 접근성
-- **현재 상태**: `MenuScreen` 오디오 슬라이더는 `<details>`로 접혀 있어 키보드 사용자가 발견하기 어려움.
-- **작업**: 항상 펼침 또는 명시적 토글 버튼.
+### P3-5. ✅ 사운드 옵션 슬라이더 키보드 접근성 (완료, 2026-05-30)
+- **완료**: 접힌 `<details>`(`사운드 믹스`)가 닫힌 상태에서 볼륨 슬라이더 4개를 접근성 트리·Tab 순회에서 숨겨 키보드·스크린리더 사용자가 존재를 발견하기 어려웠다. `<details>`/`<summary>`를 제거하고 항상 펼친 `<div role="group" aria-labelledby>` 구조로 전환 — 4개 `<input type="range">`를 `사운드 믹스` 그룹으로 묶어 상시 노출·포커스 가능하게 했다. 슬라이더 마크업과 스토어 배선(`setGameOption`)은 그대로 유지, 더 이상 쓰이지 않는 `.menu-audio-disclosure` 마커 숨김 CSS 3개 규칙도 제거.
+- **검증**: dev 브라우저에서 `details` 0개·`role="group"`(접근성 이름 `사운드 믹스`) 확인, 슬라이더 4개 모두 visible+tabbable+focusable, 값 변경 시 onChange→퍼센트 라벨 갱신(85→50) 확인. npm run check 통과(커밋 f4e0e87).
 
 ---
 
