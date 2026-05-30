@@ -16,6 +16,29 @@ interface NodeSelectionProps {
   player?: PlayerCharacter | null;
 }
 
+// level 0 = 불명(미확인 노드): 거짓 등급 대신 '?'로 표기해 정보 없음을 정직하게 전달
+const RatingMeter: React.FC<{ level: number; label: string }> = ({ level, label }) => {
+  if (level <= 0) {
+    return (
+      <div className="mt-1.5 text-[11px] font-bold text-white/40" role="img" aria-label={`${label} 불명`}>
+        <span aria-hidden>?</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-1.5 flex items-center gap-1" role="img" aria-label={`${label} ${level}/5`}>
+      {[1, 2, 3, 4, 5].map(pip => (
+        <span
+          key={pip}
+          aria-hidden
+          className={`h-1.5 w-3 rounded-full ${pip <= level ? 'bg-current opacity-90' : 'bg-white/15'}`}
+        />
+      ))}
+    </div>
+  );
+};
+
 const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndices, onSelect, currentTurn, player }) => {
   const [selectedNode, setSelectedNode] = useState<StageNode | null>(null);
   const gameOptions = useGameStore(state => state.gameOptions);
@@ -114,10 +137,12 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndic
                   <div className="rounded-md border border-white/10 bg-black/25 px-2.5 py-2">
                     <div className="text-white/45">위험</div>
                     <div className="font-bold text-white">{meta.risk}</div>
+                    <RatingMeter level={meta.riskLevel} label="위험도" />
                   </div>
                   <div className="rounded-md border border-white/10 bg-black/25 px-2.5 py-2">
                     <div className="text-white/45">기대 보상</div>
                     <div className="font-bold text-white">{meta.reward}</div>
+                    <RatingMeter level={meta.rewardLevel} label="보상" />
                   </div>
                 </div>
 

@@ -10,6 +10,8 @@ export interface NodePresentation {
   description: string;
   risk: string;
   reward: string;
+  riskLevel: number;
+  rewardLevel: number;
   stake: string;
   className: string;
   lineClassName: string;
@@ -23,6 +25,8 @@ const baseNodePresentation: Record<NodeType, Omit<NodePresentation, 'routeName' 
     description: '기본 전투입니다. 체력을 잃을 수 있지만 빌드 성장에 필요한 자원을 안정적으로 얻습니다.',
     risk: '체력 손실',
     reward: '에코 + 감각 조각',
+    riskLevel: 2,
+    rewardLevel: 2,
     stake: '안정적인 성장',
     className: 'border-red-400/50 bg-red-950/50 text-red-50 hover:border-red-300 hover:bg-red-900/60',
     lineClassName: 'from-red-500/0 via-red-300/80 to-red-500/0',
@@ -34,6 +38,8 @@ const baseNodePresentation: Record<NodeType, Omit<NodePresentation, 'routeName' 
     description: '전투 없이 다음 전투를 준비합니다. 보유 에코를 회복, 예비 동전, 기술 강화로 바꿉니다.',
     risk: '전투 보상 없음',
     reward: '즉시 보강',
+    riskLevel: 1,
+    rewardLevel: 2,
     stake: '현재 빌드 보정',
     className: 'border-fuchsia-400/45 bg-fuchsia-950/45 text-fuchsia-50 hover:border-fuchsia-300 hover:bg-fuchsia-900/55',
     lineClassName: 'from-fuchsia-500/0 via-fuchsia-300/80 to-fuchsia-500/0',
@@ -45,6 +51,8 @@ const baseNodePresentation: Record<NodeType, Omit<NodePresentation, 'routeName' 
     description: '체력을 회복하거나 기억의 제단에 들러 장기 성장을 정리합니다. 다음 전투 전 숨을 고르는 선택입니다.',
     risk: '보상 성장 지연',
     reward: '회복 / 기억 정비',
+    riskLevel: 1,
+    rewardLevel: 1,
     stake: '생존 안정화',
     className: 'border-emerald-400/45 bg-emerald-950/45 text-emerald-50 hover:border-emerald-300 hover:bg-emerald-900/55',
     lineClassName: 'from-emerald-500/0 via-emerald-300/80 to-emerald-500/0',
@@ -56,6 +64,8 @@ const baseNodePresentation: Record<NodeType, Omit<NodePresentation, 'routeName' 
     description: '확률과 조건이 섞인 장면입니다. 큰 보상, 손실, 전투 진입이 모두 가능합니다.',
     risk: '예측 불가',
     reward: '고변동 보상',
+    riskLevel: 3,
+    rewardLevel: 3,
     stake: '런의 방향 전환',
     className: 'border-amber-300/50 bg-amber-950/45 text-amber-50 hover:border-amber-200 hover:bg-amber-900/55',
     lineClassName: 'from-amber-500/0 via-amber-200/80 to-amber-500/0',
@@ -67,6 +77,8 @@ const baseNodePresentation: Record<NodeType, Omit<NodePresentation, 'routeName' 
     description: '난도가 높지만 예비 동전과 핵심 보상을 노릴 수 있습니다. 런을 강하게 밀어붙이는 선택입니다.',
     risk: '큰 피해 가능',
     reward: '희귀 보상',
+    riskLevel: 4,
+    rewardLevel: 4,
     stake: '고위험 성장',
     className: 'border-orange-300/60 bg-orange-950/55 text-orange-50 hover:border-orange-200 hover:bg-orange-900/65',
     lineClassName: 'from-orange-500/0 via-orange-200/90 to-orange-500/0',
@@ -78,6 +90,8 @@ const baseNodePresentation: Record<NodeType, Omit<NodePresentation, 'routeName' 
     description: '층의 종착점입니다. 지금까지 만든 조합, 자원, 체력 관리가 한 번에 검증됩니다.',
     risk: '치명적 전투',
     reward: '층 돌파',
+    riskLevel: 5,
+    rewardLevel: 5,
     stake: '런 진행 관문',
     className: 'border-white/60 bg-black/80 text-white hover:border-red-200 hover:bg-gray-950',
     lineClassName: 'from-white/0 via-white/90 to-white/0',
@@ -89,6 +103,8 @@ const baseNodePresentation: Record<NodeType, Omit<NodePresentation, 'routeName' 
     description: '정체를 알 수 없는 지점입니다. 위험과 보상이 모두 가려져 있습니다.',
     risk: '불명',
     reward: '불명',
+    riskLevel: 0,
+    rewardLevel: 0,
     stake: '정보 부족',
     className: 'border-slate-400/45 bg-slate-900/55 text-slate-50 hover:border-slate-200 hover:bg-slate-800/70',
     lineClassName: 'from-slate-500/0 via-slate-200/80 to-slate-500/0',
