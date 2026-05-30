@@ -205,12 +205,19 @@ export const MenuScreen = () => {
               <span className="text-[10px] font-semibold text-slate-400">전 화면</span>
             </button>
 
-            <details className="menu-audio-disclosure mt-3 border-t border-white/10 pt-3">
-              <summary className="mb-2 flex cursor-pointer items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-100">
+            <div
+              className="mt-3 border-t border-white/10 pt-3"
+              role="group"
+              aria-labelledby="menu-audio-mix-label"
+            >
+              <div
+                id="menu-audio-mix-label"
+                className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-100"
+              >
                 <SlidersHorizontal className="h-4 w-4" />
                 사운드 믹스
-              </summary>
-              <div className="menu-audio-content grid gap-2">
+              </div>
+              <div className="grid gap-2">
                 {audioSliders.map(({ key, label }) => (
                   <label key={key} className="grid grid-cols-[3.75rem_minmax(0,1fr)_2.5rem] items-center gap-2 text-xs font-bold text-slate-300">
                     <span>{label}</span>
@@ -228,7 +235,7 @@ export const MenuScreen = () => {
                   </label>
                 ))}
               </div>
-            </details>
+            </div>
           </div>
         </section>
       </div>

@@ -5396,18 +5396,6 @@ html[data-large-text="true"] {
   color: #082f49;
 }
 
-.menu-audio-disclosure > summary {
-  list-style: none;
-}
-
-.menu-audio-disclosure > summary::-webkit-details-marker {
-  display: none;
-}
-
-.menu-audio-disclosure .menu-audio-content {
-  margin-top: 0.5rem;
-}
-
 .tutorial-coachmark-actions button:last-child {
   background: rgba(255, 255, 255, 0.065);
   border: 1px solid rgba(255, 255, 255, 0.12);
