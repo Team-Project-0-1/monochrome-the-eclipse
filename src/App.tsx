@@ -1,20 +1,22 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, lazy, Suspense } from "react";
 import { useGameStore } from './store/gameStore';
 import { GameState } from "./types";
 import { AnimatePresence } from 'framer-motion';
 
-import { MenuScreen } from './screens/MenuScreen';
-import { CharacterSelectScreen } from './screens/CharacterSelectScreen';
-import { ExplorationScreen } from './screens/ExplorationScreen';
-import { CombatScreen } from './screens/CombatScreen';
-import { ShopScreen } from './screens/ShopScreen';
-import { RestScreen } from './screens/RestScreen';
-import { EventScreen } from './screens/EventScreen';
-import { CombatRewardScreen } from './screens/CombatRewardScreen';
-import { GameOverScreen } from './screens/GameOverScreen';
-import { VictoryScreen } from './screens/VictoryScreen';
-import { StageClearScreen } from './screens/StageClearScreen';
-import { MemoryAltarScreen } from './screens/MemoryAltarScreen';
+// 화면은 진입 시에만 필요하므로 React.lazy로 코드 스플리팅한다(초기 번들 축소).
+// 각 화면은 named export라 default로 매핑해 lazy에 넘긴다.
+const MenuScreen = lazy(() => import('./screens/MenuScreen').then(m => ({ default: m.MenuScreen })));
+const CharacterSelectScreen = lazy(() => import('./screens/CharacterSelectScreen').then(m => ({ default: m.CharacterSelectScreen })));
+const ExplorationScreen = lazy(() => import('./screens/ExplorationScreen').then(m => ({ default: m.ExplorationScreen })));
+const CombatScreen = lazy(() => import('./screens/CombatScreen').then(m => ({ default: m.CombatScreen })));
+const ShopScreen = lazy(() => import('./screens/ShopScreen').then(m => ({ default: m.ShopScreen })));
+const RestScreen = lazy(() => import('./screens/RestScreen').then(m => ({ default: m.RestScreen })));
+const EventScreen = lazy(() => import('./screens/EventScreen').then(m => ({ default: m.EventScreen })));
+const CombatRewardScreen = lazy(() => import('./screens/CombatRewardScreen').then(m => ({ default: m.CombatRewardScreen })));
+const GameOverScreen = lazy(() => import('./screens/GameOverScreen').then(m => ({ default: m.GameOverScreen })));
+const VictoryScreen = lazy(() => import('./screens/VictoryScreen').then(m => ({ default: m.VictoryScreen })));
+const StageClearScreen = lazy(() => import('./screens/StageClearScreen').then(m => ({ default: m.StageClearScreen })));
+const MemoryAltarScreen = lazy(() => import('./screens/MemoryAltarScreen').then(m => ({ default: m.MemoryAltarScreen })));
 
 import InventoryPanel from './components/InventoryPanel';
 import SkillReplacementModal from './components/modals/SkillReplacementModal';
@@ -127,7 +129,9 @@ export const App: React.FC = () => {
           />
         )}
 
-        {renderGame()}
+        <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-gray-950" aria-hidden="true" />}>
+          {renderGame()}
+        </Suspense>
         <TutorialCoachmark />
 
         {player && (

@@ -6622,18 +6622,6 @@ html[data-large-text="true"] {
   padding: 0.18rem 0.32rem;
 }
 
-.enemy-action-intent-card {
-  text-align: left;
-}
-
-.enemy-action-intent-card .enemy-intent-display--panel {
-  gap: 0.52rem;
-}
-
-.enemy-action-intent-card .enemy-intent-display--panel .enemy-intent-title {
-  font-size: 1rem;
-}
-
 @media (max-width: 767px) {
   .combat-sprite-slot.enemy .combat-enemy-overhead-stack .combat-enemy-strip {
     gap: 0.32rem;
@@ -7276,9 +7264,7 @@ html[data-large-text="true"] {
 .shop-preview-summary,
 .inventory-effect-summary,
 .run-status-effect-summary,
-.skill-replacement-summary,
-.pattern-display-summary,
-.enemy-action-effect-summary {
+.skill-replacement-summary {
   margin-top: 0.42rem;
 }
 
@@ -7307,10 +7293,6 @@ html[data-large-text="true"] {
 .skill-replacement-summary .effect-chip > span,
 .skill-replacement-summary .effect-chip > b {
   font-size: 0.6rem;
-}
-
-.enemy-action-effect-summary.is-muted {
-  opacity: 0.72;
 }
 
 .inventory-modal-frame {
