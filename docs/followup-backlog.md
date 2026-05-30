@@ -146,11 +146,11 @@
 ### R-1. `CombatIntelBar` 슬림화 → 모바일 HUD 영향
 - 이번 변경에서 `combat-intel-snapshot` 3개 블록을 제거했는데, `CombatMobileHud`는 별도로 `CombatMobileOutcomeSummary`를 가지므로 영향 없을 것으로 추정. 그러나 태블릿(768~1023px)에서 어떻게 보이는지 실기기 확인 필요.
 
-### R-2. (i) 버튼 → 기존 모바일 long-press 사용자 학습
-- long-press에 익숙한 기존 유저가 헷갈릴 수 있음. 첫 전투 튜토리얼 코치마크에 "(i) 버튼으로 상세 효과 확인" 안내 추가 고려.
+### R-2. (i) 버튼 → 기존 모바일 long-press 사용자 학습 — ✅ 완료 (2026-05-30)
+- 첫 전투 코치마크 fallback에 "(i) 버튼을 누르거나, 카드를 길게 누르면…" 안내 추가(`TutorialCoachmark.tsx`). long-press에 익숙한 유저가 새 (i) 버튼을 발견하도록.
 
-### R-3. `useCombatEffectTimeline` reducedMotion 가드 → 시각적 피드백 부족
-- reducedMotion 활성 시 카메라 셰이크/플래시가 0이 됨. 피격이 발생했는지 시각적 단서가 약해질 수 있음. 대안: 화면 가장자리에 짧은 outline pulse(non-spatial).
+### R-3. `useCombatEffectTimeline` reducedMotion 가드 → 시각적 피드백 부족 — ✅ 완료 (2026-05-30)
+- reducedMotion 시 카메라 셰이크/플래시 대신 **비-공간적 화면 가장자리 펄스**(opacity-only 0.55s inset 글로우, 피격=적색/가격=시안)로 피드백 보존. `useCombatEffectTimeline`이 edgePulse 신호를 내고 `CombatScreen`이 key 기반 재생. 전역 reduced-motion 애니메이션 차단(0.01ms)에는 명시도(0,2,1) 예외로 이 펄스만 허용 — 브라우저 computed-style로 검증(펄스 0.55s, 대조군 0.01ms 유지). 커밋 2672044.
 
 ### R-4. `--color-face-*-alt` 토큰 보존
 - GDD 가이드 색(노랑/시안)을 alt 토큰으로 보존. 의도적 결정. 누가 보면 "사용 안 하는 토큰"으로 오해해 삭제할 수 있으므로 tokens.css 주석을 잘 유지.
