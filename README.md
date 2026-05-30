@@ -147,7 +147,7 @@ npm run preview      # 빌드 결과 미리보기
 ├─ components/              # 재사용 UI
 │   ├─ combat/              #   전투 HUD: IntelPanel, OutcomeRail, Sprites, MobileHud …
 │   ├─ modals/              #   SkillReplacementModal 등
-│   └─ ui/                  #   GameShell, Panel, ResponsiveCombatLayout, ScreenHeader
+│   └─ ui/                  #   GameShell, Panel, ScreenHeader
 │
 ├─ store/                   # Zustand 슬라이스 아키텍처
 │   ├─ gameStore.ts         #   슬라이스 조립 + persist + 런 복구
@@ -165,7 +165,7 @@ npm run preview      # 빌드 결과 미리보기
 │   ├─ dataMonsters.ts      #   적 + 페이즈 + 패시브
 │   ├─ dataEvents.ts        #   이벤트 시나리오
 │   ├─ dataShop.ts · dataUpgrades.ts
-│   └─ dataStages.ts · dataStage3ContentTypes.ts
+│   └─ dataStages.ts
 │
 ├─ utils/                   # 순수 로직 (UI 비의존)
 │   ├─ combatLogic.ts       #   피해/방어/상태이상 계산, 적 AI

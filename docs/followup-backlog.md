@@ -80,10 +80,11 @@
 
 ## P2 — 점진적 개선
 
-### P2-1. `index.css`의 동일 셀렉터 4~5회 재정의 정리
+### P2-1. `components.css`의 동일 셀렉터 4~5회 재정의 정리 — ⏸️ 보류 유지 (2026-05-30 재평가)
 - **현재 상태**: `.combat-bottom-hud`, `.combat-pattern-rail`, `.combat-stage` 등이 4~5회 재정의됨(코덱스가 같은 위치를 반복 패치한 흔적).
-- **작업**: 중복 셀렉터 통합 또는 모듈 단위 파일로 분할(`styles/combat.css`, `styles/exploration.css` 등).
-- **위험**: 한 번에 다 하면 회귀 위험 큼. 한 컴포넌트씩.
+- **재평가 결론(2026-05-30)**: 자동 카운트상 "중복"으로 보이는 정의의 **대부분이 실제로는 살아있는 반응형/모디파이어 변형**이다. 예) `.combat-active-skill`은 6회 등장하나 5개가 서로 다른 `@media`(max-width:767 / min-width:900~1279 / max-height:520 등 총 60개 미디어 블록) 또는 `.combat-adjust-row`·`.combat-screen` 컨텍스트 안에 있음. 바깥 동일 셀렉터의 진짜 반복(예 `.rest-choice` @5776·@8427)도 세션별로 누적된 **의도적 cascade 오버라이드**(P1-2·P2-6 등)라 병합 시 "나중 정의 우선" 순위가 역전될 수 있다.
+- **판정**: 화면별 시각 회귀 QA 없이 무인 통합은 부적합. 백로그 원안의 "한 컴포넌트씩" 방침이 옳음 → **보류 유지**. 통합한다면 단일 컴포넌트(예 `.rest-choice` 계열) 범위로 좁히고 dev 10화면 육안 + computed style 비교를 묶어 진행할 것.
+- **작업(원안)**: 중복 셀렉터 통합 또는 모듈 단위 파일로 분할(`styles/combat.css`, `styles/exploration.css` 등). → P3-1과 동일 리스크.
 
 ### P2-2. ✅ 캐릭터 선택 카드 비교 패널 (완료, 2026-05-30)
 - **완료**: 카드 클릭이 즉시 출정으로 이어지던 동선을 두 단계로 분리. 카드 hover(onMouseEnter)/focus/click은 미리보기 상태(`activeClass`)만 갱신하고, 실제 출정은 우측 상세 패널의 '이 캐릭터로 시작' 버튼이 담당. 상세 패널은 활성 캐릭터의 초상화·이름·HP·무기·시그니처·패시브·액티브 스킬을 한곳에 모아 4종 비교를 지원. 잠금 캐릭터도 미리보기로 스펙 확인이 가능하며, 이때 시작 버튼은 비활성 + 해금 힌트를 노출. 미리보기는 화면 한정 임시 상태라 스토어가 아닌 로컬 `useState`(기본값=첫 해금 캐릭터)로 두고, 활성 카드는 ring 강조 + `aria-pressed`로 표시. 카드 onClick의 `selectCharacter` 직접 호출을 제거했으므로 e2e 스모크도 두 단계(카드 클릭 → `start-with-character` 클릭)로 갱신. 검증: dev 브라우저에서 hover/focus/click 패널 전환, 잠금 카드(신제우) 시작 비활성 + '3회 이상 플레이' 힌트, WARRIOR 시작 → 탐험 진입을 확인(`aria-pressed`/active ring/`startDisabled` DOM 검증 포함). check 전체 PASS.
@@ -107,9 +108,17 @@
 
 ## P3 — 장기 정리
 
-### P3-1. `index.css` 모듈 분할
-- **현재 상태**: 단일 파일 13,000줄.
-- **작업**: `styles/base.css` (Tailwind preflight), `styles/combat.css`, `styles/exploration.css`, `styles/shop.css`, `styles/menu.css`로 분할. `tokens.css`는 이미 분리됨.
+### P3-6. ✅ 데드 코드 + 마이그레이션 footgun 정리 (완료, 2026-05-30)
+- **데드 컴포넌트/타입 8개 삭제(≈745줄)**: 저장소 전역에서 import·경로 참조가 0건임을 2차 정밀 grep(`*.ts/tsx/mjs/json`, scripts·docs 포함)으로 확인 후 제거 — `ActiveSkillButton.tsx`, `combat/CombatPortrait.tsx`, `CombatLog.tsx`, `CombatPredictionPanel.tsx`(P3-3 부수 발견), `EnemyActionPanel.tsx`, `PatternDisplay.tsx`, `ui/ResponsiveCombatLayout.tsx`, `data/dataStage3ContentTypes.ts`(Stage3 JSON 스키마 authoring scaffold였으나 어디서도 import 안 됨). 잔존 참조는 `.omx/logs/*`·`.omc/project-memory.json` 캐시뿐(기능 무관).
+- **`scripts/extract-handwritten-css.mjs` 제거(footgun)**: Tailwind 마이그레이션(C-2) 때 1회용으로 `index.css`→`components.css` 추출에 썼으나, 이후 `index.css`가 깨끗한 디렉티브 엔트리(85줄)로 정리되며 추출 원본 관계가 끊김. 지금 재실행하면 `components.css`(≈13k줄 단일 출처)를 **파괴**하므로 삭제. package.json scripts에는 원래 없었음.
+- **문서/주석 동기화**: `components.css` 헤더 주석을 "스크립트로 추출" → "이 파일이 단일 출처(hand-written), index.tsx에서 Tailwind 뒤 import로 cascade 우선"으로 정정. `README.md` 디렉터리 트리에서 삭제된 `ResponsiveCombatLayout`·`dataStage3ContentTypes.ts` 항목 제거. (P3-2·C-2의 과거 "완료" 로그는 당시 사실이라 보존; 본 항목이 그 후속 상태를 기록.)
+- **검증**: `npm run typecheck` EXIT 0(삭제 전 baseline) + 삭제 후 `npm run check` 전체 통과. 에셋 파이프라인(png=원본/webp=최적화/manifest+prune)·tailwind·vite·tsconfig는 점검 결과 **정상**이라 미변경.
+
+### P3-1. `components.css` 모듈 분할 — ⏸️ 보류 (2026-05-30 재평가, 순서 보존 리스크)
+- **현재 상태**: 손글 컴포넌트 CSS 단일 파일 `src/styles/components.css` ≈12,950줄(Tailwind preflight는 이미 `index.css` 디렉티브가 생성, `tokens.css`도 분리됨).
+- **재평가 결론(2026-05-30)**: 분할 자체는 매력적이나 **기계적 안전 작업이 아니다**. 파일에 `@media` 60개 + 세션 누적 오버라이드가 섞여 있어, prefix별(combat/exploration/shop/menu)로 규칙을 재배치하면 cascade 동순위 규칙의 "나중 정의 우선" 순서가 바뀌어 시각 회귀가 발생할 수 있다. 임의 줄 경계 분할은 순서를 보존하지만 "논리적 모듈" 목적을 달성하지 못한다.
+- **판정**: 이득(파일 가독성) 대비 회귀 리스크/QA 비용이 커 **보류**. 진행한다면 화면별로 끊어, 분할 전후 dist CSS의 규칙 순서 동일성(기계 검증) + dev 10화면 육안을 묶어야 함.
+- **작업(원안)**: `styles/base.css`, `styles/combat.css`, `styles/exploration.css`, `styles/shop.css`, `styles/menu.css`로 분할.
 
 ### P3-2. ✅ Tailwind 빌드 파이프라인 도입 (완료, 2026-05-29)
 - **완료**: tailwindcss@3 + postcss + autoprefixer 도입. `src/index.css`는 `@tailwind` 디렉티브 엔트리로 전환되어 빌드 시 유틸리티가 재생성됨. 손글 컴포넌트 CSS는 `scripts/extract-handwritten-css.mjs`로 추출해 `src/styles/components.css`로 분리, index.tsx에서 마지막에 import(cascade 손글 우선). 중복이던 `tailwind-source.css`는 삭제.
