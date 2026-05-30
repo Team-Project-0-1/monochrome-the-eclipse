@@ -174,7 +174,8 @@ const CoinDisplay: React.FC<CoinDisplayProps> = ({
 
         <span className="coin-slot-badge" aria-hidden="true">{index + 1}</span>
 
-        {state.key !== 'idle' && (
+        {/* used는 노란 테두리만으로 식별되므로 라벨 칩을 생략한다(동전 위 칩이 겹쳐 깨져 보이던 문제 회피). 상태 설명은 aria-label·title에 유지됨. */}
+        {state.key !== 'idle' && state.key !== 'used' && (
           <span
             className={state.toneClass}
             aria-hidden="true"
