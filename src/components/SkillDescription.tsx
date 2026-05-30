@@ -62,7 +62,7 @@ const SkillDescription: React.FC<{ text: string; className?: string }> = ({ text
                         onKeyDown={(e) => handleKeywordKeyDown(e, effectKey)}
                         role="button"
                         tabIndex={0}
-                        className={`${keywordStyles[part]} cursor-help underline decoration-dotted decoration-gray-500 hover:decoration-white transition-colors focus:outline-none`}
+                        className={`${keywordStyles[part]} cursor-help rounded-sm underline decoration-dotted decoration-gray-500 hover:decoration-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300`}
                     >
                         {part}
                     </span>

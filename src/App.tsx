@@ -50,6 +50,16 @@ export const App: React.FC = () => {
     });
   }, []);
 
+  // 키워드 툴팁은 Enter/Space로 열리므로 키보드 사용자가 Escape로 닫을 수 있어야 동작이 일관된다.
+  useEffect(() => {
+    if (!tooltip) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') hideTooltip();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [tooltip, hideTooltip]);
+
   useEffect(() => {
     document.documentElement.dataset.reduceMotion = gameOptions.reducedMotion ? 'true' : 'false';
     document.documentElement.dataset.highContrast = gameOptions.highContrast ? 'true' : 'false';
