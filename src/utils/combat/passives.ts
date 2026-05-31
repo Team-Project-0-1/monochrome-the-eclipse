@@ -109,13 +109,12 @@ export const applyAndLogStatus = (
     return effects;
 };
 
-export const applyDamage = (caster: Character, target: Character, damage: number, log: LogFn, state: GameStoreDraft, options: { isFixed?: boolean, ignoreDefense?: boolean, isCounterAttack?: boolean, isBleed?: boolean, isCurse?: boolean, isPursuit?: boolean } = {}): { damageDealt: number, effects: EffectPayload[] } => {
-    if (damage <= 0) return { damageDealt: 0, effects: [] };
+type DamageOptions = { isFixed?: boolean, ignoreDefense?: boolean, isCounterAttack?: boolean, isBleed?: boolean, isCurse?: boolean, isPursuit?: boolean };
 
-    let totalDamage = damage;
-    let allEffects: EffectPayload[] = [];
+// 1단계: 시전자 측 공격 보정(패시브/상태효과)을 적용해 보정된 피해량을 반환한다.
+const computeAttackModifiers = (caster: Character, target: Character, baseDamage: number, log: LogFn, state: GameStoreDraft, options: DamageOptions): number => {
+    let totalDamage = baseDamage;
 
-    // 1. Caster's attack modifiers
     if (!options.isFixed) {
       const temporaryDamageBonus = getTemporaryNumber(caster, 'bonusAtk') + getTemporaryNumber(caster, 'bonusDamage');
       if (temporaryDamageBonus > 0) {
@@ -205,7 +204,11 @@ export const applyDamage = (caster: Character, target: Character, damage: number
         totalDamage *= 2;
     }
 
-    // 2. Target's defense modifiers
+    return totalDamage;
+};
+
+// 2단계: 대상 방어/공명 방벽으로 피해를 경감하고, 최종 피해량과 사용된 방어 수치를 반환한다.
+const applyDefenseMitigation = (target: Character, totalDamage: number, log: LogFn, state: GameStoreDraft, options: DamageOptions, allEffects: EffectPayload[]): { finalDamage: number, targetDefense: number, originalTargetDefense: number } => {
     const originalTargetDefense = options.ignoreDefense ? 0 : target.temporaryDefense;
     let targetDefense = originalTargetDefense;
     const shatterStacks = target.statusEffects.SHATTER || 0;
@@ -234,6 +237,107 @@ export const applyDamage = (caster: Character, target: Character, damage: number
         }
     }
 
+    return { finalDamage, targetDefense, originalTargetDefense };
+};
+
+// 4단계: 피격 후 반응 효과(출혈/반격/ON_DAMAGE_TAKEN 패시브 등)를 처리한다.
+const applyOnDamageReactions = (caster: Character, target: Character, actualDamage: number, totalDamage: number, targetDefense: number, originalTargetDefense: number, log: LogFn, state: GameStoreDraft, options: DamageOptions, allEffects: EffectPayload[]) => {
+    const brokeDefense = !options.isFixed && originalTargetDefense > 0 && totalDamage > targetDefense;
+    if ('class' in caster && target === state.enemy && brokeDefense && hasUnlockedPassive(state, 'TANK_P_ABSORB_DEFENSE')) {
+        pushDefenseGain(caster, 3, log, allEffects, `[방어 흡수] 상대 방어를 뚫고 방어 3을 얻습니다.`);
+    }
+
+    if (hasMonsterPassive(target, 'PASSIVE_APOSTLE_ADAPTIVE_EVOLUTION')) {
+        const tempEffects = ensureTemporaryEffects(target);
+        const triggerCount = Number(tempEffects.adaptiveEvolutionTriggers?.value ?? 0);
+        if (triggerCount < 3) {
+            tempEffects.adaptiveEvolutionTriggers = { value: triggerCount + 1, duration: 999 };
+            allEffects.push(...applyAndLogStatus(target, StatusEffectType.AMPLIFY, 1, log, state, caster));
+            log(`[적응 진화] ${target.name}이(가) 피해에 적응해 증폭을 얻습니다.`, 'status');
+        }
+    }
+
+    const triggersReactiveDamage = !options.isBleed && !options.isCurse && !options.isPursuit;
+    if (triggersReactiveDamage) {
+        const bleedStacks = target.statusEffects[StatusEffectType.BLEED] || 0;
+        if (bleedStacks > 0) {
+            let bleedDamage = Math.floor(target.maxHp * 0.05);
+
+            const bleedHits = (state.player && state.unlockedPatterns.includes('ROGUE_P_WOUND_TEAR')) ? 2 : 1;
+
+            for (let i = 0; i < bleedHits; i++) {
+                if (bleedDamage > 0) {
+                    const { damageDealt, effects } = applyDamage(target, target, bleedDamage, log, state, { isFixed: true, ignoreDefense: true, isBleed: true });
+                    if(damageDealt > 0) {
+                         log(`[출혈] ${target.name}(이)가 ${damageDealt} 피해를 입었다!`, 'damage');
+                         allEffects.push(...effects);
+                         if (state.player && state.unlockedPatterns.includes('ROGUE_P_LIFE_STEAL')) {
+                             allEffects.push(...applyHeal(state.player, Math.floor(damageDealt * 0.1), log));
+                         }
+                         if (state.player && state.unlockedPatterns.includes('ROGUE_P_BLOOD_BULLET')) {
+                             allEffects.push(...applyAndLogStatus(state.player, StatusEffectType.PURSUIT, 1, log, state, state.player));
+                         }
+                         if (target === state.player && state.enemy && state.unlockedPatterns.includes('WARRIOR_PASSIVE_SHARE_BLEED_DMG')) {
+                             const sharedBleed = applyDamage(target, state.enemy, damageDealt, log, state, { isFixed: true, ignoreDefense: true, isBleed: true });
+                             allEffects.push(...sharedBleed.effects);
+                             if (sharedBleed.damageDealt > 0) {
+                                 log(`[비명 이중주] 자신의 출혈 피해가 적에게도 전이됩니다.`, 'damage');
+                             }
+                         }
+                    }
+                }
+            }
+            allEffects.push(...applyAndLogStatus(target, StatusEffectType.BLEED, -1, log, state, target));
+        }
+
+        const counterStacks = target.statusEffects[StatusEffectType.COUNTER] || 0;
+        if (counterStacks > 0 && !options.isCounterAttack) {
+            const counterDamage = counterStacks;
+            log(`[반격] ${target.name}이(가) ${caster.name}에게 ${counterDamage} 피해를 돌려줍니다!`, 'player');
+            const counterResult = applyDamage(target, caster, counterDamage, log, state, { isFixed: true, isCounterAttack: true });
+            allEffects.push(...counterResult.effects);
+            allEffects.push(...applyAndLogStatus(target, StatusEffectType.COUNTER, -counterStacks, log, state, target));
+        }
+
+        allEffects.push(...applyPassives(state, 'ON_DAMAGE_TAKEN', log, { character: target, damage: actualDamage, caster, ignoreDefense: options.ignoreDefense }));
+    }
+
+    if ('class' in target && target.currentHp <= 0 && state.unlockedPatterns.includes('MAGE_P_DEATH_RESIST') && !target.temporaryEffects?.deathResistUsed) {
+        ensureTemporaryEffects(target).deathResistUsed = { value: true, duration: 999 };
+        target.statusEffects = {};
+        target.currentHp = Math.max(1, Math.floor(target.maxHp * 0.5));
+        log(`[죽음 극복] ${target.name}이(가) 죽음에 달하는 피해를 버티고 회복합니다.`, 'heal');
+        allEffects.push({ type: 'heal', target: 'player', data: { amount: target.currentHp } });
+    }
+
+    if ('class' in caster && !options.isFixed && state.unlockedPatterns.includes('WARRIOR_PASSIVE_ATTACKS_GIVE_RESONANCE')) {
+        const tempEffects = ensureTemporaryEffects(caster);
+        const attackCount = (tempEffects.attackSkillCount?.value || 0) + 1;
+        tempEffects.attackSkillCount = { value: attackCount, duration: 999 };
+        if (attackCount % 3 === 0) {
+            allEffects.push(...applyAndLogStatus(target, StatusEffectType.RESONANCE, 5, log, state, caster));
+            log(`[자가 공명 기능] 세 번째 공격이 공명을 남깁니다.`, 'status');
+        }
+    }
+
+    if ('class' in target && hasMonsterPassive(caster, 'PASSIVE_CHIMERA_SAW_TEETH') && actualDamage >= 10) {
+        allEffects.push(...applyAndLogStatus(target, StatusEffectType.BLEED, 1, log, state, caster));
+        log(`[톱날 이빨] ${caster.name}의 큰 피해가 출혈을 남깁니다.`, 'status');
+    }
+};
+
+export const applyDamage = (caster: Character, target: Character, damage: number, log: LogFn, state: GameStoreDraft, options: DamageOptions = {}): { damageDealt: number, effects: EffectPayload[] } => {
+    if (damage <= 0) return { damageDealt: 0, effects: [] };
+
+    const allEffects: EffectPayload[] = [];
+
+    // 1. 시전자 공격 보정
+    const totalDamage = computeAttackModifiers(caster, target, damage, log, state, options);
+
+    // 2. 대상 방어 경감
+    const { finalDamage, targetDefense, originalTargetDefense } = applyDefenseMitigation(target, totalDamage, log, state, options, allEffects);
+
+    // 3. 체력에 피해 적용
     const prevHp = target.currentHp;
     target.currentHp = Math.max(0, target.currentHp - finalDamage);
     const actualDamage = prevHp - target.currentHp;
@@ -242,6 +346,7 @@ export const applyDamage = (caster: Character, target: Character, damage: number
         caster.temporaryEffects.damageDealtThisTurn = (caster.temporaryEffects.damageDealtThisTurn || 0) + actualDamage;
     }
 
+    // 4. 피격 후 반응 효과
     if (actualDamage > 0) {
         if (target.temporaryEffects) {
             target.temporaryEffects.damageTakenThisTurn = (target.temporaryEffects.damageTakenThisTurn || 0) + actualDamage;
@@ -251,89 +356,7 @@ export const applyDamage = (caster: Character, target: Character, damage: number
         allEffects.push({ type: 'damage', target: targetType, data: { amount: actualDamage } });
         log(`${caster.name}(이)가 ${target.name}에게 ${actualDamage} 피해. (${totalDamage} - ${targetDefense})`, 'damage');
 
-        const brokeDefense = !options.isFixed && originalTargetDefense > 0 && totalDamage > targetDefense;
-        if ('class' in caster && target === state.enemy && brokeDefense && hasUnlockedPassive(state, 'TANK_P_ABSORB_DEFENSE')) {
-            pushDefenseGain(caster, 3, log, allEffects, `[방어 흡수] 상대 방어를 뚫고 방어 3을 얻습니다.`);
-        }
-
-        if (hasMonsterPassive(target, 'PASSIVE_APOSTLE_ADAPTIVE_EVOLUTION')) {
-            const tempEffects = ensureTemporaryEffects(target);
-            const triggerCount = Number(tempEffects.adaptiveEvolutionTriggers?.value ?? 0);
-            if (triggerCount < 3) {
-                tempEffects.adaptiveEvolutionTriggers = { value: triggerCount + 1, duration: 999 };
-                allEffects.push(...applyAndLogStatus(target, StatusEffectType.AMPLIFY, 1, log, state, caster));
-                log(`[적응 진화] ${target.name}이(가) 피해에 적응해 증폭을 얻습니다.`, 'status');
-            }
-        }
-
-        // 3. On Damage Taken effects
-        const triggersReactiveDamage = !options.isBleed && !options.isCurse && !options.isPursuit;
-        if (triggersReactiveDamage) {
-            const bleedStacks = target.statusEffects[StatusEffectType.BLEED] || 0;
-            if (bleedStacks > 0) {
-                let bleedDamage = Math.floor(target.maxHp * 0.05);
-
-                const bleedHits = (state.player && state.unlockedPatterns.includes('ROGUE_P_WOUND_TEAR')) ? 2 : 1;
-
-                for (let i = 0; i < bleedHits; i++) {
-                    if (bleedDamage > 0) {
-                        const { damageDealt, effects } = applyDamage(target, target, bleedDamage, log, state, { isFixed: true, ignoreDefense: true, isBleed: true });
-                        if(damageDealt > 0) {
-                             log(`[출혈] ${target.name}(이)가 ${damageDealt} 피해를 입었다!`, 'damage');
-                             allEffects.push(...effects);
-                             if (state.player && state.unlockedPatterns.includes('ROGUE_P_LIFE_STEAL')) {
-                                 allEffects.push(...applyHeal(state.player, Math.floor(damageDealt * 0.1), log));
-                             }
-                             if (state.player && state.unlockedPatterns.includes('ROGUE_P_BLOOD_BULLET')) {
-                                 allEffects.push(...applyAndLogStatus(state.player, StatusEffectType.PURSUIT, 1, log, state, state.player));
-                             }
-                             if (target === state.player && state.enemy && state.unlockedPatterns.includes('WARRIOR_PASSIVE_SHARE_BLEED_DMG')) {
-                                 const sharedBleed = applyDamage(target, state.enemy, damageDealt, log, state, { isFixed: true, ignoreDefense: true, isBleed: true });
-                                 allEffects.push(...sharedBleed.effects);
-                                 if (sharedBleed.damageDealt > 0) {
-                                     log(`[비명 이중주] 자신의 출혈 피해가 적에게도 전이됩니다.`, 'damage');
-                                 }
-                             }
-                        }
-                    }
-                }
-                allEffects.push(...applyAndLogStatus(target, StatusEffectType.BLEED, -1, log, state, target));
-            }
-
-            const counterStacks = target.statusEffects[StatusEffectType.COUNTER] || 0;
-            if (counterStacks > 0 && !options.isCounterAttack) {
-                const counterDamage = counterStacks;
-                log(`[반격] ${target.name}이(가) ${caster.name}에게 ${counterDamage} 피해를 돌려줍니다!`, 'player');
-                const counterResult = applyDamage(target, caster, counterDamage, log, state, { isFixed: true, isCounterAttack: true });
-                allEffects.push(...counterResult.effects);
-                allEffects.push(...applyAndLogStatus(target, StatusEffectType.COUNTER, -counterStacks, log, state, target));
-            }
-
-            allEffects.push(...applyPassives(state, 'ON_DAMAGE_TAKEN', log, { character: target, damage: actualDamage, caster, ignoreDefense: options.ignoreDefense }));
-        }
-
-        if ('class' in target && target.currentHp <= 0 && state.unlockedPatterns.includes('MAGE_P_DEATH_RESIST') && !target.temporaryEffects?.deathResistUsed) {
-            ensureTemporaryEffects(target).deathResistUsed = { value: true, duration: 999 };
-            target.statusEffects = {};
-            target.currentHp = Math.max(1, Math.floor(target.maxHp * 0.5));
-            log(`[죽음 극복] ${target.name}이(가) 죽음에 달하는 피해를 버티고 회복합니다.`, 'heal');
-            allEffects.push({ type: 'heal', target: 'player', data: { amount: target.currentHp } });
-        }
-
-        if ('class' in caster && !options.isFixed && state.unlockedPatterns.includes('WARRIOR_PASSIVE_ATTACKS_GIVE_RESONANCE')) {
-            const tempEffects = ensureTemporaryEffects(caster);
-            const attackCount = (tempEffects.attackSkillCount?.value || 0) + 1;
-            tempEffects.attackSkillCount = { value: attackCount, duration: 999 };
-            if (attackCount % 3 === 0) {
-                allEffects.push(...applyAndLogStatus(target, StatusEffectType.RESONANCE, 5, log, state, caster));
-                log(`[자가 공명 기능] 세 번째 공격이 공명을 남깁니다.`, 'status');
-            }
-        }
-
-        if ('class' in target && hasMonsterPassive(caster, 'PASSIVE_CHIMERA_SAW_TEETH') && actualDamage >= 10) {
-            allEffects.push(...applyAndLogStatus(target, StatusEffectType.BLEED, 1, log, state, caster));
-            log(`[톱날 이빨] ${caster.name}의 큰 피해가 출혈을 남깁니다.`, 'status');
-        }
+        applyOnDamageReactions(caster, target, actualDamage, totalDamage, targetDefense, originalTargetDefense, log, state, options, allEffects);
     }
 
     return { damageDealt: actualDamage, effects: allEffects };
