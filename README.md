@@ -113,7 +113,7 @@ npm install
 npm run dev          # Vite 개발 서버 — http://127.0.0.1:5173/
 ```
 
-요구 사항: **Node 22.22.0 이상** (Browser Use / Codex 자동화 호환).
+요구 사항: **Node 22 이상 권장** (Browser Use / Codex 자동화 호환 기준 — `package.json`에 `engines`로 강제하진 않습니다).
 
 빌드와 미리보기:
 
@@ -126,32 +126,34 @@ npm run preview      # 빌드 결과 미리보기
 
 ## 프로젝트 구조
 
-저장소 루트가 곧 앱 루트입니다(2026-05-26 평탄화 이후 별도 하위 폴더 없음).
+모든 TypeScript/React 소스는 `src/` 아래에 있고, 루트에는 설정·도구·문서만 둡니다(2026-05-28 `src/` 디렉터리 도입).
 
 ```
-.
+src/
 ├─ App.tsx                  # 게임 상태(GameState)에 따라 화면 라우팅
 ├─ index.tsx                # React 엔트리
+├─ index.css                # Tailwind 디렉티브 엔트리
 ├─ types.ts                 # 핵심 enum/인터페이스 (GameState, CoinFace, PatternType, …)
 ├─ constants.ts             # 동전 수, 턴 기준 등 게임 상수
 │
 ├─ screens/                 # GameState별 최상위 화면
-│   ├─ MenuScreen.tsx
-│   ├─ CharacterSelectScreen.tsx
-│   ├─ ExplorationScreen.tsx
-│   ├─ CombatScreen.tsx
+│   ├─ MenuScreen.tsx · CharacterSelectScreen.tsx
+│   ├─ ExplorationScreen.tsx · CombatScreen.tsx
 │   ├─ EventScreen.tsx · ShopScreen.tsx · RestScreen.tsx
 │   ├─ CombatRewardScreen.tsx · MemoryAltarScreen.tsx
 │   └─ StageClearScreen.tsx · GameOverScreen.tsx · VictoryScreen.tsx
 │
 ├─ components/              # 재사용 UI
-│   ├─ combat/              #   전투 HUD: IntelPanel, OutcomeRail, Sprites, MobileHud …
-│   ├─ modals/              #   SkillReplacementModal 등
-│   └─ ui/                  #   GameShell, Panel, ScreenHeader
+│   ├─ combat/              #   전투 HUD: CombatIntelPanel · CombatOutcomeRail
+│   │                       #   · CombatSprites · CombatMobileHud · intel/ …
+│   ├─ modals/              #   SkillReplacementModal
+│   └─ ui/                  #   GameShell · Panel · ScreenHeader · ActionButton
+│
+├─ hooks/                   # 커스텀 훅 (useCombatEffectTimeline)
 │
 ├─ store/                   # Zustand 슬라이스 아키텍처
 │   ├─ gameStore.ts         #   슬라이스 조립 + persist + 런 복구
-│   └─ slices/
+│   └─ slices/              #   도메인 슬라이스 + 동거 *.test.ts
 │       ├─ metaSlice.ts        # 메타 진행도 (영구 저장)
 │       ├─ playerSlice.ts      # 플레이어, 자원, 해금 패턴
 │       ├─ explorationSlice.ts # 스테이지 노드, 라우트 시드
@@ -164,24 +166,27 @@ npm run preview      # 빌드 결과 미리보기
 │   ├─ dataSkills.ts        #   스킬 + 패턴 매핑
 │   ├─ dataMonsters.ts      #   적 + 페이즈 + 패시브
 │   ├─ dataEvents.ts        #   이벤트 시나리오
-│   ├─ dataShop.ts · dataUpgrades.ts
+│   ├─ dataShop.ts · dataUpgrades.ts · dataEffects.ts
 │   └─ dataStages.ts
 │
-├─ utils/                   # 순수 로직 (UI 비의존)
-│   ├─ combatLogic.ts       #   피해/방어/상태이상 계산, 적 AI
+├─ utils/                   # 순수 로직 (UI 비의존, *.test.ts 동거)
+│   ├─ combat/              #   전투 도메인 모듈: enemyIntent · helpers
+│   │                       #   · passives · prediction · turnFlow · types
+│   ├─ combatLogic.ts       #   combat/ 모듈 파사드 (기존 import 경로 보존)
 │   ├─ gameLogic.ts         #   동전 생성, 패턴 검출
-│   ├─ combatPresentation.ts · effectSummary.ts
-│   ├─ stageProgression.ts · eventScenes.ts
+│   ├─ combatPresentation.ts · effectSummary.ts · nodePresentation.ts
 │   ├─ contentValidation.ts #   passive/문구 무결성 검사
 │   ├─ audioManager.ts · audioManifest.ts · sound.ts
 │   └─ assetPath.ts         #   배포 base-path 분기
 │
 ├─ styles/
-│   └─ tokens.css           # 색 · 공간 · z-index · 모션 디자인 토큰 (단일 진실)
+│   ├─ tokens.css           #   색·공간·z-index·모션 디자인 토큰 (단일 진실)
+│   └─ components/          #   손글 컴포넌트 CSS 7슬라이스 (components-01..07.css)
 │
-├─ docs/                    # 제품/운영/콘텐츠 문서 (아래 "추가 문서" 참조)
-├─ scripts/                 # 검증·번들·자산 최적화 Node 스크립트
-└─ public/                  # 정적 자산 (캐릭터, 적, UI 아이콘 등)
+├─ content/                 # 콘텐츠 템플릿 (stage3/*.json)
+└─ test/                    # 테스트 픽스처·헬퍼 (fixtures.ts · store.ts)
+
+루트: docs/(문서) · scripts/(검증·번들 스크립트) · public/(정적 자산) · 설정(package.json · vite.config.ts · tailwind.config.js · tsconfig.json)
 ```
 
 ---
@@ -251,11 +256,11 @@ UI 일관성은 두 개의 단일 진실(SSoT)이 책임집니다.
 
 ## 검증 파이프라인
 
-3계층으로 분리되어 있으며, PR 머지 / 일반 빌드 / 포트폴리오 공개 빌드가 각자 다른 게이트를 통과해야 합니다.
+3계층으로 분리되어 있으며, PR 머지 / 일반 빌드 / 포트폴리오 공개 빌드가 각자 다른 게이트를 통과해야 합니다. 세 게이트 모두 **Vitest 유닛 테스트**(순수 전투·게임 로직 + 6개 스토어 슬라이스, 17개 파일 224개)를 `test:run` 단계로 포함합니다.
 
 | 명령 | 포함 단계 | 언제 |
 |---|---|---|
-| `npm run check` | text-integrity · stage3-content · stage3-assets · exploration-route · typecheck · validate:passives · check:release-assets · build · check:dist | PR 머지 전 표준 게이트 |
+| `npm run check` | text-integrity · stage3-content · stage3-assets · exploration-route · typecheck · test:run · validate:passives · check:release-assets · build · check:dist | PR 머지 전 표준 게이트 |
 | `npm run release:check` | check:asset-tooling · optimize:assets · security:audit + `check` | 일반 릴리스 빌드 |
 | `npm run prototype:check` | `release:check` + check:prototype-readiness | 포트폴리오/프로토타입 공개 빌드 |
 
@@ -263,6 +268,7 @@ UI 일관성은 두 개의 단일 진실(SSoT)이 책임집니다.
 
 ```powershell
 npm run typecheck             # TypeScript 타입체크
+npm run test:run              # Vitest 유닛 테스트 (17파일 224개)
 npm run check:text-integrity  # 한국어 카피 가이드 위반 검사
 npm run validate:passives     # 적 패시브 시나리오 검증
 npm run check:stage3-content  # 스테이지 3 콘텐츠 무결성
@@ -325,6 +331,7 @@ npm run build
 - **Zustand 5** + **Immer 10** — 슬라이스 기반 상태, persist 미들웨어
 - **Framer Motion 11** — 화면 전환/전투 이펙트 (`reducedMotion` 가드 포함)
 - **Lucide React** — 아이콘
+- **Vitest 4** — 순수 로직 + 스토어 슬라이스 유닛 테스트 224개 (CI 게이트에 편입)
 - 외부 런타임 종속 없음 · 클라이언트 단독 동작 · 키 없이 빌드 가능
 
 ---
