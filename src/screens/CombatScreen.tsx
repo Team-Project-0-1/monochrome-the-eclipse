@@ -1,13 +1,10 @@
 import React from 'react';
 import { AnimatePresence, motion, useAnimation } from 'framer-motion';
-import { ArrowRight, RotateCcw, X } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
-import CoinDisplay from '../components/CoinDisplay';
-import { ActiveSkillPill, PatternRail, ReserveCoinStrip } from '../components/combat/CombatControls';
 import { CombatIntelBar, type CombatIntelView } from '../components/combat/CombatIntelPanel';
 import { CombatMobileHud } from '../components/combat/CombatMobileHud';
-import { CombatTicker, FocusBanner } from '../components/combat/CombatReadouts';
-import { CombatOutcomeRail } from '../components/combat/CombatOutcomeRail';
+import { CombatDesktopHud } from '../components/combat/CombatDesktopHud';
+import { FocusBanner } from '../components/combat/CombatReadouts';
 import { CombatStage } from '../components/combat/CombatStage';
 import { useCombatEffectTimeline } from '../hooks/useCombatEffectTimeline';
 import { playGameSfx, playUiSound } from '../utils/sound';
@@ -297,82 +294,34 @@ export const CombatScreen: React.FC = () => {
             onExecuteTurn={handleExecuteTurn}
           />
         ) : (
-          <div className={`combat-bottom-hud combat-card-hand ${isFocusMode ? 'is-focus' : ''}`}>
-            <CombatOutcomeRail
-              player={player}
-              enemy={enemy}
-              selectedPatterns={selectedPatterns}
-              prediction={combatPrediction}
-              intent={enemyIntent}
-            />
-
-            <div className="combat-player-tools">
-              <div className="combat-player-control-row">
-                <div className={`combat-coin-row ${isFocusMode ? 'is-targeting' : ''}`}>
-                  {playerCoins.map((coin, index) => (
-                    <CoinDisplay
-                      key={coin.id}
-                      coin={coin}
-                      index={index}
-                      onClick={isFocusMode || devTestMode ? () => onCoinClick(index) : null}
-                      isUsed={usedCoinIndices.includes(index)}
-                      isSwapTarget={swapState.phase === 'revealed'}
-                      isSkillTarget={isSkillTargetingMode && !activeSkillState.selection.includes(index)}
-                      isSelectedForSkill={activeSkillState.selection.includes(index)}
-                    />
-                  ))}
-                </div>
-
-                <div className="combat-adjust-tools" aria-label="동전 조정 도구">
-                  <div className="combat-action-row combat-adjust-row">
-                    {!isFocusMode ? (
-                      <ActiveSkillPill player={player} disabled={disabledByFocus} onClick={handleUseActiveSkill} />
-                    ) : null}
-                    {devTestMode ? (
-                      <button type="button" className="combat-tool-button" onClick={handleFlipAllCoins} title="전체 동전 다시 굴리기">
-                        <RotateCcw size={17} />
-                        <span>리롤</span>
-                      </button>
-                    ) : null}
-                    {isFocusMode ? (
-                      <button type="button" className="combat-cancel-button" onClick={cancelFocus}>
-                        <X size={17} />
-                        <span>취소</span>
-                      </button>
-                    ) : null}
-                  </div>
-
-                  <ReserveCoinStrip
-                    reserveCoins={reserveCoins}
-                    isSwapping={isSwapMode}
-                    selectedIndex={swapState.reserveCoinIndex}
-                    revealedFace={swapState.revealedFace}
-                    testMode={devTestMode}
-                    onFlip={handleFlipReserveCoin}
-                    onSwap={handleInitiateSwap}
-                  />
-                </div>
-              </div>
-
-              <PatternRail
-                patterns={detectedPatterns}
-                selectedPatterns={selectedPatterns}
-                usedCoinIndices={usedCoinIndices}
-                player={player}
-                onToggle={disabledByFocus ? () => undefined : handleTogglePattern}
-              />
-            </div>
-
-            <div className="combat-command-strip">
-              <div className="combat-command-row">
-                <CombatTicker messages={combatLog} />
-                <button type="button" className="combat-execute-button" disabled={!canExecute} onClick={handleExecuteTurn} data-testid="combat-execute-button">
-                  <span>실행</span>
-                  <ArrowRight size={20} />
-                </button>
-              </div>
-            </div>
-          </div>
+          <CombatDesktopHud
+            player={player}
+            enemy={enemy}
+            playerCoins={playerCoins}
+            reserveCoins={reserveCoins}
+            detectedPatterns={detectedPatterns}
+            selectedPatterns={selectedPatterns}
+            usedCoinIndices={usedCoinIndices}
+            prediction={combatPrediction}
+            intent={enemyIntent}
+            combatLog={combatLog}
+            canExecute={canExecute}
+            isFocusMode={isFocusMode}
+            isSkillTargetingMode={isSkillTargetingMode}
+            isSwapMode={isSwapMode}
+            activeSkillState={activeSkillState}
+            swapState={swapState}
+            disabledByFocus={disabledByFocus}
+            devTestMode={devTestMode}
+            onCoinClick={onCoinClick}
+            onUseActiveSkill={handleUseActiveSkill}
+            onFlipAllCoins={handleFlipAllCoins}
+            onFlipReserveCoin={handleFlipReserveCoin}
+            onInitiateSwap={handleInitiateSwap}
+            onCancelFocus={cancelFocus}
+            onTogglePattern={handleTogglePattern}
+            onExecuteTurn={handleExecuteTurn}
+          />
         )}
       </motion.div>
     </div>
