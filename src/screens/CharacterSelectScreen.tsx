@@ -118,15 +118,10 @@ export const CharacterSelectScreen = () => {
                                             <span className="rounded-md bg-cyan-400/15 px-2 py-1 text-cyan-200">{activeSkill.name}</span>
                                         </div>
                                         {isUnlocked ? (
+                                            // 액티브 스킬 상세는 우측 패널과 중복 + 카드 아트를 가려서 제거.
+                                            // 스킬 이름은 위 칩에 있고, 정의적 패시브 한 줄만 남겨 4카드 한눈 비교를 보존한다(V-2).
                                             <div className="space-y-2 text-sm text-gray-200">
                                                 <EffectSummary text={data.innatePassives[0]} compact hideHeadline chipLimit={3} showCue cueLabel="패시브" />
-                                                <div className="hidden border-t border-white/10 pt-2 text-xs text-gray-300 sm:block">
-                                                    <div className="mb-1 flex items-center gap-1 font-bold text-cyan-200">
-                                                        <Cpu size={13} />
-                                                        액티브 스킬
-                                                    </div>
-                                                    <EffectSummary text={activeSkill.description} compact hideHeadline chipLimit={3} showCue cueLabel="용도" />
-                                                </div>
                                             </div>
                                         ) : (
                                             <p className="text-sm font-bold text-red-300">{characterUnlockHints[characterClass] || "잠김"}</p>
