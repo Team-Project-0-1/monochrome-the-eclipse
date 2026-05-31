@@ -550,6 +550,7 @@
   }
 
   .route-signal-board p,
+  .route-signal-board .route-common-brief,
   .route-signal-board .relative.z-10.mb-4 > div:last-child {
     display: none;
   }
@@ -637,6 +638,7 @@
   }
 
   .route-signal-board p,
+  .route-signal-board .route-common-brief,
   .route-signal-board .relative.z-10.mb-4 > div:last-child {
     display: none;
   }

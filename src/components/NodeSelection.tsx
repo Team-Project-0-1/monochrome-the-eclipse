@@ -43,6 +43,11 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndic
   const [selectedNode, setSelectedNode] = useState<StageNode | null>(null);
   const gameOptions = useGameStore(state => state.gameOptions);
   const availableNodeSet = new Set(availableNodeIndices);
+  // 같은 유형 노드가 2개 이상이면 카드 본문(타입 설명·감각 신호)이 전부 동일해진다.
+  // 경로 선택은 게임적으로 동일(selectNode가 적을 랜덤 풀에서 뽑고 index를 무시)하므로
+  // 공통 정보는 보드 상단에 1회만 보이고, 카드는 경로 차별 요소(이름·힌트·위험/보상)에 집중.
+  const allSameType = nodes.length > 1 && nodes.every(n => n.type === nodes[0].type);
+  const commonMeta = allSameType ? getNodePresentation(nodes[0], 0, player) : null;
 
   const handleSelect = (node: StageNode, index: number) => {
     if (selectedNode) return;
@@ -73,7 +78,9 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndic
           </div>
           <h2 className="text-2xl font-black text-white sm:text-3xl">다음 신호를 고르세요</h2>
           <p className="mt-1 max-w-2xl text-sm leading-relaxed text-slate-300">
-            같은 전투라도 경로에 따라 체력, 보상, 빌드 방향이 달라집니다. 지금 필요한 것은 생존, 성장, 변수 중 무엇인지 판단하세요.
+            {allSameType && commonMeta
+              ? `이번 층의 경로는 모두 ${commonMeta.label} 신호입니다. 위험과 보상은 같고, 진입 각도(경로 이름)만 다릅니다.`
+              : '같은 전투라도 경로에 따라 체력, 보상, 빌드 방향이 달라집니다. 지금 필요한 것은 생존, 성장, 변수 중 무엇인지 판단하세요.'}
           </p>
         </div>
         <div className="flex items-center gap-2 rounded-md border border-white/10 bg-black/30 px-3 py-2 text-xs text-slate-300">
@@ -81,6 +88,13 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndic
           선택 즉시 다음 장면으로 진입합니다.
         </div>
       </div>
+
+      {allSameType && commonMeta ? (
+        <div className="route-common-brief relative z-10 mb-4 rounded-lg border border-white/10 bg-black/25 p-3 sm:p-4">
+          <p className="text-sm leading-relaxed text-white/80">{commonMeta.description}</p>
+          <p className="mt-2 rounded-md border border-white/10 bg-black/20 px-2.5 py-2 text-xs font-semibold leading-relaxed text-white/70">{commonMeta.senseHint}</p>
+        </div>
+      ) : null}
 
       <div className="relative z-10 grid gap-3 md:grid-cols-3">
         {nodes.map((node, index) => {
@@ -128,10 +142,16 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndic
                 </div>
 
                 <h3 className="text-xl font-black text-white">{meta.label}</h3>
-                <p className="route-node-description mt-2 flex-1 text-sm leading-relaxed text-white/75">{meta.description}</p>
-                <p className="mt-3 rounded-md border border-white/10 bg-black/20 px-2.5 py-2 text-xs font-semibold leading-relaxed text-white/70">
-                  {meta.senseHint}
-                </p>
+                {allSameType ? (
+                  <div className="mt-2 flex-1" aria-hidden />
+                ) : (
+                  <p className="route-node-description mt-2 flex-1 text-sm leading-relaxed text-white/75">{meta.description}</p>
+                )}
+                {!allSameType ? (
+                  <p className="mt-3 rounded-md border border-white/10 bg-black/20 px-2.5 py-2 text-xs font-semibold leading-relaxed text-white/70">
+                    {meta.senseHint}
+                  </p>
+                ) : null}
 
                 <div className="route-node-meta mt-4 grid grid-cols-2 gap-2 text-xs">
                   <div className="rounded-md border border-white/10 bg-black/25 px-2.5 py-2">
