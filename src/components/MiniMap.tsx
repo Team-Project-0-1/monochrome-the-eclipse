@@ -3,6 +3,7 @@ import { Map } from 'lucide-react';
 import { StageNode, NodeType } from '../types';
 import NodeIcon from './NodeIcon';
 import { STAGE_TURNS } from '../constants';
+import { clamp } from '../utils/math';
 
 interface MiniMapProps {
   nodes: StageNode[][];
@@ -36,8 +37,8 @@ const MiniMap: React.FC<MiniMapProps> = ({ nodes, currentTurn, path, availableNo
   const mapHeight = MINI_MAP_VIEW.turnLabelHeight + maxNodeRows * MINI_MAP_VIEW.nodeRowHeight;
 
   const getPoint = (turn: number, nodeIndex: number) => {
-    const turnIndex = Math.min(Math.max(turn - 1, 0), turnCount - 1);
-    const rowIndex = Math.min(Math.max(nodeIndex, 0), maxNodeRows - 1);
+    const turnIndex = clamp(turn - 1, 0, turnCount - 1);
+    const rowIndex = clamp(nodeIndex, 0, maxNodeRows - 1);
 
     return {
       x: turnIndex * MINI_MAP_VIEW.turnWidth + MINI_MAP_VIEW.turnWidth / 2,

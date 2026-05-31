@@ -1,4 +1,5 @@
 import { CharacterClass, EventChoice } from '../types';
+import { clamp } from './math';
 
 export interface EventResourceState {
   echoRemnants: number;
@@ -76,7 +77,7 @@ export const getEventChoicePresentation = (
 
   const baseRate = choice.baseSuccessRate ?? 0;
   const bonus = choice.senseBonus?.[playerClass] ?? 0;
-  const successRate = Math.min(100, Math.max(0, baseRate + bonus));
+  const successRate = clamp(baseRate + bonus, 0, 100);
 
   return {
     locked,

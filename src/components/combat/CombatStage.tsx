@@ -11,6 +11,7 @@ import {
   PlayerCharacter,
 } from '../../types';
 import { assetPath } from '../../utils/assetPath';
+import { clamp } from '../../utils/math';
 import {
   characterClassTokens,
   CombatResultBanner,
@@ -52,7 +53,7 @@ export const CombatStage: React.FC<CombatStageProps> = ({
   const playerClassToken = characterClassTokens[player.class];
   const playerMotionToken = getSkillMotionToken(playerSkillEffect);
   const enemyMotionToken = getSkillMotionToken(enemySkillEffect);
-  const backgroundStage = Math.min(Math.max(currentStage, 1), 3);
+  const backgroundStage = clamp(currentStage, 1, 3);
   const backgroundPath = backgroundStage === 3
     ? 'assets/backgrounds/combat-stage-3-eclipse-sanctum.png'
     : `assets/backgrounds/combat-stage-${backgroundStage}.webp`;

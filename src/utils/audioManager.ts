@@ -8,6 +8,7 @@ import {
   VoiceKey,
   bgmPresets,
 } from './audioManifest';
+import { clamp } from './math';
 
 type WindowWithAudio = Window & typeof globalThis & {
   webkitAudioContext?: typeof AudioContext;
@@ -15,7 +16,7 @@ type WindowWithAudio = Window & typeof globalThis & {
 
 const clamp01 = (value: number | undefined, fallback: number) => {
   if (typeof value !== 'number' || Number.isNaN(value)) return fallback;
-  return Math.min(1, Math.max(0, value));
+  return clamp(value, 0, 1);
 };
 
 const toAudioGain = (value: number) => Math.pow(clamp01(value, 0), 1.6);

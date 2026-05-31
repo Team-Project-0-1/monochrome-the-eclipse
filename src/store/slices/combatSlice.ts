@@ -14,6 +14,7 @@ import { isDocumentedFinalStage } from '../../utils/stageProgression';
 import { CombatRewardChoice, createCombatRewardChoices } from '../../utils/combatRewards';
 import { playerSkillUnlocks } from '../../data/dataSkills';
 import { MAX_RESERVE_COINS } from '../../constants';
+import { clamp } from '../../utils/math';
 
 const COMBAT_RESOLUTION_DELAY_MS = 1200;
 
@@ -82,7 +83,7 @@ const getPlayerHeadsChance = (draft: GameStore): number => {
 
     const temporaryChance = player.temporaryEffects?.headsChanceUp?.value || 0;
     const passiveChance = draft.unlockedPatterns.includes('ROGUE_P_ADRENALINE') ? 0.1 : 0;
-    return Math.min(0.95, Math.max(0.05, 0.5 + temporaryChance + passiveChance));
+    return clamp(0.5 + temporaryChance + passiveChance, 0.05, 0.95);
 };
 
 const applyPlayerCoinOverrides = (draft: GameStore) => {

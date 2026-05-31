@@ -9,6 +9,7 @@ import {
   PlayerCharacter,
   StatusEffectType,
 } from '../types';
+import { clamp } from './math';
 
 export type SkillMotionToken = 'skill' | 'strike' | 'guard' | 'ultimate';
 export type CombatResultTone = 'player' | 'enemy' | 'system' | 'status';
@@ -167,7 +168,7 @@ export const getEffectBanner = (effect: CombatEffectData): CombatResultBanner | 
 
 export const hpPercent = (current: number, max: number) => {
   if (max <= 0) return 0;
-  return Math.max(0, Math.min(100, (current / max) * 100));
+  return clamp((current / max) * 100, 0, 100);
 };
 
 /**

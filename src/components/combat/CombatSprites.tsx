@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Skull } from 'lucide-react';
 import { EnemyCharacter } from '../../types';
 import { assetPath } from '../../utils/assetPath';
+import { clamp } from '../../utils/math';
 
 const SPRITE_GRID_SIZE = 4;
 const SPRITE_STEP = 100 / (SPRITE_GRID_SIZE - 1);
@@ -51,7 +52,7 @@ export const SpriteAvatar: React.FC<SpriteAvatarProps> = ({
     setFrame(0);
   }, [resolvedSrc, row]);
 
-  const safeRow = Math.max(0, Math.min(SPRITE_GRID_SIZE - 1, row));
+  const safeRow = clamp(row, 0, SPRITE_GRID_SIZE - 1);
   const glow = tone === 'enemy' ? 'rgba(248,113,113,0.36)' : 'rgba(103,232,249,0.32)';
   const spriteClassName = [
     'combat-sprite-avatar',

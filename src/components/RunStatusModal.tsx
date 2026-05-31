@@ -11,6 +11,7 @@ import { assetPath } from '../utils/assetPath';
 import { resourceIconPaths } from '../utils/resourceAssets';
 import EffectSummary from './EffectSummary';
 import { summarizeDescription } from '../utils/effectSummary';
+import { clamp } from '../utils/math';
 
 interface RunStatusModalProps {
   isOpen: boolean;
@@ -85,7 +86,7 @@ const RunStatusModal: React.FC<RunStatusModalProps> = ({ isOpen, onClose }) => {
   const statuses = Object.entries(player.statusEffects).filter(
     (entry): entry is [StatusEffectType, number] => typeof entry[1] === 'number' && entry[1] > 0,
   );
-  const hpPercent = player.maxHp > 0 ? Math.max(0, Math.min(100, (player.currentHp / player.maxHp) * 100)) : 0;
+  const hpPercent = player.maxHp > 0 ? clamp((player.currentHp / player.maxHp) * 100, 0, 100) : 0;
   const portraitSrc = player.portraitSrc ? assetPath(player.portraitSrc) : null;
 
   return (
