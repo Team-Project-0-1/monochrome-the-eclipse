@@ -15,6 +15,7 @@ import { CombatRewardChoice, createCombatRewardChoices } from '../../utils/comba
 import { playerSkillUnlocks } from '../../data/dataSkills';
 import { MAX_RESERVE_COINS } from '../../constants';
 import { clamp } from '../../utils/math';
+import { ensureTemporaryEffects } from '../../utils/combat/helpers';
 
 const COMBAT_RESOLUTION_DELAY_MS = 1200;
 
@@ -422,8 +423,7 @@ export const createCombatSlice: StateCreator<GameStore, [], [], CombatSlice> = (
       }
       draft.combatTurn += 1;
       if (draft.enemy) {
-          draft.enemy.temporaryEffects = draft.enemy.temporaryEffects || {};
-          draft.enemy.temporaryEffects.combatTurn = { value: draft.combatTurn, duration: 999 };
+          ensureTemporaryEffects(draft.enemy).combatTurn = { value: draft.combatTurn, duration: 999 };
       }
       let effects: EffectPayload[] = [];
       const log = (message: string, type: CombatLogMessage['type']) => {
@@ -480,12 +480,12 @@ export const createCombatSlice: StateCreator<GameStore, [], [], CombatSlice> = (
         }
 
         if (draft.player && draft.unlockedPatterns.includes('TANK_P_HP_TRAINING')) {
-          draft.player.temporaryEffects = draft.player.temporaryEffects || {};
-          const gained = draft.player.temporaryEffects.hpTrainingGains?.value || 0;
+          const tempEffects = ensureTemporaryEffects(draft.player);
+          const gained = tempEffects.hpTrainingGains?.value || 0;
           if (gained < 10) {
             draft.player.maxHp += 1;
             draft.player.currentHp += 1;
-            draft.player.temporaryEffects.hpTrainingGains = { value: gained + 1, duration: 999 };
+            tempEffects.hpTrainingGains = { value: gained + 1, duration: 999 };
             log(`[기초 체력 훈련] 최대 체력이 1 증가합니다.`, 'heal');
           }
         }

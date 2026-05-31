@@ -102,13 +102,18 @@ export const resolveStatusTarget = (
     return caster;
 };
 
+export const ensureTemporaryEffects = (character: Character): NonNullable<Character['temporaryEffects']> => {
+    character.temporaryEffects = character.temporaryEffects || {};
+    return character.temporaryEffects;
+};
+
 export const syncResonanceMirror = (target: Character, value: number, countdown: number | undefined) => {
-    target.temporaryEffects = target.temporaryEffects || {};
+    const tempEffects = ensureTemporaryEffects(target);
     if (value > 0) {
-        target.temporaryEffects.resonance = { name: 'resonance', value, duration: countdown ?? 999, accumulative: true };
+        tempEffects.resonance = { name: 'resonance', value, duration: countdown ?? 999, accumulative: true };
     } else {
-        delete target.temporaryEffects.resonance;
-        delete target.temporaryEffects.resonanceCountdown;
+        delete tempEffects.resonance;
+        delete tempEffects.resonanceCountdown;
     }
 };
 

@@ -19,6 +19,7 @@ import {
   resolveStatusTarget,
   syncResonanceMirror,
   applyHeal,
+  ensureTemporaryEffects,
 } from './helpers';
 import {
   applyAndLogStatus,
@@ -134,7 +135,7 @@ const handleTemporaryEffect = (
     log?: LogFn,
     source?: Character
 ) => {
-    char.temporaryEffects = char.temporaryEffects || {};
+    const effectsMap = ensureTemporaryEffects(char);
 
     if (te.name === 'resonance_clear' || te.name === 'clearResonance') {
         const resonance = getStatusValue(char, StatusEffectType.RESONANCE);
@@ -146,10 +147,10 @@ const handleTemporaryEffect = (
     }
 
     if (te.name === 'resonance_extend') {
-        const countdown = Number(char.temporaryEffects.resonanceCountdown?.value ?? char.temporaryEffects.resonance?.duration ?? 0);
+        const countdown = Number(effectsMap.resonanceCountdown?.value ?? effectsMap.resonance?.duration ?? 0);
         if (countdown > 0) {
             const nextCountdown = countdown + Number(te.value || 0);
-            char.temporaryEffects.resonanceCountdown = { value: nextCountdown, duration: 999 };
+            effectsMap.resonanceCountdown = { value: nextCountdown, duration: 999 };
             syncResonanceMirror(char, getStatusValue(char, StatusEffectType.RESONANCE), nextCountdown);
         }
         return;
@@ -160,7 +161,7 @@ const handleTemporaryEffect = (
             allEffects.push(...applyAndLogStatus(char, StatusEffectType.RESONANCE, Number(te.value || 0), log, state, source));
         }
         if (te.name === 'resonanceAndFlip') {
-            char.temporaryEffects.resonanceAndFlip = { ...te, value: true };
+            effectsMap.resonanceAndFlip = { ...te, value: true };
         }
         return;
     }
@@ -170,11 +171,11 @@ const handleTemporaryEffect = (
         storedEffect.value = Math.max(Number(te.value || 0), 0.1);
     }
 
-    if (storedEffect.accumulative && char.temporaryEffects[storedEffect.name]) {
-        char.temporaryEffects[storedEffect.name].value = (char.temporaryEffects[storedEffect.name].value || 0) + storedEffect.value;
-        char.temporaryEffects[storedEffect.name].duration = Math.max(char.temporaryEffects[storedEffect.name].duration || 0, storedEffect.duration);
+    if (storedEffect.accumulative && effectsMap[storedEffect.name]) {
+        effectsMap[storedEffect.name].value = (effectsMap[storedEffect.name].value || 0) + storedEffect.value;
+        effectsMap[storedEffect.name].duration = Math.max(effectsMap[storedEffect.name].duration || 0, storedEffect.duration);
     } else {
-        char.temporaryEffects[storedEffect.name] = storedEffect;
+        effectsMap[storedEffect.name] = storedEffect;
     }
 
     if ((storedEffect.name === 'bonusAtk' || storedEffect.name === 'bonusDef') && typeof storedEffect.value === 'number' && storedEffect.value !== 0) {
@@ -281,8 +282,7 @@ export const processStartOfTurn = (character: Character, opponent: Character, lo
 
     const resonance = character.statusEffects[StatusEffectType.RESONANCE] || 0;
     if (resonance > 0) {
-        character.temporaryEffects = character.temporaryEffects || {};
-        const countdown = Number(character.temporaryEffects.resonanceCountdown?.value ?? 2) - 1;
+        const countdown = Number(ensureTemporaryEffects(character).resonanceCountdown?.value ?? 2) - 1;
         if (countdown <= 0) {
             log(`[공명] ${character.name}에게 누적 공명 ${resonance}이(가) 폭발합니다.`, 'status');
             const { damageDealt, effects } = applyDamage(character, character, resonance, log, state, { isFixed: true, ignoreDefense: true, isCurse: true });
@@ -374,8 +374,7 @@ const processCharacterEndOfTurn = (character: Character, opponent: Character, lo
         character.statusEffects[StatusEffectType.PURSUIT] = Math.max(0, pursuit - loss);
 
         if (isPlayer && state.unlockedPatterns.includes('ROGUE_P_HUNT_FLOW') && pursuit >= 6 && !character.temporaryEffects?.huntFlowUsed?.value) {
-            character.temporaryEffects = character.temporaryEffects || {};
-            character.temporaryEffects.huntFlowQueued = { value: true, duration: 999 };
+            ensureTemporaryEffects(character).huntFlowQueued = { value: true, duration: 999 };
             log(`[사냥의 흐름] 다음 턴 뒷면 하나를 앞면으로 바꿉니다.`, 'status');
         }
     }
@@ -403,9 +402,8 @@ const processCharacterEndOfTurn = (character: Character, opponent: Character, lo
     if ((character.statusEffects[StatusEffectType.SHATTER] || 0) > 0) {
         allEffects.push(...applyAndLogStatus(character, StatusEffectType.SHATTER, -1, log, state, character));
         if (character === state.enemy && state.player && state.unlockedPatterns.includes('TANK_P_SHATTER_DEF')) {
-            state.player.temporaryEffects = state.player.temporaryEffects || {};
             const queuedDefense = getTemporaryNumber(state.player, 'gainDefenseOnTurnStart') + 3;
-            state.player.temporaryEffects.gainDefenseOnTurnStart = { value: queuedDefense, duration: 999 };
+            ensureTemporaryEffects(state.player).gainDefenseOnTurnStart = { value: queuedDefense, duration: 999 };
             log(`[불어오는 돌풍] 분쇄가 사라진 반동으로 다음 턴 방어를 준비합니다.`, 'defense');
         }
     }

@@ -21,6 +21,7 @@ import {
   hasMonsterPassive,
   syncResonanceMirror,
   applyHeal,
+  ensureTemporaryEffects,
 } from './helpers';
 import { determineEnemyIntent } from './enemyIntent';
 
@@ -31,8 +32,7 @@ const triggerMageSealDefense = (state: GameStoreDraft, log: LogFn, effects: Effe
     if (player.temporaryEffects?.mageSealDefenseUsed?.value) return;
     if (getStatusValue(enemy, StatusEffectType.SEAL) < 10) return;
 
-    player.temporaryEffects = player.temporaryEffects || {};
-    player.temporaryEffects.mageSealDefenseUsed = { value: true, duration: 999 };
+    ensureTemporaryEffects(player).mageSealDefenseUsed = { value: true, duration: 999 };
     enemy.coins.forEach(coin => {
         if (!coin.locked) coin.face = CoinFace.TAILS;
     });
@@ -80,16 +80,16 @@ export const applyAndLogStatus = (
     log(`${target.name}에게 ${effectName} ${Math.abs(actualDelta)} ${action}. (총: ${nextValue})`, 'status');
 
     if (type === StatusEffectType.RESONANCE) {
-        target.temporaryEffects = target.temporaryEffects || {};
+        const tempEffects = ensureTemporaryEffects(target);
         if (nextValue > 0 && actualDelta > 0) {
             const countdown = getResonanceDelay(state, target, source, nextValue);
-            target.temporaryEffects.resonanceCountdown = { value: countdown, duration: 999 };
+            tempEffects.resonanceCountdown = { value: countdown, duration: 999 };
             syncResonanceMirror(target, nextValue, countdown);
         }
         if (nextValue <= 0) {
             syncResonanceMirror(target, 0, undefined);
         } else if (actualDelta < 0) {
-            const countdown = Number(target.temporaryEffects.resonanceCountdown?.value ?? 2);
+            const countdown = Number(tempEffects.resonanceCountdown?.value ?? 2);
             syncResonanceMirror(target, nextValue, countdown);
         }
     }
@@ -257,10 +257,10 @@ export const applyDamage = (caster: Character, target: Character, damage: number
         }
 
         if (hasMonsterPassive(target, 'PASSIVE_APOSTLE_ADAPTIVE_EVOLUTION')) {
-            target.temporaryEffects = target.temporaryEffects || {};
-            const triggerCount = Number(target.temporaryEffects.adaptiveEvolutionTriggers?.value ?? 0);
+            const tempEffects = ensureTemporaryEffects(target);
+            const triggerCount = Number(tempEffects.adaptiveEvolutionTriggers?.value ?? 0);
             if (triggerCount < 3) {
-                target.temporaryEffects.adaptiveEvolutionTriggers = { value: triggerCount + 1, duration: 999 };
+                tempEffects.adaptiveEvolutionTriggers = { value: triggerCount + 1, duration: 999 };
                 allEffects.push(...applyAndLogStatus(target, StatusEffectType.AMPLIFY, 1, log, state, caster));
                 log(`[적응 진화] ${target.name}이(가) 피해에 적응해 증폭을 얻습니다.`, 'status');
             }
@@ -313,8 +313,7 @@ export const applyDamage = (caster: Character, target: Character, damage: number
         }
 
         if ('class' in target && target.currentHp <= 0 && state.unlockedPatterns.includes('MAGE_P_DEATH_RESIST') && !target.temporaryEffects?.deathResistUsed) {
-            target.temporaryEffects = target.temporaryEffects || {};
-            target.temporaryEffects.deathResistUsed = { value: true, duration: 999 };
+            ensureTemporaryEffects(target).deathResistUsed = { value: true, duration: 999 };
             target.statusEffects = {};
             target.currentHp = Math.max(1, Math.floor(target.maxHp * 0.5));
             log(`[죽음 극복] ${target.name}이(가) 죽음에 달하는 피해를 버티고 회복합니다.`, 'heal');
@@ -322,9 +321,9 @@ export const applyDamage = (caster: Character, target: Character, damage: number
         }
 
         if ('class' in caster && !options.isFixed && state.unlockedPatterns.includes('WARRIOR_PASSIVE_ATTACKS_GIVE_RESONANCE')) {
-            caster.temporaryEffects = caster.temporaryEffects || {};
-            const attackCount = (caster.temporaryEffects.attackSkillCount?.value || 0) + 1;
-            caster.temporaryEffects.attackSkillCount = { value: attackCount, duration: 999 };
+            const tempEffects = ensureTemporaryEffects(caster);
+            const attackCount = (tempEffects.attackSkillCount?.value || 0) + 1;
+            tempEffects.attackSkillCount = { value: attackCount, duration: 999 };
             if (attackCount % 3 === 0) {
                 allEffects.push(...applyAndLogStatus(target, StatusEffectType.RESONANCE, 5, log, state, caster));
                 log(`[자가 공명 기능] 세 번째 공격이 공명을 남깁니다.`, 'status');
@@ -435,8 +434,7 @@ export const triggerMageCurseNuke = (state: GameStoreDraft, log: LogFn, allEffec
     const curse = getStatusValue(player, StatusEffectType.CURSE);
     if (curse < 20) return;
 
-    player.temporaryEffects = player.temporaryEffects || {};
-    player.temporaryEffects.curseNukeUsed = { value: true, duration: 999 };
+    ensureTemporaryEffects(player).curseNukeUsed = { value: true, duration: 999 };
     log(`[강림] 누적된 저주가 폭발합니다.`, 'status');
     const { effects } = applyDamage(player, enemy, curse * 2, log, state, { isFixed: true, ignoreDefense: true, isCurse: true });
     allEffects.push(...effects);
@@ -448,7 +446,7 @@ export const applyInnatePassives = (state: GameStoreDraft, log: LogFn): EffectPa
     const { player, enemy } = state;
     if (!player || !enemy) return [];
     let allEffects: EffectPayload[] = [];
-    player.temporaryEffects = player.temporaryEffects || {};
+    const tempEffects = ensureTemporaryEffects(player);
 
     switch (player.class) {
         case CharacterClass.WARRIOR:
@@ -458,18 +456,18 @@ export const applyInnatePassives = (state: GameStoreDraft, log: LogFn): EffectPa
             }
             break;
         case CharacterClass.ROGUE:
-            player.temporaryEffects.firstCoinHeads = { duration: 2 };
+            tempEffects.firstCoinHeads = { duration: 2 };
             break;
         case CharacterClass.TANK:
-            player.temporaryEffects.bonusAtk = { value: 3, duration: 999 };
-            player.temporaryEffects.bonusDef = { value: 3, duration: 999 };
+            tempEffects.bonusAtk = { value: 3, duration: 999 };
+            tempEffects.bonusDef = { value: 3, duration: 999 };
             log(`${player.name}이(가) 전투 태세에 돌입하여 공격과 방어를 3 얻습니다.`, 'status');
             if (state.unlockedPatterns.includes('TANK_P_PREPARED')) {
                 allEffects.push(...applyAndLogStatus(player, StatusEffectType.COUNTER, 3, log, state, player));
             }
             break;
         case CharacterClass.MAGE:
-            player.temporaryEffects.debuffAccumulator = { damage: 0, turns: 0 };
+            tempEffects.debuffAccumulator = { damage: 0, turns: 0 };
             log(`${player.name}이(가) 5턴간 디버프 피해를 저장합니다.`, 'status');
             break;
     }
@@ -538,16 +536,16 @@ export const applyPassives = (
                     break;
                 }
                 case 'TANK_P_CHAIN_HEAL': {
-                    player.temporaryEffects = player.temporaryEffects || {};
+                    const chainHealEffects = ensureTemporaryEffects(player);
                     if ((player.statusEffects[StatusEffectType.SEAL] || 0) >= 10) {
-                        const sealTurns = (Number(player.temporaryEffects.chainSealTurns?.value) || 0) + 1;
-                        player.temporaryEffects.chainSealTurns = { value: sealTurns, duration: 999 };
-                        if (sealTurns >= 5 && !player.temporaryEffects.chainHealUsed?.value) {
-                            player.temporaryEffects.chainHealUsed = { value: true, duration: 999 };
+                        const sealTurns = (Number(chainHealEffects.chainSealTurns?.value) || 0) + 1;
+                        chainHealEffects.chainSealTurns = { value: sealTurns, duration: 999 };
+                        if (sealTurns >= 5 && !chainHealEffects.chainHealUsed?.value) {
+                            chainHealEffects.chainHealUsed = { value: true, duration: 999 };
                             pushDefenseGain(player, 5, log, allEffects, `[구속복] 봉인을 오래 유지해 방어 5를 얻습니다.`);
                         }
                     } else {
-                        delete player.temporaryEffects.chainSealTurns;
+                        delete chainHealEffects.chainSealTurns;
                     }
                     break;
                 }
@@ -599,8 +597,7 @@ export const applyPassives = (
                 allEffects.push(...applyAndLogStatus(player, StatusEffectType.AMPLIFY, 2, log, state, player));
              }
              if (id === 'TANK_P_KEEP_DEF' && payload.defense > 0) {
-                player.temporaryEffects = player.temporaryEffects || {};
-                player.temporaryEffects.keepDefenseNextTurn = { value: payload.defense, duration: 1 };
+                ensureTemporaryEffects(player).keepDefenseNextTurn = { value: payload.defense, duration: 1 };
              }
              if (id === 'TANK_P_DEF_TO_SEAL' && payload.defense > 0) {
                 allEffects.push(...applyAndLogStatus(player, StatusEffectType.SEAL, payload.defense, log, state, player));
