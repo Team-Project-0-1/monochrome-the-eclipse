@@ -98,11 +98,11 @@
 ### 스크린샷
 
 <!-- 갤러리 스크린샷은 docs/screenshots/ 폴더에 아래 파일명 그대로 저장하면 자동 표시됩니다.
-     character-select.png · exploration.png · event.png -->
+     character-select.png · exploration.png (event.png를 추가하려면 아래 표에 열 하나를 더하세요) -->
 
-| 캐릭터 선택 | 탐험 (스테이지 노드) | 이벤트 분기 |
-|---|---|---|
-| ![캐릭터 선택 — 4명의 라인업과 캐릭터별 시그니처](docs/screenshots/character-select.png) | ![탐험 — 노드 기반 스테이지 라우팅](docs/screenshots/exploration.png) | ![이벤트 — 분기 선택과 결과 패널](docs/screenshots/event.png) |
+| 캐릭터 선택 | 탐험 (스테이지 노드) |
+|---|---|
+| ![캐릭터 선택 — 4명의 라인업과 캐릭터별 시그니처](docs/screenshots/character-select.png) | ![탐험 — 노드 기반 스테이지 라우팅](docs/screenshots/exploration.png) |
 
 ---
 
