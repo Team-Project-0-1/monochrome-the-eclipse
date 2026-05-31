@@ -37,10 +37,10 @@ export const MemoryAltarScreen = () => {
       <div
         className="memory-altar-scene-bg"
         style={{
-          backgroundImage: `linear-gradient(180deg, rgba(2,6,23,0.18), rgba(2,6,23,0.92)), ${assetCssUrl('assets/backgrounds/rest-tuning-camp.png')}`,
+          backgroundImage: `linear-gradient(180deg, rgba(2,6,23,0.10), rgba(2,6,23,0.74)), ${assetCssUrl('assets/backgrounds/rest-tuning-camp.png')}`,
         }}
       />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_26%_22%,rgba(96,165,250,0.18),transparent_28%),radial-gradient(circle_at_76%_18%,rgba(168,85,247,0.14),transparent_25%),linear-gradient(180deg,rgba(15,23,42,0.94),rgba(2,6,23,1))]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_26%_22%,rgba(96,165,250,0.18),transparent_28%),radial-gradient(circle_at_76%_18%,rgba(168,85,247,0.14),transparent_25%),linear-gradient(180deg,rgba(15,23,42,0.5),rgba(2,6,23,0.82))]" />
       <div className="relative z-10 mx-auto grid min-h-[calc(100dvh-1.5rem)] w-full max-w-6xl gap-4 lg:grid-cols-[18rem_minmax(0,1fr)]">
         <aside className="grid content-start gap-3">
           <div className="memory-altar-intro rounded-lg border border-blue-300/20 bg-blue-950/18 p-4 backdrop-blur-md">

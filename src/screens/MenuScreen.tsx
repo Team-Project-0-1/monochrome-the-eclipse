@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
-import { ChevronRight, Eye, Gauge, HelpCircle, Keyboard, SlidersHorizontal, Volume2, Zap } from 'lucide-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ChevronDown, ChevronRight, Eye, Gauge, HelpCircle, Keyboard, SlidersHorizontal, Volume2, Zap } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
 import ActionButton from '../components/ui/ActionButton';
 import { assetCssUrl } from '../utils/assetPath';
@@ -38,6 +38,7 @@ export const MenuScreen = () => {
   const setGameOption = useGameStore(state => state.setGameOption);
   const toggleGameOption = useGameStore(state => state.toggleGameOption);
   const resetTutorial = useGameStore(state => state.resetTutorial);
+  const [showAudioMix, setShowAudioMix] = useState(false);
 
   const hasRun = Boolean(
     player &&
@@ -92,14 +93,13 @@ export const MenuScreen = () => {
     <div
       className="menu-screen relative min-h-screen overflow-hidden px-4 py-5 text-white scanlines sm:p-8"
       style={{
-        backgroundImage: `linear-gradient(180deg,rgba(0,0,0,0.1),rgba(0,0,0,0.5)),${assetCssUrl('assets/backgrounds/lobby-eclipse.png')},${assetCssUrl('mono.png')}`,
+        backgroundImage: `${assetCssUrl('assets/backgrounds/lobby-eclipse.png')},${assetCssUrl('mono.png')}`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundPosition: 'center 32%',
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <div className="absolute inset-0 bg-black/62" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_48%_12%,rgba(255,255,255,0.16),transparent_22%),linear-gradient(180deg,rgba(0,0,0,0.08),rgba(0,0,0,0.86))]" />
+      <div className="menu-scrim" />
 
       <div className="menu-content relative z-10">
         <section className="menu-command-panel flex max-w-4xl flex-col justify-center">
@@ -206,36 +206,40 @@ export const MenuScreen = () => {
               <span className="text-[10px] font-semibold text-slate-400">전 화면</span>
             </button>
 
-            <div
-              className="mt-3 border-t border-white/10 pt-3"
-              role="group"
-              aria-labelledby="menu-audio-mix-label"
-            >
-              <div
-                id="menu-audio-mix-label"
-                className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-100"
+            <div className="mt-3 border-t border-white/10 pt-3">
+              <button
+                type="button"
+                onClick={() => setShowAudioMix(value => !value)}
+                aria-expanded={showAudioMix}
+                aria-controls="menu-audio-mix-panel"
+                className="flex w-full items-center justify-between gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-100"
               >
-                <SlidersHorizontal className="h-4 w-4" />
-                사운드 믹스
-              </div>
-              <div className="grid gap-2">
-                {audioSliders.map(({ key, label }) => (
-                  <label key={key} className="grid grid-cols-[3.75rem_minmax(0,1fr)_2.5rem] items-center gap-2 text-xs font-bold text-slate-300">
-                    <span>{label}</span>
-                    <input
-                      type="range"
-                      min={0}
-                      max={1}
-                      step={0.05}
-                      value={gameOptions[key]}
-                      disabled={!gameOptions.soundEnabled}
-                      onChange={(event) => setGameOption(key, Number(event.target.value))}
-                      className="h-2 w-full accent-cyan-200 disabled:opacity-40"
-                    />
-                    <span className="text-right text-slate-400">{Math.round(gameOptions[key] * 100)}</span>
-                  </label>
-                ))}
-              </div>
+                <span className="inline-flex items-center gap-2">
+                  <SlidersHorizontal className="h-4 w-4" />
+                  사운드 믹스
+                </span>
+                <ChevronDown className={`h-4 w-4 transition-transform ${showAudioMix ? 'rotate-180' : ''}`} />
+              </button>
+              {showAudioMix ? (
+                <div id="menu-audio-mix-panel" className="mt-2 grid gap-2" role="group" aria-label="사운드 믹스">
+                  {audioSliders.map(({ key, label }) => (
+                    <label key={key} className="grid grid-cols-[3.75rem_minmax(0,1fr)_2.5rem] items-center gap-2 text-xs font-bold text-slate-300">
+                      <span>{label}</span>
+                      <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.05}
+                        value={gameOptions[key]}
+                        disabled={!gameOptions.soundEnabled}
+                        onChange={(event) => setGameOption(key, Number(event.target.value))}
+                        className="h-2 w-full accent-cyan-200 disabled:opacity-40"
+                      />
+                      <span className="text-right text-slate-400">{Math.round(gameOptions[key] * 100)}</span>
+                    </label>
+                  ))}
+                </div>
+              ) : null}
             </div>
           </div>
         </section>

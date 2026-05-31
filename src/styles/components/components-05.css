@@ -878,10 +878,6 @@
   padding: 1rem !important;
 }
 
-.shop-scene-bg {
-  filter: saturate(0.86) brightness(0.7);
-}
-
 .shop-content {
   display: grid;
   gap: 1rem;
@@ -952,7 +948,7 @@
 
 .event-scene-bg,
 .rest-scene-bg {
-  filter: saturate(0.82) contrast(1.04) brightness(0.68);
+  filter: contrast(1.04);
 }
 
 .event-layout {
