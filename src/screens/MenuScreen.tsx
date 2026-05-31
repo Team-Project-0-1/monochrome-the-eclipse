@@ -53,7 +53,8 @@ export const MenuScreen = () => {
       stageNodes.length > 0
     ),
   );
-  const routeStatus = hasRun ? `${currentStage}층 / ${currentTurn}턴` : APP_RELEASE_SCOPE;
+  // 신규 상태에서 SCOPE로 폴백하면 '범위' 카드와 글자까지 같아진다(V-3). 진행 중에는 위치를, 신규에는 제3의 값을 보여 세 카드를 구별.
+  const routeStatus = hasRun ? `${currentStage}층 / ${currentTurn}턴` : '진입 전';
 
   const startNewGame = useCallback(() => {
     playUiSound(gameOptions.soundEnabled, 'confirm');
