@@ -15,6 +15,40 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # E2E render-smoke. Intentionally NOT a `needs:` of deploy — it is observable
+  # only by the maintainer, so a flake here must never block the deploy pipeline.
+  # ubuntu-latest ships Google Chrome preinstalled (CHROME_BIN=google-chrome); if
+  # a future runner image drops it, add a `browser-actions/setup-chrome@v1` step
+  # before "Run E2E render-smoke". No ffmpeg needed (no video capture).
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: './package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run E2E render-smoke
+        env:
+          CHROME_BIN: google-chrome
+        run: npm run e2e
+
+      - name: Upload E2E artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-smoke
+          path: output/e2e
+          if-no-files-found: ignore
+
   deploy:
     environment:
       name: github-pages

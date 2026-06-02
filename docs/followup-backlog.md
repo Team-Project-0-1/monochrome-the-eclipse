@@ -193,6 +193,18 @@
 
 ---
 
+## 2026-06-03 — E2E 렌더-스모크 복구 + CI 배선 (release-direction 즉시우선순위 #3)
+
+> stale했던 `scripts/run-e2e-smoke.mjs`를 복구. stale 원인: (1) playwright 의존인데 미설치, (2) `localStorage` seed→reload가 `normalizeHydratedState`의 MENU 강제로 깨짐, (3) 어떤 npm script에도 미연결.
+
+- **A1 (로컬 검증 완료)**: playwright→시스템 Chrome **CDP**(의존성 0), localStorage seed→**`VITE_E2E` 전용 스토어 노출**(`window.__gameStore`/`__eventData`/`__detectPatterns`) + setState 토글(hydration MENU 강제 우회), 고정 sleep→**조건 폴링**(CI flake 방지). 도달 = 하이브리드(testid 자연 진입 menu→character→exploration→combat + 깊은 화면 shop/rest/event/memory-altar/reward setState 토글). 각 gameState 렌더 + 콘솔에러 0 + 가로 오버플로 없음을 desktop(1280)+mobile(390)으로 단언. `npm run e2e`(스크립트가 `VITE_E2E=1` 자체 빌드 후 정적 서빙+CDP, OS 무관). **로컬 결과: 10화면×2뷰포트 green(ok:true, errors:0), 3회 연속 안정.**
+- **tree-shake 보안 가드**: `scripts/check-no-e2e-hooks.mjs`가 deploy(비-E2E) `dist/assets/*.js`에 3개 훅 부재를 단언 → `check` 본체에 배선(deploy 경로=`prototype:check`→`check`). **양방향 검증 완료** — clean build PASS / VITE_E2E build에서 3훅 모두 FAIL.
+- **A2 (작성됨, 사용자 Actions 확인 필요)**: `deploy.yml`에 비-blocking `e2e` job(ubuntu, Chrome 사전설치 가정·`CHROME_BIN=google-chrome`·`--no-sandbox`). **deploy에 `needs: e2e` 미연결** — 관찰 불가 job이 배포를 막지 않게. 첫 green은 사용자가 Actions 탭에서 확인. 실패 시 Chrome 바이너리(→`browser-actions/setup-chrome`) 또는 CI 부하 wait timeout 가능성(재설계 아님). 안정화 후 `needs:`로 배포 게이트 승격 가능.
+- **deviation(공개)**: 스펙은 훅 2개였으나 `__detectPatterns` 추가 — 전투 코인이 RNG라 교차 시퀀스면 패턴 0개(칩 없음→flake) 가능. all-HEADS seed + production `detectPatterns` 재계산으로 칩 보장. 동일 게이팅 + 가드 forbidden 목록 포함.
+- **스코프**: render-smoke(최소 viable). GAME_OVER/VICTORY/STAGE_CLEAR 및 전투 끝까지 클릭스루는 범위 밖(Phase 5 full regression).
+
+---
+
 ## 회귀/리스크 (즉시 모니터)
 
 ### R-1. `CombatIntelBar` 슬림화 → 모바일 HUD 영향

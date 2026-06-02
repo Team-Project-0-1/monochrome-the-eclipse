@@ -2,6 +2,9 @@ import React from 'react';
 // FIX: Updated the import for ReactDOM to use 'react-dom/client' to access the createRoot API as required by React 18.
 import ReactDOM from 'react-dom/client';
 import { App } from './App';
+import { useGameStore } from './store/gameStore';
+import { eventData } from './data/dataEvents';
+import { detectPatterns } from './utils/gameLogic';
 import './styles/tokens.css';
 import './index.css';
 // 손글 컴포넌트 CSS는 단일 13k줄 파일을 순서 보존 슬라이스(components-01..07)로 분할한 것.
@@ -27,6 +30,17 @@ root.render(
     <App />
   </React.StrictMode>
 );
+
+// E2E-only test hooks. Gated on VITE_E2E (NOT DEV/PROD), so deploy builds — which
+// never set VITE_E2E — tree-shake this block away (verified by check-no-e2e-hooks.mjs).
+if (import.meta.env.VITE_E2E) {
+  (window as unknown as { __gameStore?: typeof useGameStore }).__gameStore = useGameStore;
+  (window as unknown as { __eventData?: typeof eventData }).__eventData = eventData;
+  // detectPatterns lets the smoke test seed a deterministic coin set (all HEADS)
+  // and recompute patterns with production logic, so a combat-pattern chip always
+  // renders — combat coins are RNG and can yield zero patterns (alternating faces).
+  (window as unknown as { __detectPatterns?: typeof detectPatterns }).__detectPatterns = detectPatterns;
+}
 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
