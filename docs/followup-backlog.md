@@ -171,6 +171,16 @@
 
 ---
 
+## 2026-06-03 — 배경 가시성 복원(ac947df) 시각 검증 완료
+
+> `ac947df` 커밋 메시지가 "shop/event/rest/memory-altar는 빌드 안전하나 시각 미검증"으로 남긴 후속을 종결. (메뉴는 6/1에 캡처 검증 완료였음.)
+
+- **결과**: 4화면(shop·rest·memory-altar·event) 헤드리스 캡처 검증 → **전부 PASS**. 배경 아트 복원(전역 `brightness` 감광·`scene-bg` `opacity:0.88`·과도 scrim 제거 효과 확인) + 본문 텍스트/라벨 가독성 유지 + 다크 판타지 톤 유지. **회귀 없음, 코드 변경 0**(ac947df가 이미 정답이었음).
+- **가독성이 유지된 구조적 이유**: 결정 UI는 불투명 카드/패널 위에 있고, 배경 위 직접 텍스트(rest·event 제목·설명)는 좌측 세로 scrim(`linear-gradient 90deg`) + 하단 scrim 0.80 + `text-slate-500`→`#cbd5e1` 대비 보정이 함께 보호. 전역 감광을 국소 scrim으로 대체한 설계라 "배경 밝히기 ↔ 텍스트 가독성" 트레이드오프를 우회.
+- **도달 방법(다음 검증 재현용)**: `localStorage` seed→reload는 `normalizeHydratedState`가 `gameState`를 MENU로 강제하고 `continueRun`이 SHOP/REST를 resume하지 않아 4화면 통일 도달 불가. → dev 전용 `window.__gameStore.setState({gameState})` 토글(hydration 우회)로 도달, EVENT는 `currentEvent: eventData.event_supplies` 동시 주입. 캡처는 시스템 Chrome `--headless` + CDP(playwright 미설치, 의존성 0). 임시 노출 코드는 검증 후 원복(작업 트리 clean, `npm run check` PASS). `scripts/run-e2e-smoke.mjs`의 seed 방식은 hydration 변경 이후 stale(어떤 npm script에도 미연결).
+
+---
+
 ## 회귀/리스크 (즉시 모니터)
 
 ### R-1. `CombatIntelBar` 슬림화 → 모바일 HUD 영향
