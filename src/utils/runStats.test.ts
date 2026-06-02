@@ -15,6 +15,7 @@ describe('summarizeRunHistory', () => {
   it('returns zeroed summary for an empty history', () => {
     const s = summarizeRunHistory([]);
     expect(s.total).toBe(0);
+    expect(s.overall).toEqual({ wins: 0, losses: 0, winrate: 0 });
     expect(s.winrateByCharacter).toEqual({});
     expect(s.deathsByStage).toEqual({});
     expect(s.lastRun).toBeNull();
@@ -31,6 +32,8 @@ describe('summarizeRunHistory', () => {
     expect(s.winrateByCharacter[CharacterClass.WARRIOR]).toEqual({ wins: 1, losses: 2, winrate: 33 });
     // MAGE: 1 win / 1 → 100%
     expect(s.winrateByCharacter[CharacterClass.MAGE]).toEqual({ wins: 1, losses: 0, winrate: 100 });
+    // overall: 2 wins / 4 runs → 50%
+    expect(s.overall).toEqual({ wins: 2, losses: 2, winrate: 50 });
   });
 
   it('reports winrate 0 (not NaN) when a character only lost', () => {

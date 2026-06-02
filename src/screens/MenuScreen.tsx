@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ChevronDown, ChevronRight, Eye, Gauge, HelpCircle, Keyboard, SlidersHorizontal, Volume2, Zap } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
 import ActionButton from '../components/ui/ActionButton';
 import { assetCssUrl } from '../utils/assetPath';
 import { playUiSound } from '../utils/sound';
+import { summarizeRunHistory } from '../utils/runStats';
 import { GameState } from '../types';
 import { APP_RELEASE_LABEL, APP_RELEASE_SCOPE } from '../constants';
 
@@ -38,6 +39,7 @@ export const MenuScreen = () => {
   const setGameOption = useGameStore(state => state.setGameOption);
   const toggleGameOption = useGameStore(state => state.toggleGameOption);
   const resetTutorial = useGameStore(state => state.resetTutorial);
+  const metaProgress = useGameStore(state => state.metaProgress);
   const [showAudioMix, setShowAudioMix] = useState(false);
 
   const hasRun = Boolean(
@@ -56,6 +58,14 @@ export const MenuScreen = () => {
   );
   // 신규 상태에서 SCOPE로 폴백하면 '범위' 카드와 글자까지 같아진다(V-3). 진행 중에는 위치를, 신규에는 제3의 값을 보여 세 카드를 구별.
   const routeStatus = hasRun ? `${currentStage}층 / ${currentTurn}턴` : '진입 전';
+  // 로비는 캐릭터 선택 전이라 전체(overall) 승률을 쓴다. totalRuns(사망만 카운트)는 의미가 달라 의도적으로 쓰지 않는다.
+  const runSummary = useMemo(() => summarizeRunHistory(metaProgress.runHistory), [metaProgress.runHistory]);
+  const topDeathStage = useMemo(() => {
+    const ranked = Object.entries(runSummary.deathsByStage)
+      .map(([stage, count]) => ({ stage: Number(stage), count: Number(count) }))
+      .sort((a, b) => b.count - a.count || a.stage - b.stage);
+    return ranked.length > 0 ? ranked[0].stage : null;
+  }, [runSummary.deathsByStage]);
 
   const startNewGame = useCallback(() => {
     playUiSound(gameOptions.soundEnabled, 'confirm');
@@ -160,6 +170,14 @@ export const MenuScreen = () => {
               </div>
             ))}
           </div>
+
+          {runSummary.total > 0 ? (
+            <div className="menu-run-stats rounded-md border border-white/8 bg-white/5 px-3 py-2 text-xs leading-relaxed text-slate-300">
+              <span className="font-bold uppercase tracking-[0.16em] text-slate-500">최근 기록</span>
+              <span className="ml-2 text-slate-200">최근 {runSummary.total}런 · 승률 {runSummary.overall.winrate}% ({runSummary.overall.wins}승 {runSummary.overall.losses}패)</span>
+              {topDeathStage !== null ? <span className="ml-2 text-slate-400">· 최다 사망 {topDeathStage}스테이지</span> : null}
+            </div>
+          ) : null}
 
           <div className="menu-accessibility-dock rounded-lg border border-cyan-300/20 bg-cyan-950/16 p-3 backdrop-blur-md">
             <div className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-100">

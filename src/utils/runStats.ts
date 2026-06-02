@@ -9,6 +9,8 @@ export interface CharacterWinrate {
 
 export interface RunHistorySummary {
   total: number;
+  /** Aggregate winrate across every character in the window (lobby uses this — no character is selected yet). */
+  overall: CharacterWinrate;
   winrateByCharacter: Partial<Record<CharacterClass, CharacterWinrate>>;
   /** Death count keyed by the stage the run ended on (deaths only). */
   deathsByStage: Record<number, number>;
@@ -34,13 +36,19 @@ export const summarizeRunHistory = (history: RunRecord[]): RunHistorySummary => 
     }
   }
 
+  const overall: CharacterWinrate = { wins: 0, losses: 0, winrate: 0 };
   for (const entry of Object.values(winrateByCharacter)) {
     const played = entry.wins + entry.losses;
     entry.winrate = played > 0 ? Math.round((entry.wins / played) * 100) : 0;
+    overall.wins += entry.wins;
+    overall.losses += entry.losses;
   }
+  const overallPlayed = overall.wins + overall.losses;
+  overall.winrate = overallPlayed > 0 ? Math.round((overall.wins / overallPlayed) * 100) : 0;
 
   return {
     total: history.length,
+    overall,
     winrateByCharacter,
     deathsByStage,
     lastRun: history.at(-1) ?? null,

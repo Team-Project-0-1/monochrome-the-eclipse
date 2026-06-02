@@ -188,7 +188,7 @@
 - **구현**: `metaProgress.runHistory: RunRecord[]`(상한 `RUN_HISTORY_CAP=50`, metaProgress가 persist되므로 자동 저장) + 공유 헬퍼 `recordRunEnd`(metaSlice). 런 종료 4곳 후킹 — 사망(`combatSlice`·`eventSlice`), 승리(`combatSlice` 보스처치 `VICTORY` guard·`explorationSlice` 턴소진 `VICTORY`). `totalRuns`는 기존 동작(사망만 카운트) **보존**, 승률은 runHistory에서 파생(`utils/runStats.ts`의 `summarizeRunHistory`). `RunResultScreen`에 패배 원인·마지막 적·캐릭터 승률·최다 사망 스테이지 표시(라벨 "최근 기록 (최대 N런)" — cap 때문에 lifetime 아님). hydration guard(`gameStore.ts`)로 텔레메트리 이전 세이브에 빈 runHistory 백필. 신규 14 테스트(각 종료 경로가 정확히 1 레코드 생성 + STAGE_CLEAR는 0 레코드 포함), `npm run check` PASS(238 tests).
 - **검증**: 코드 리뷰(후킹 4곳·`totalRuns` 보존·STAGE_CLEAR guard) + headless 캡처/DOM 텍스트로 GAME_OVER(승률 25%·패배원인 "전투·루멘 리퍼(보스)"·최다사망 2스테이지) / VICTORY(승률 50%·패배원인 미표시) 값 정확성 확인.
 - **스코프 한계(known boundary, 의도)**: hooks(슬라이스 단위 테스트)와 UI(headless 시각/DOM)를 **따로** 검증했고, "real run → death → 화면 단언"의 단일 통합 테스트는 없음(seam = 공유 `RunRecord` 타입, 양쪽에서 커버). "가벼운" 스코프에 비례적.
-- **B-2 (deferred)**: `MenuScreen` 로비 승률 표시. 이때 `totalRuns`(사망만 카운트)와 runHistory 파생 승률의 의미 차이를 UI에서 정합화할 것.
+- **B-2 (완료, 2026-06-03)**: `MenuScreen` 로비 run-strip 아래에 컴팩트 통계 라인 추가 — 최근 N런·전체 승률·최다 사망 스테이지. `summarizeRunHistory`에 `overall`(전 캐릭터 합산 승률) 추가. 로비는 캐릭터 선택 전이라 캐릭터별 대신 overall 사용. `totalRuns`(사망만 카운트)는 의미 차이 때문에 **의도적으로 미사용**(라벨 충돌 회피 — advisor가 지적한 정합화 지점 해소). 검증: headless 캡처 + DOM 텍스트(최근 4런·승률 50%(2승 2패)·최다 사망 1스테이지), `npm run check` PASS.
 - **발견된 기존 중복(P3 dedup 후보)**: `explorationSlice.handleRestChoice('heal')`의 턴 진행 블록이 `proceedToNextTurn`과 바이트 동일(VICTORY 분기 포함). 둘 다 최종 턴=`BOSS_TURN`(전 노드 보스 강제)이라 dead path → 텔레메트리 미배선. 비대칭(`proceedToNextTurn`엔 방어적 배선, 쌍둥이엔 미배선)은 의도 — dead path에 테스트 불가 코드를 넣지 않기 위함. 최종층 비-보스화 시 둘을 동기화하고, 가능하면 중복 블록을 헬퍼로 추출할 것.
 
 ---
