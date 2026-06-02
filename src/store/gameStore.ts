@@ -91,6 +91,9 @@ const normalizeHydratedState = (state: GameStore): GameStore => {
   const normalized: GameStore = {
     ...state,
     testMode: false,
+    // Backfill runHistory for saves persisted before telemetry existed; merge
+    // wholesale would otherwise leave runHistory undefined and crash on first push.
+    metaProgress: { ...initialMetaProgress, ...state.metaProgress },
     encounteredEventIds: state.encounteredEventIds ?? [],
     routeSeed: state.routeSeed ?? null,
     routeGenerationLog: state.routeGenerationLog ?? [],

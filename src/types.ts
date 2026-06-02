@@ -69,6 +69,18 @@ export enum CharacterClass {
   MAGE = "MAGE",
 }
 
+export interface RunRecord {
+  ts: number;
+  characterClass: CharacterClass;
+  outcome: 'victory' | 'death';
+  deathCause?: 'combat' | 'event';
+  finalStage: number;
+  finalTurn: number;
+  lastEnemyName?: string;
+  lastEnemyTier?: string;
+  echoCollected: number;
+}
+
 export enum StatusEffectType {
   AMPLIFY = "AMPLIFY", // 증폭: Atk up
   RESONANCE = "RESONANCE", // 공명: Damage after X turns

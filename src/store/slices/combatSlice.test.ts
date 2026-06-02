@@ -284,6 +284,73 @@ describe('combatSlice — coins & log & guards', () => {
   });
 });
 
+describe('combatSlice.executeTurn — run telemetry (recordRunEnd)', () => {
+  // The death/victory checks are pure `currentHp <= 0`, and every turn phase is
+  // gated behind isCombatOver(). Pre-setting the dying side to 0 HP makes the
+  // turn skip straight to resolution with zero RNG / ability lookup. The
+  // recordRunEnd push happens synchronously inside produce() (only the gameState
+  // flip is deferred to setTimeout), so runHistory is asserted immediately.
+  const oneSelectedPattern = () => [makeDetectedPattern({ type: PatternType.PAIR, face: CoinFace.HEADS, count: 2, indices: [0, 1] })];
+
+  it('combat death records exactly one death run (deathCause=combat, enemy captured)', () => {
+    const enemy = makeEnemy({ name: '약탈자1', tier: 'normal', currentHp: 30 });
+    store.setState({
+      player: makePlayer({ currentHp: 0, maxHp: 100 }),
+      enemy,
+      enemyIntent: determineEnemyIntent(enemy),
+      selectedPatterns: oneSelectedPattern(),
+      currentStage: 1,
+      currentTurn: 4,
+      gameState: GameState.COMBAT,
+      combatLog: [],
+      combatEffects: [],
+      unlockedPatterns: [],
+    });
+    store.getState().executeTurn();
+    const history = store.getState().metaProgress.runHistory;
+    expect(history).toHaveLength(1);
+    expect(history[0]).toMatchObject({ outcome: 'death', deathCause: 'combat', lastEnemyName: '약탈자1', lastEnemyTier: 'normal', finalStage: 1 });
+  });
+
+  it('final-stage boss kill records exactly one victory run (VICTORY branch)', () => {
+    const boss = makeEnemy({ key: 'eclipseChoir', name: '이클립스 합창단', tier: 'boss', currentHp: 0 });
+    store.setState({
+      player: makePlayer({ currentHp: 100, maxHp: 100 }),
+      enemy: boss,
+      enemyIntent: determineEnemyIntent(boss),
+      selectedPatterns: oneSelectedPattern(),
+      currentStage: 3, // isDocumentedFinalStage → VICTORY (not STAGE_CLEAR)
+      gameState: GameState.COMBAT,
+      combatLog: [],
+      combatEffects: [],
+      unlockedPatterns: [],
+    });
+    store.getState().executeTurn();
+    const history = store.getState().metaProgress.runHistory;
+    expect(history).toHaveLength(1);
+    expect(history[0]).toMatchObject({ outcome: 'victory', lastEnemyName: '이클립스 합창단', lastEnemyTier: 'boss' });
+    expect(history[0].deathCause).toBeUndefined();
+  });
+
+  it('STAGE_CLEAR boss kill (non-final stage) records NOTHING — clearing a stage is not a run end', () => {
+    const boss = makeEnemy({ key: 'lumenReaper', name: '루멘 리퍼', tier: 'boss', currentHp: 0 });
+    store.setState({
+      player: makePlayer({ currentHp: 100, maxHp: 100 }),
+      enemy: boss,
+      enemyIntent: determineEnemyIntent(boss),
+      selectedPatterns: oneSelectedPattern(),
+      currentStage: 1, // boss of stage 1 → STAGE_CLEAR
+      gameState: GameState.COMBAT,
+      combatLog: [],
+      combatEffects: [],
+      unlockedPatterns: [],
+    });
+    store.getState().executeTurn();
+    expect(store.getState().metaProgress.runHistory).toHaveLength(0);
+    expect(store.getState().pendingCombatReward?.nextState).toBe(GameState.STAGE_CLEAR);
+  });
+});
+
 describe('combatSlice.togglePattern', () => {
   const pairPattern = (indices: number[], id = 'p1') =>
     makeDetectedPattern({ id, type: PatternType.PAIR, face: CoinFace.HEADS, count: 2, indices });

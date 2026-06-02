@@ -7,6 +7,7 @@ import { eventData } from '../../data/dataEvents';
 import { generateCoins, detectPatterns } from '../../utils/gameLogic';
 import { determineEnemyIntent, calculateCombatPrediction, applyInnatePassives } from '../../utils/combatLogic';
 import { MAX_RESERVE_COINS } from '../../constants';
+import { recordRunEnd } from './metaSlice';
 
 export interface EventSlice {
   currentEvent: EventDefinition | null;
@@ -173,6 +174,7 @@ export const createEventSlice: StateCreator<GameStore, [], [], EventSlice> = (se
     if (player.currentHp <= 0) {
       set(produce((draft: GameStore) => {
         draft.metaProgress.totalRuns += 1;
+        recordRunEnd(draft, 'death', { deathCause: 'event' });
         draft.metaProgress.highestStage = Math.max(draft.metaProgress.highestStage, draft.currentStage);
         draft.currentEvent = null;
         draft.eventPhase = 'choice';

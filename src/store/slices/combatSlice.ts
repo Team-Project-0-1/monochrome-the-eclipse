@@ -16,6 +16,7 @@ import { playerSkillUnlocks } from '../../data/dataSkills';
 import { MAX_RESERVE_COINS } from '../../constants';
 import { clamp } from '../../utils/math';
 import { ensureTemporaryEffects } from '../../utils/combat/helpers';
+import { recordRunEnd } from './metaSlice';
 
 const COMBAT_RESOLUTION_DELAY_MS = 1200;
 
@@ -505,6 +506,11 @@ export const createCombatSlice: StateCreator<GameStore, [], [], CombatSlice> = (
             : GameState.STAGE_CLEAR
           : GameState.EXPLORATION;
 
+        // Telemetry: only the final-stage boss kill ends the run. STAGE_CLEAR/EXPLORATION continue.
+        if (nextState === GameState.VICTORY) {
+          recordRunEnd(draft, 'victory', { enemyName: defeatedEnemy.name, enemyTier: defeatedEnemy.tier });
+        }
+
         draft.pendingCombatReward = {
           enemyName: defeatedEnemy.name,
           enemyTier: defeatedEnemy.tier,
@@ -521,6 +527,7 @@ export const createCombatSlice: StateCreator<GameStore, [], [], CombatSlice> = (
         log(`플레이어가 쓰러졌습니다...`, 'system');
 
         draft.metaProgress.totalRuns += 1;
+        recordRunEnd(draft, 'death', { deathCause: 'combat', enemyName: draft.enemy?.name, enemyTier: draft.enemy?.tier });
         if (draft.currentStage > draft.metaProgress.highestStage) {
             draft.metaProgress.highestStage = draft.currentStage;
         }

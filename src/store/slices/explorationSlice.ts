@@ -10,6 +10,7 @@ import { STAGE_TURNS } from '../../constants';
 import { monsterData } from '../../data/dataMonsters';
 import { determineEnemyIntent, calculateCombatPrediction, applyInnatePassives } from '../../utils/combatLogic';
 import { isDocumentedFinalStage, isStagePlayable } from '../../utils/stageProgression';
+import { recordRunEnd } from './metaSlice';
 
 
 export interface ExplorationSlice {
@@ -182,6 +183,8 @@ export const createExplorationSlice: StateCreator<GameStore, [], [], Exploration
         if (nextTurn > STAGE_TURNS) {
             if (isDocumentedFinalStage(draft.currentStage)) {
                 draft.gameState = GameState.VICTORY;
+                // Telemetry: surviving the final stage's last floor ends the run as a win.
+                recordRunEnd(draft, 'victory');
             } else {
                 draft.gameState = GameState.STAGE_CLEAR;
             }
@@ -212,6 +215,10 @@ export const createExplorationSlice: StateCreator<GameStore, [], [], Exploration
             const nextTurn = draft.currentTurn + 1;
             if (nextTurn > STAGE_TURNS) {
                 if (isDocumentedFinalStage(draft.currentStage)) {
+                    // 텔레메트리 recordRunEnd 미배선(의도): 최종 턴=BOSS_TURN이라 전 노드가 보스로 강제되어
+                    // REST를 거쳐 이 VICTORY에 도달할 수 없다(dead path; proceedToNextTurn의 쌍둥이와 바이트 동일).
+                    // 도달 불가 경로에는 테스트로 정당화할 수 없는 코드를 넣지 않는다.
+                    // 최종 층을 비-보스화하면 여기와 proceedToNextTurn의 VICTORY 분기를 함께 배선할 것. (backlog: P3 dedup 후보)
                     draft.gameState = GameState.VICTORY;
                 } else {
                     draft.gameState = GameState.STAGE_CLEAR;

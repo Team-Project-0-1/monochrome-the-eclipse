@@ -58,6 +58,22 @@ describe('explorationSlice.proceedToNextTurn', () => {
     expect(store.getState().gameState).toBe(GameState.VICTORY);
   });
 
+  it('records exactly one victory run when surviving the final stage to VICTORY', () => {
+    store.setState({ player: makePlayer(), currentStage: 3, currentTurn: STAGE_TURNS });
+    store.getState().proceedToNextTurn();
+    const history = store.getState().metaProgress.runHistory;
+    expect(history).toHaveLength(1);
+    expect(history[0]).toMatchObject({ outcome: 'victory', finalStage: 3 });
+    expect(history[0].deathCause).toBeUndefined();
+  });
+
+  it('clearing a non-final stage (STAGE_CLEAR) records NOTHING', () => {
+    store.setState({ player: makePlayer(), currentStage: 1, currentTurn: STAGE_TURNS });
+    store.getState().proceedToNextTurn();
+    expect(store.getState().gameState).toBe(GameState.STAGE_CLEAR);
+    expect(store.getState().metaProgress.runHistory).toHaveLength(0);
+  });
+
   it('no-ops without a player', () => {
     store.setState({ player: null, currentTurn: 5 });
     store.getState().proceedToNextTurn();

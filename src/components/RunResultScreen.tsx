@@ -7,6 +7,14 @@ import { assetCssUrl, assetPath } from '../utils/assetPath';
 import { playUiSound } from '../utils/sound';
 import { MAX_RESERVE_COINS } from '../constants';
 import { resourceIconPaths } from '../utils/resourceAssets';
+import { summarizeRunHistory } from '../utils/runStats';
+import { formatTier } from '../utils/combatPresentation';
+import type { EnemyCharacter } from '../types';
+
+const deathCauseLabels: Record<'combat' | 'event', string> = {
+  combat: '전투',
+  event: '사건',
+};
 
 interface RunResultScreenProps {
   tone: 'stage-clear' | 'victory' | 'defeat';
@@ -69,6 +77,21 @@ const RunResultScreen: React.FC<RunResultScreenProps> = ({
   const routeText = path.length > 0
     ? path.slice(-5).map(step => `${step.turn}-${step.nodeIndex + 1}`).join(' / ')
     : '기록 없음';
+
+  const summary = React.useMemo(() => summarizeRunHistory(metaProgress.runHistory), [metaProgress.runHistory]);
+  // The hook for the just-ended run pushes a record before this screen mounts,
+  // so the latest entry is this run.
+  const thisRun = summary.lastRun;
+  const showDefeatCause = tone === 'defeat' && thisRun?.outcome === 'death';
+
+  const currentWinrate = player ? summary.winrateByCharacter[player.class] : undefined;
+  const topDeathStages = React.useMemo(
+    () => Object.entries(summary.deathsByStage)
+      .map(([stage, count]): { stage: number; count: number } => ({ stage: Number(stage), count: Number(count) }))
+      .sort((a, b) => b.count - a.count || a.stage - b.stage)
+      .slice(0, 3),
+    [summary.deathsByStage],
+  );
 
   const handlePrimary = () => {
     if (primaryDisabled) {
@@ -168,7 +191,34 @@ const RunResultScreen: React.FC<RunResultScreenProps> = ({
             <div className="mb-1 font-bold uppercase tracking-[0.16em] text-slate-500">런 기록</div>
             <p>스테이지 {currentStage} · {currentTurn}층 · 최근 경로: {routeText}</p>
             <p className="mt-1">예비 동전 {reserveCoins.length}/{MAX_RESERVE_COINS} · 최고 도달 층 {metaProgress.highestStage} · 누적 에코 {metaProgress.totalEchoCollected}</p>
+
+            {showDefeatCause ? (
+              <p className="mt-2 text-slate-200">
+                패배 원인: <strong>{thisRun?.deathCause ? deathCauseLabels[thisRun.deathCause] : '미상'}</strong>
+                {thisRun?.lastEnemyName ? (
+                  <> · 마지막 적: <strong>{thisRun.lastEnemyName}</strong>
+                    {thisRun.lastEnemyTier ? ` (${formatTier(thisRun.lastEnemyTier as EnemyCharacter['tier'])})` : ''}
+                  </>
+                ) : null}
+              </p>
+            ) : null}
           </div>
+
+          {summary.total > 0 ? (
+            <div className="mt-3 rounded-md border border-white/10 bg-black/28 p-3 text-xs leading-relaxed text-slate-300">
+              <div className="mb-1 font-bold uppercase tracking-[0.16em] text-slate-500">최근 기록 (최대 {summary.total}런)</div>
+              {currentWinrate ? (
+                <p>이 캐릭터 승률: <strong>{currentWinrate.winrate}%</strong> ({currentWinrate.wins}승 {currentWinrate.losses}패)</p>
+              ) : (
+                <p>이 캐릭터의 최근 기록이 없습니다.</p>
+              )}
+              {topDeathStages.length > 0 ? (
+                <p className="mt-1">
+                  최다 사망 스테이지: {topDeathStages.map(item => `${item.stage}스테이지 (${item.count})`).join(' · ')}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
         </Panel>
       </section>
     </main>

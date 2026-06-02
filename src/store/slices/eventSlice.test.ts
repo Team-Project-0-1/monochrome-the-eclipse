@@ -68,6 +68,20 @@ describe('eventSlice.continueEventResult', () => {
     expect(store.getState().gameState).toBe(GameState.GAME_OVER);
   });
 
+  it('records exactly one event-death run when the player dies in an event', () => {
+    store.setState({
+      player: makePlayer({ currentHp: 0 }),
+      currentStage: 2,
+      currentTurn: 6,
+      eventResultData: { type: 'outcome', payload: {} },
+    });
+    store.getState().continueEventResult();
+    const history = store.getState().metaProgress.runHistory;
+    expect(history).toHaveLength(1);
+    expect(history[0]).toMatchObject({ outcome: 'death', deathCause: 'event', finalStage: 2, finalTurn: 6 });
+    expect(history[0].lastEnemyName).toBeUndefined();
+  });
+
   it('loads a real follow-up event by id', () => {
     store.setState({
       player: makePlayer({ currentHp: 50 }),
