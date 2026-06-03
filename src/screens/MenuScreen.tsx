@@ -101,7 +101,7 @@ export const MenuScreen = () => {
 
   return (
     <div
-      className="menu-screen relative min-h-screen overflow-hidden px-4 py-5 text-white scanlines sm:p-8"
+      className="menu-screen relative min-h-screen overflow-hidden px-4 py-5 text-white sm:p-8"
       style={{
         backgroundImage: assetCssUrl('assets/backgrounds/lobby-eclipse.png'),
         backgroundSize: 'cover',

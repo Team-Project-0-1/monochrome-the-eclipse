@@ -55,7 +55,7 @@ export const RestScreen = () => {
   };
 
   return (
-    <main className="rest-screen relative min-h-screen overflow-hidden bg-gray-950 text-white scanlines">
+    <main className="rest-screen relative min-h-screen overflow-hidden bg-gray-950 text-white">
       <div
         className="rest-scene-bg"
         style={restSceneStyle}

@@ -33,7 +33,7 @@ export const MemoryAltarScreen = () => {
   };
 
   return (
-    <main className="memory-altar-screen relative min-h-screen overflow-hidden bg-gray-950 p-3 text-white scanlines sm:p-6">
+    <main className="memory-altar-screen relative min-h-screen overflow-hidden bg-gray-950 p-3 text-white sm:p-6">
       <div
         className="memory-altar-scene-bg"
         style={{

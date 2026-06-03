@@ -161,7 +161,7 @@ export const ShopScreen = () => {
   };
 
   return (
-    <main className="shop-screen relative min-h-screen overflow-hidden bg-gray-950 p-3 text-white scanlines sm:p-5">
+    <main className="shop-screen relative min-h-screen overflow-hidden bg-gray-950 p-3 text-white sm:p-5">
       <div
         className="shop-scene-bg"
         style={{

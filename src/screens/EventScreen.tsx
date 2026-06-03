@@ -86,7 +86,7 @@ export const EventScreen = () => {
   };
 
   return (
-    <main className={`event-screen event-scene ${scene.className} relative min-h-screen overflow-hidden bg-gray-950 p-3 text-white scanlines sm:p-5`}>
+    <main className={`event-screen event-scene ${scene.className} relative min-h-screen overflow-hidden bg-gray-950 p-3 text-white sm:p-5`}>
       <div
         className="event-scene-bg"
         style={sceneBackgroundStyle}

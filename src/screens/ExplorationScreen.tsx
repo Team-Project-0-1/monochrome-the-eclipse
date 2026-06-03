@@ -56,7 +56,7 @@ export const ExplorationScreen = () => {
     : '진입 전';
 
   return (
-    <div className="exploration-screen relative min-h-screen overflow-x-hidden bg-gray-950 p-3 text-white scanlines sm:p-5">
+    <div className="exploration-screen relative min-h-screen overflow-x-hidden bg-gray-950 p-3 text-white sm:p-5">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(34,211,238,0.16),transparent_30%),radial-gradient(circle_at_85%_12%,rgba(248,113,113,0.14),transparent_28%),linear-gradient(180deg,rgba(15,23,42,0.92),rgba(3,7,18,1))]" />
       <div className="pointer-events-none absolute inset-x-0 top-24 h-px bg-gradient-to-r from-transparent via-cyan-200/35 to-transparent" />
 

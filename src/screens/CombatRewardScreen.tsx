@@ -46,7 +46,7 @@ export const CombatRewardScreen = () => {
 
   return (
     <main
-      className="combat-reward-screen relative min-h-screen overflow-hidden bg-gray-950 p-4 text-white scanlines sm:p-6"
+      className="combat-reward-screen relative min-h-screen overflow-hidden bg-gray-950 p-4 text-white sm:p-6"
       style={{
         backgroundImage: `linear-gradient(180deg,rgba(2,6,23,0.18),rgba(2,6,23,0.90)),${assetCssUrl('assets/backgrounds/combat-reward-chest.png')}`,
         backgroundPosition: 'center',

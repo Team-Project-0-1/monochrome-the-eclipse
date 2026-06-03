@@ -109,7 +109,7 @@ const RunResultScreen: React.FC<RunResultScreenProps> = ({
 
   return (
     <main
-      className="relative min-h-screen overflow-hidden bg-gray-950 p-4 text-white scanlines sm:p-6"
+      className="relative min-h-screen overflow-hidden bg-gray-950 p-4 text-white sm:p-6"
       style={{
         backgroundImage: `linear-gradient(180deg,rgba(2,6,23,0.24),rgba(2,6,23,0.92)),${assetCssUrl('assets/backgrounds/lobby-eclipse.png')}`,
         backgroundPosition: 'center',
