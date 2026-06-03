@@ -3,7 +3,7 @@
 //  - RUNTIME : fetch 중 동적으로 채우는 런타임 캐시(해시 에셋 등). 무한 증가를 막기 위해
 //              RUNTIME_MAX_ENTRIES로 상한을 두고 FIFO로 가지치기한다.
 // CACHE_VERSION을 올리면 activate에서 옛 버전 캐시(이전 단일 v1 포함)가 일괄 삭제된다.
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const PRECACHE = `monochrome-precache-${CACHE_VERSION}`;
 const RUNTIME = `monochrome-runtime-${CACHE_VERSION}`;
 const RUNTIME_MAX_ENTRIES = 64;
@@ -14,7 +14,6 @@ const APP_SHELL_URLS = [
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
-  './mono.webp',
   './apple-touch-icon.png',
 ];
 

@@ -32,7 +32,6 @@ const headers = readText('public/_headers');
 const robots = readText('public/robots.txt');
 const manifestPath = requireFile('public/manifest.webmanifest');
 
-requireFile('public/mono.webp');
 requireFile('public/icon-192.png');
 requireFile('public/icon-512.png');
 requireFile('public/apple-touch-icon.png');
