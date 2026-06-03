@@ -275,3 +275,44 @@ describe('playerSlice.selectCharacter', () => {
     expect(s.reserveCoins).toHaveLength(1);
   });
 });
+
+describe('playerSlice.setSandboxPlayerState', () => {
+  beforeEach(() => {
+    store.setState({
+      player: makePlayer({ maxHp: 100, currentHp: 100 }),
+      resources: { ...zeroResources, echoRemnants: 50 },
+    });
+  });
+
+  it('sets HP and echo within range', () => {
+    store.getState().setSandboxPlayerState({ currentHp: 40, echoRemnants: 999 });
+    const s = store.getState();
+    expect(s.player!.currentHp).toBe(40);
+    expect(s.resources.echoRemnants).toBe(999);
+  });
+
+  it('clamps HP to [1, maxHp]', () => {
+    store.getState().setSandboxPlayerState({ currentHp: 0 });
+    expect(store.getState().player!.currentHp).toBe(1);
+    store.getState().setSandboxPlayerState({ currentHp: 500 });
+    expect(store.getState().player!.currentHp).toBe(100);
+  });
+
+  it('clamps echo to >= 0', () => {
+    store.getState().setSandboxPlayerState({ echoRemnants: -10 });
+    expect(store.getState().resources.echoRemnants).toBe(0);
+  });
+
+  it('leaves omitted fields untouched', () => {
+    store.getState().setSandboxPlayerState({ currentHp: 30 });
+    const s = store.getState();
+    expect(s.player!.currentHp).toBe(30);
+    expect(s.resources.echoRemnants).toBe(50); // unchanged
+  });
+
+  it('no-ops without a player', () => {
+    store.setState({ player: null });
+    store.getState().setSandboxPlayerState({ currentHp: 10, echoRemnants: 10 });
+    expect(store.getState().player).toBeNull();
+  });
+});

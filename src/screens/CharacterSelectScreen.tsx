@@ -8,6 +8,7 @@ import ScreenHeader from '../components/ui/ScreenHeader';
 import Panel from '../components/ui/Panel';
 import ActionButton from '../components/ui/ActionButton';
 import EffectSummary from '../components/EffectSummary';
+import SandboxPanel from '../components/dev/SandboxPanel';
 
 const playerClassIcons: { [key in CharacterClass]: LucideIcon } = {
   [CharacterClass.WARRIOR]: Zap,
@@ -33,6 +34,19 @@ export const CharacterSelectScreen = () => {
     const [activeClass, setActiveClass] = useState<CharacterClass>(
         () => characterClasses.find(c => metaProgress.unlockedCharacters.includes(c)) ?? characterClasses[0]
     );
+
+    // testMode에서 캐릭터를 고르면 sandbox 패널로 분기한다. selectCharacter는 즉시 EXPLORATION으로
+    // 가므로 여기서 호출하지 않고, 패널의 "전투 시작"이 selectCharacter→COMBAT을 한 번에 처리한다.
+    const [sandboxClass, setSandboxClass] = useState<CharacterClass | null>(null);
+    const sandboxActive = showTestMode && testMode && sandboxClass !== null;
+
+    const handleStart = (characterClass: CharacterClass) => {
+        if (showTestMode && testMode) {
+            setSandboxClass(characterClass);
+        } else {
+            selectCharacter(characterClass);
+        }
+    };
 
     const activeData = characterData[activeClass];
     const activeSkill = characterActiveSkills[activeClass];
@@ -60,6 +74,10 @@ export const CharacterSelectScreen = () => {
                 }
             />
 
+            {sandboxActive ? (
+                <SandboxPanel sandboxClass={sandboxClass!} onBack={() => setSandboxClass(null)} />
+            ) : (
+            <>
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     {Object.entries(characterData).map(([classType, data]) => {
@@ -181,10 +199,10 @@ export const CharacterSelectScreen = () => {
                                 <ActionButton
                                     variant="primary"
                                     className="w-full"
-                                    onClick={() => selectCharacter(activeClass)}
+                                    onClick={() => handleStart(activeClass)}
                                     data-testid="start-with-character"
                                 >
-                                    이 캐릭터로 시작
+                                    {showTestMode && testMode ? '이 캐릭터로 시험' : '이 캐릭터로 시작'}
                                 </ActionButton>
                             ) : (
                                 <div className="space-y-2">
@@ -245,6 +263,8 @@ export const CharacterSelectScreen = () => {
                     </div>
                 </div>
             </Panel>
+            </>
+            )}
         </GameShell>
     );
 };

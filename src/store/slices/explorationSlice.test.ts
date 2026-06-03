@@ -137,3 +137,24 @@ describe('explorationSlice.selectNode', () => {
     expect(store.getState().gameState).toBe(GameState.MENU); // unchanged initial state
   });
 });
+
+describe('explorationSlice.startSandboxCombat', () => {
+  it('summons the exact monster requested and enters combat', () => {
+    store.setState({ player: makePlayer() });
+    store.getState().startSandboxCombat('chimera');
+    const s = store.getState();
+    expect(s.gameState).toBe(GameState.COMBAT);
+    expect(s.enemy).not.toBeNull();
+    expect(s.enemy!.key).toBe('chimera');
+    expect(s.enemy!.currentHp).toBe(220); // chimera template HP
+    expect(s.playerCoins.length).toBeGreaterThan(0);
+    expect(s.enemyIntent).not.toBeNull();
+  });
+
+  it('no-ops without a player', () => {
+    store.setState({ player: null });
+    store.getState().startSandboxCombat('marauder1');
+    expect(store.getState().gameState).toBe(GameState.MENU); // unchanged
+    expect(store.getState().enemy).toBeNull();
+  });
+});

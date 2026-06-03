@@ -12,6 +12,76 @@ import { determineEnemyIntent, calculateCombatPrediction, applyInnatePassives } 
 import { isDocumentedFinalStage, isStagePlayable } from '../../utils/stageProgression';
 import { recordRunEnd } from './metaSlice';
 
+// Initializes a combat encounter for an already-resolved monsterKey: builds the
+// enemy from its template, resets transient combat state, applies passives, and
+// computes the opening prediction. Decoupling this from monster *selection* lets
+// both the normal route (selectNode picks via stage RNG) and the DEV sandbox
+// (startSandboxCombat picks directly) summon any enemy through one code path.
+const beginCombat = (draft: GameStore, monsterKey: string) => {
+    const player = draft.player;
+    if (!player) return;
+
+    player.activeSkillCooldown = 0;
+
+    const monsterTemplate = monsterData[monsterKey];
+    const enemyCoins = generateCoins();
+
+    const enemy: EnemyCharacter = {
+        key: monsterKey,
+        name: monsterTemplate.name,
+        currentHp: monsterTemplate.hp,
+        maxHp: monsterTemplate.hp,
+        baseAtk: monsterTemplate.baseAtk,
+        baseDef: monsterTemplate.baseDef,
+        temporaryDefense: 0,
+        statusEffects: {},
+        assetKey: monsterTemplate.assetKey ?? monsterKey,
+        portraitSrc: monsterTemplate.portraitSrc,
+        spriteSheetSrc: monsterTemplate.spriteSheetSrc,
+        spriteFrameSize: monsterTemplate.spriteFrameSize,
+        spriteAnimations: monsterTemplate.spriteAnimations,
+        coins: enemyCoins,
+        detectedPatterns: detectPatterns(enemyCoins),
+        temporaryEffects: {},
+        tier: monsterTemplate.tier,
+    };
+
+    draft.enemy = enemy;
+
+    draft.combatLog = [];
+    draft.combatTurn = 1;
+    draft.pendingCombatReward = null;
+    draft.selectedPatterns = [];
+    draft.usedCoinIndices = [];
+    draft.activeSkillState = { phase: 'idle', selection: [] };
+
+    const log = (message: string, type: CombatLogMessage['type']) => {
+      draft.combatLog.push({ id: Date.now() + Math.random(), turn: draft.combatTurn, message, type });
+    };
+
+    log(`--- 전투 시작 ---`, 'system');
+    log(`${enemy.name} 등장!`, 'system');
+
+    // REFACTOR: Generate a fresh set of coins for EVERY combat encounter.
+    draft.playerCoins = generateCoins();
+
+    // Apply innate passives at the start of every combat.
+    applyInnatePassives(draft, log);
+
+    // Specifically apply Rogue's passive to the newly generated coins.
+    if (player.class === CharacterClass.ROGUE) {
+        if (draft.playerCoins.length > 0) {
+            draft.playerCoins[0].face = CoinFace.HEADS;
+        }
+    }
+
+    draft.gameState = GameState.COMBAT;
+
+    // With the definitive coin state set, calculate patterns and predictions.
+    draft.detectedPatterns = detectPatterns(draft.playerCoins);
+    draft.enemyIntent = determineEnemyIntent(enemy);
+    draft.combatPrediction = calculateCombatPrediction(player, enemy, draft.selectedPatterns, draft.enemyIntent, draft.playerCoins, draft.unlockedPatterns);
+};
 
 export interface ExplorationSlice {
   currentStage: number;
@@ -22,6 +92,7 @@ export interface ExplorationSlice {
   path: { turn: number; nodeIndex: number; nodeId: string; }[];
   startStage: (stageNumber: number) => void;
   selectNode: (node: StageNode, nodeIndex: number) => void;
+  startSandboxCombat: (monsterKey: string) => void;
   proceedToNextTurn: () => void;
   handleRestChoice: (choice: 'heal' | 'memory_altar') => void;
 }
@@ -78,69 +149,7 @@ export const createExplorationSlice: StateCreator<GameStore, [], [], Exploration
                 if (node.type === NodeType.MINIBOSS) monsterKey = stageInfo.miniboss;
                 if (node.type === NodeType.BOSS) monsterKey = stageInfo.boss;
 
-                const player = draft.player;
-                if (!player) return;
-
-                player.activeSkillCooldown = 0;
-
-                const monsterTemplate = monsterData[monsterKey];
-                const enemyCoins = generateCoins();
-
-                const enemy: EnemyCharacter = {
-                    key: monsterKey,
-                    name: monsterTemplate.name,
-                    currentHp: monsterTemplate.hp,
-                    maxHp: monsterTemplate.hp,
-                    baseAtk: monsterTemplate.baseAtk,
-                    baseDef: monsterTemplate.baseDef,
-                    temporaryDefense: 0,
-                    statusEffects: {},
-                    assetKey: monsterTemplate.assetKey ?? monsterKey,
-                    portraitSrc: monsterTemplate.portraitSrc,
-                    spriteSheetSrc: monsterTemplate.spriteSheetSrc,
-                    spriteFrameSize: monsterTemplate.spriteFrameSize,
-                    spriteAnimations: monsterTemplate.spriteAnimations,
-                    coins: enemyCoins,
-                    detectedPatterns: detectPatterns(enemyCoins),
-                    temporaryEffects: {},
-                    tier: monsterTemplate.tier,
-                };
-
-                draft.enemy = enemy;
-
-                draft.combatLog = [];
-                draft.combatTurn = 1;
-                draft.pendingCombatReward = null;
-                draft.selectedPatterns = [];
-                draft.usedCoinIndices = [];
-                draft.activeSkillState = { phase: 'idle', selection: [] };
-
-                const log = (message: string, type: CombatLogMessage['type']) => {
-                  draft.combatLog.push({ id: Date.now() + Math.random(), turn: draft.combatTurn, message, type });
-                };
-
-                log(`--- 전투 시작 ---`, 'system');
-                log(`${enemy.name} 등장!`, 'system');
-
-                // REFACTOR: Generate a fresh set of coins for EVERY combat encounter.
-                draft.playerCoins = generateCoins();
-
-                // Apply innate passives at the start of every combat.
-                applyInnatePassives(draft, log);
-
-                // Specifically apply Rogue's passive to the newly generated coins.
-                if (player.class === CharacterClass.ROGUE) {
-                    if (draft.playerCoins.length > 0) {
-                        draft.playerCoins[0].face = CoinFace.HEADS;
-                    }
-                }
-
-                draft.gameState = GameState.COMBAT;
-
-                // With the definitive coin state set, calculate patterns and predictions.
-                draft.detectedPatterns = detectPatterns(draft.playerCoins);
-                draft.enemyIntent = determineEnemyIntent(enemy);
-                draft.combatPrediction = calculateCombatPrediction(player, enemy, draft.selectedPatterns, draft.enemyIntent, draft.playerCoins, draft.unlockedPatterns);
+                beginCombat(draft, monsterKey);
                 break;
             }
             case NodeType.SHOP:
@@ -172,6 +181,13 @@ export const createExplorationSlice: StateCreator<GameStore, [], [], Exploration
                 break;
             }
         }
+    }));
+  },
+  startSandboxCombat: (monsterKey) => {
+    // DEV 전용 밸런스 sandbox: 노드/스테이지 RNG를 건너뛰고 지정한 적으로 즉시 전투를 연다.
+    set(produce((draft: GameStore) => {
+        if (!draft.player) return;
+        beginCombat(draft, monsterKey);
     }));
   },
   proceedToNextTurn: () => {

@@ -17,6 +17,7 @@ export interface PlayerSlice {
   reserveCoins: Coin[];
   reserveCoinShopCost: number;
   selectCharacter: (characterClass: CharacterClass) => void;
+  setSandboxPlayerState: (next: { currentHp?: number; echoRemnants?: number }) => void;
   handlePurchase: (item: ShopItem | (PatternUpgradeDefinition & { type: 'upgrade' })) => void;
   handleSkillUpgradePurchase: (skill: SkillUpgradeDefinition) => void;
   handleMemoryUpgrade: (upgradeType: MemoryUpgradeType) => void;
@@ -96,6 +97,18 @@ export const createPlayerSlice: StateCreator<GameStore, [], [], PlayerSlice> = (
         draft.tooltip = null;
 
         draft.gameState = GameState.EXPLORATION;
+    }));
+  },
+  setSandboxPlayerState: (next) => {
+    // DEV 전용 밸런스 sandbox: 플레이어 HP와 에코 잔재를 직접 세팅한다(클램프 포함).
+    set(produce((draft: GameStore) => {
+        if (!draft.player) return;
+        if (next.currentHp !== undefined) {
+            draft.player.currentHp = Math.max(1, Math.min(draft.player.maxHp, Math.floor(next.currentHp)));
+        }
+        if (next.echoRemnants !== undefined) {
+            draft.resources.echoRemnants = Math.max(0, Math.floor(next.echoRemnants));
+        }
     }));
   },
   handlePurchase: (item) => {
