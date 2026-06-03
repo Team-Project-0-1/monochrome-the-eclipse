@@ -32,28 +32,6 @@
     font-family: 'Orbitron', sans-serif;
   }
 
-  .scanlines::before {
-    animation: scan 10s linear infinite;
-    background-image: linear-gradient(
-      rgba(255, 255, 255, 0.03) 50%,
-      rgba(0, 0, 0, 0.05) 50%
-    );
-    background-size: 100% 4px;
-    content: "";
-    height: 100%;
-    left: 0;
-    pointer-events: none;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 1;
-  }
-
-  @keyframes scan {
-    0% { background-position: 0 0; }
-    100% { background-position: 0 -100px; }
-  }
-
   .perspective {
     perspective: 1000px;
   }
