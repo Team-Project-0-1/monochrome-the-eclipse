@@ -68,6 +68,23 @@
 - 신규 액션 2개 단위 테스트(238 → +N).
 - 빌드/타입/dist 가드는 `check` 체인이 강제.
 
+## v2 — 패시브·스킬 사전 부여 (A안 선택, 구현)
+
+A안 위에 SandboxPanel을 확장. 선택한 캐릭터 클래스 기준으로:
+- **패시브(`unlockedPatterns`)**: 클래스별 패시브 패턴 후보 전체를 다중선택 토글로 부여(전투 시 `enemyIntent` 등에서 효과 적용).
+- **스킬(`acquiredSkills`)**: 클래스별 액티브 스킬 후보 전체를 다중선택 토글로 부여(코인 패턴 발동 = `getPlayerAbility`).
+- 전투 시작 시 선택분을 보유한 상태로 진입.
+
+**족보(코인 패턴)는 v2 비포함** — 전투 중 기존 `testMode` 코인 뒤집기로 맞춤(사용자 결정).
+
+영향:
+- `SandboxPanel`: 패시브/스킬 다중선택 UI(선택 클래스 필터, 클래스 변경 시 초기화)
+- 세팅 액션: `setSandboxPlayerState`를 `unlockedPatterns?`/`acquiredSkills?`로 확장 또는 새 `setSandboxLoadout` — 깔끔한 쪽
+- 후보 열거: `dataSkills`(스킬 카탈로그), 패시브 패턴 풀(`combatRewards`의 패시브 로직/데이터) — 클래스별 *전체* 후보 헬퍼 확인/추가(draft의 랜덤 일부 ≠ 전체)
+- 순서: `selectCharacter`가 `unlockedPatterns`/`acquiredSkills`를 `[]`로 리셋하므로, 세팅은 `selectCharacter` *후*에 적용
+
+테스트: 세팅 액션(부여·클래스 필터·omitted 보존), 기존 회귀 0.
+
 ## 후속 (별도 sub-project)
 
 - **행동수집(원격 애널리틱스)**: 배포·홍보 직전. PostHog(추천) 또는 GA4. `RunRecord`를 이벤트 페이로드로 재사용. 한국 서비스 → 개인정보처리방침/PIPA + 쿠키리스 모드로 동의 마찰 최소화.

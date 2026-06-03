@@ -2,6 +2,9 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import type { StoreApi } from 'zustand/vanilla';
 import { createTestStore } from '../../test/store';
 import { makePlayer } from '../../test/fixtures';
+import { getSandboxLoadoutCandidates } from './playerSlice';
+import { patternUpgrades } from '../../data/dataUpgrades';
+import { playerSkillUnlocks } from '../../data/dataSkills';
 import type { GameStore } from '../gameStore';
 import {
   CharacterClass,
@@ -310,9 +313,62 @@ describe('playerSlice.setSandboxPlayerState', () => {
     expect(s.resources.echoRemnants).toBe(50); // unchanged
   });
 
+  it('grants passives to top-level unlockedPatterns', () => {
+    store.getState().setSandboxPlayerState({ unlockedPatterns: ['TANK_P_IMPLANT', 'WARRIOR_PASSIVE_AMP_GIVES_DEF'] });
+    expect(store.getState().unlockedPatterns).toEqual(['TANK_P_IMPLANT', 'WARRIOR_PASSIVE_AMP_GIVES_DEF']);
+  });
+
+  it('grants skills to player.acquiredSkills (no MAX_SKILLS cap in sandbox)', () => {
+    const many = Array.from({ length: MAX_SKILLS + 3 }, (_, i) => `SKILL_${i}`);
+    store.getState().setSandboxPlayerState({ acquiredSkills: many });
+    expect(store.getState().player!.acquiredSkills).toEqual(many);
+  });
+
+  it('copies loadout arrays (no shared reference with the caller)', () => {
+    const passives = ['A'];
+    const skills = ['B'];
+    store.getState().setSandboxPlayerState({ unlockedPatterns: passives, acquiredSkills: skills });
+    passives.push('mutated');
+    skills.push('mutated');
+    expect(store.getState().unlockedPatterns).toEqual(['A']);
+    expect(store.getState().player!.acquiredSkills).toEqual(['B']);
+  });
+
+  it('leaves loadout untouched when those fields are omitted', () => {
+    store.setState({
+      player: makePlayer({ acquiredSkills: ['keep'] }),
+      unlockedPatterns: ['keep_passive'],
+    });
+    store.getState().setSandboxPlayerState({ currentHp: 30 });
+    const s = store.getState();
+    expect(s.unlockedPatterns).toEqual(['keep_passive']);
+    expect(s.player!.acquiredSkills).toEqual(['keep']);
+  });
+
   it('no-ops without a player', () => {
     store.setState({ player: null });
-    store.getState().setSandboxPlayerState({ currentHp: 10, echoRemnants: 10 });
+    store.getState().setSandboxPlayerState({ currentHp: 10, echoRemnants: 10, unlockedPatterns: ['x'], acquiredSkills: ['y'] });
     expect(store.getState().player).toBeNull();
+  });
+});
+
+describe('getSandboxLoadoutCandidates', () => {
+  it('returns the full passive + skill catalog for a class (source-of-truth, not a random draft)', () => {
+    const { passives, skills } = getSandboxLoadoutCandidates(CharacterClass.WARRIOR);
+    expect(passives).toEqual(Object.values(patternUpgrades[CharacterClass.WARRIOR]!));
+    expect(skills).toEqual(Object.values(playerSkillUnlocks[CharacterClass.WARRIOR]!));
+    expect(passives.length).toBeGreaterThan(0);
+    expect(skills.length).toBeGreaterThan(0);
+  });
+
+  it('is class-specific: candidate sets differ between classes', () => {
+    const warrior = getSandboxLoadoutCandidates(CharacterClass.WARRIOR);
+    const tank = getSandboxLoadoutCandidates(CharacterClass.TANK);
+    const warriorPassiveIds = warrior.passives.map(p => p.id);
+    const tankPassiveIds = tank.passives.map(p => p.id);
+    // A WARRIOR passive must not appear in the TANK candidate set.
+    expect(warriorPassiveIds).toContain('WARRIOR_PASSIVE_AMP_GIVES_DEF');
+    expect(tankPassiveIds).not.toContain('WARRIOR_PASSIVE_AMP_GIVES_DEF');
+    expect(tankPassiveIds).toContain('TANK_P_IMPLANT');
   });
 });

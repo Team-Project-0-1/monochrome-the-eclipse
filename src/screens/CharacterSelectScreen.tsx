@@ -75,7 +75,8 @@ export const CharacterSelectScreen = () => {
             />
 
             {sandboxActive ? (
-                <SandboxPanel sandboxClass={sandboxClass!} onBack={() => setSandboxClass(null)} />
+                // key=클래스: 클래스를 바꾸면 패널을 새로 마운트해 선택 상태(패시브/스킬/적)를 초기화한다.
+                <SandboxPanel key={sandboxClass!} sandboxClass={sandboxClass!} onBack={() => setSandboxClass(null)} />
             ) : (
             <>
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">

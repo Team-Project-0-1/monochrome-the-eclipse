@@ -3,7 +3,7 @@ import type { StoreApi } from 'zustand/vanilla';
 import { createTestStore } from '../../test/store';
 import { makePlayer } from '../../test/fixtures';
 import type { GameStore } from '../gameStore';
-import { NodeType, GameState, type StageNode } from '../../types';
+import { NodeType, GameState, CharacterClass, type StageNode } from '../../types';
 import { STAGE_TURNS } from '../../constants';
 
 // First-turn / empty-path makes every node index available
@@ -156,5 +156,22 @@ describe('explorationSlice.startSandboxCombat', () => {
     store.getState().startSandboxCombat('marauder1');
     expect(store.getState().gameState).toBe(GameState.MENU); // unchanged
     expect(store.getState().enemy).toBeNull();
+  });
+
+  // Guards the sandbox "전투 시작" sequence: selectCharacter resets unlockedPatterns/
+  // acquiredSkills to [], so the loadout MUST be applied AFTER it. This proves the
+  // panel's call order (selectCharacter → setSandboxPlayerState → startSandboxCombat)
+  // carries the pre-granted passives/skills into COMBAT and isn't wiped by the reset.
+  it('preserves a loadout granted after selectCharacter into combat', () => {
+    store.getState().selectCharacter(CharacterClass.WARRIOR);
+    store.getState().setSandboxPlayerState({
+      unlockedPatterns: ['WARRIOR_PASSIVE_AMP_GIVES_DEF'],
+      acquiredSkills: ['WARRIOR_RES_P_H'],
+    });
+    store.getState().startSandboxCombat('chimera');
+    const s = store.getState();
+    expect(s.gameState).toBe(GameState.COMBAT);
+    expect(s.unlockedPatterns).toContain('WARRIOR_PASSIVE_AMP_GIVES_DEF');
+    expect(s.player!.acquiredSkills).toContain('WARRIOR_RES_P_H');
   });
 });

@@ -3,8 +3,22 @@ import { produce } from 'immer';
 import { GameStore } from '../gameStore';
 import { PlayerCharacter, CharacterClass, ShopItem, PatternUpgradeDefinition, SkillUpgradeDefinition, MemoryUpgradeType, GameState, CoinFace, Coin } from '../../types';
 import { characterData } from '../../data/dataCharacters';
+import { patternUpgrades } from '../../data/dataUpgrades';
+import { playerSkillUnlocks } from '../../data/dataSkills';
 import { MAX_RESERVE_COINS, MAX_SKILLS, MEMORY_UPGRADE_DATA } from '../../constants';
 import { generateLoggedStageNodes } from '../../utils/gameLogic';
+
+// DEV 전용 밸런스 sandbox: 선택한 클래스의 패시브(`unlockedPatterns`)·액티브 스킬(`acquiredSkills`)
+// 후보 *전체*를 그대로 반환한다. combatRewards의 draft 로직은 랜덤 일부만 뽑지만, sandbox는
+// 한 번에 빌드를 통째로 부여하므로 ShopScreen과 동일한 원천(patternUpgrades/playerSkillUnlocks)에서
+// 필터 없이 전체를 열거한다(중복 정의 금지). 컴포넌트가 토글 UI를 그리도록 이 셀렉터를 import한다.
+export const getSandboxLoadoutCandidates = (characterClass: CharacterClass): {
+  passives: PatternUpgradeDefinition[];
+  skills: SkillUpgradeDefinition[];
+} => ({
+  passives: Object.values(patternUpgrades[characterClass] ?? {}),
+  skills: Object.values(playerSkillUnlocks[characterClass] ?? {}),
+});
 
 export interface PlayerSlice {
   player: PlayerCharacter | null;
@@ -17,7 +31,7 @@ export interface PlayerSlice {
   reserveCoins: Coin[];
   reserveCoinShopCost: number;
   selectCharacter: (characterClass: CharacterClass) => void;
-  setSandboxPlayerState: (next: { currentHp?: number; echoRemnants?: number }) => void;
+  setSandboxPlayerState: (next: { currentHp?: number; echoRemnants?: number; unlockedPatterns?: string[]; acquiredSkills?: string[] }) => void;
   handlePurchase: (item: ShopItem | (PatternUpgradeDefinition & { type: 'upgrade' })) => void;
   handleSkillUpgradePurchase: (skill: SkillUpgradeDefinition) => void;
   handleMemoryUpgrade: (upgradeType: MemoryUpgradeType) => void;
@@ -100,7 +114,9 @@ export const createPlayerSlice: StateCreator<GameStore, [], [], PlayerSlice> = (
     }));
   },
   setSandboxPlayerState: (next) => {
-    // DEV 전용 밸런스 sandbox: 플레이어 HP와 에코 잔재를 직접 세팅한다(클램프 포함).
+    // DEV 전용 밸런스 sandbox: 플레이어 HP·에코 잔재와 사전 부여 로드아웃을 직접 세팅한다.
+    // unlockedPatterns(패시브 ID)는 슬라이스 최상위, acquiredSkills(스킬 ID)는 player 하위에 산다.
+    // selectCharacter가 둘을 []로 리셋하므로 반드시 그 *후*에 이 세터를 호출해야 효과가 남는다.
     set(produce((draft: GameStore) => {
         if (!draft.player) return;
         if (next.currentHp !== undefined) {
@@ -108,6 +124,13 @@ export const createPlayerSlice: StateCreator<GameStore, [], [], PlayerSlice> = (
         }
         if (next.echoRemnants !== undefined) {
             draft.resources.echoRemnants = Math.max(0, Math.floor(next.echoRemnants));
+        }
+        // 컴포넌트 배열 참조를 공유하지 않도록 복사해 넣는다(MAX_SKILLS 캡은 sandbox에선 의도적으로 비적용).
+        if (next.unlockedPatterns !== undefined) {
+            draft.unlockedPatterns = [...next.unlockedPatterns];
+        }
+        if (next.acquiredSkills !== undefined) {
+            draft.player.acquiredSkills = [...next.acquiredSkills];
         }
     }));
   },
