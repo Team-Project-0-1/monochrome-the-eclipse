@@ -213,6 +213,9 @@ const launchChrome = async (viewport, instancePort) => {
     '--hide-scrollbars',
     '--disable-extensions',
     '--disable-background-networking',
+    // CI(ubuntu 러너)의 /dev/shm은 기본 64MB로 작아 headless Chrome이 메모리 부족으로
+    // 조용히 죽고 CDP 포트가 안 열린다 → 일반 디스크(/tmp)를 쓰게 해 flaky를 제거.
+    '--disable-dev-shm-usage',
     `--remote-debugging-port=${instancePort}`,
     `--window-size=${viewport.width},${viewport.height}`,
     `--user-data-dir=${userDataDir}`,
@@ -225,7 +228,8 @@ const launchChrome = async (viewport, instancePort) => {
   });
 
   // Wait for the DevTools endpoint to answer before talking to it.
-  const deadline = Date.now() + 15000;
+  // 30s: CI 러너 콜드 스타트(Chrome 첫 실행 + 디스크 프로필 생성)가 느릴 수 있다.
+  const deadline = Date.now() + 30000;
   let version = null;
   while (Date.now() < deadline) {
     try {
