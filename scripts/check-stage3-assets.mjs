@@ -180,8 +180,9 @@ for (const eventId of stage3EventIds) {
   "assets/backgrounds/event-stage3-flesh-vat.png",
   "assets/backgrounds/event-stage3-eclipse-sanctuary.png",
 ].forEach((assetPath) => {
-  const label = assetPath.includes("combat-stage-3") ? "CombatStage.tsx" : "src/utils/eventScenes.ts";
-  const text = assetPath.includes("combat-stage-3") ? readText("src/components/combat/CombatStage.tsx") : eventScenes;
+  // combat-stage-3 배경 경로는 stageBackground.ts(전투·탐험 공유 단일 소스)에서 결정된다.
+  const label = assetPath.includes("combat-stage-3") ? "src/utils/stageBackground.ts" : "src/utils/eventScenes.ts";
+  const text = assetPath.includes("combat-stage-3") ? readText("src/utils/stageBackground.ts") : eventScenes;
   requireTextIncludes(label, text, assetPath);
 });
 

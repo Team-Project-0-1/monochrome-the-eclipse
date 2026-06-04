@@ -11,7 +11,7 @@ import {
   PlayerCharacter,
 } from '../../types';
 import { assetPath } from '../../utils/assetPath';
-import { clamp } from '../../utils/math';
+import { getStageBackgroundCss } from '../../utils/stageBackground';
 import {
   characterClassTokens,
   CombatResultBanner,
@@ -19,7 +19,6 @@ import {
   getSpriteRow,
   isPositiveDamage,
 } from '../../utils/combatPresentation';
-import { isStage3PublicSafeMode, stage3PublicSafeBackgroundCss } from '../../utils/stage3PublicSafeMode';
 
 interface CombatStageProps {
   player: PlayerCharacter;
@@ -53,13 +52,7 @@ export const CombatStage: React.FC<CombatStageProps> = ({
   const playerClassToken = characterClassTokens[player.class];
   const playerMotionToken = getSkillMotionToken(playerSkillEffect);
   const enemyMotionToken = getSkillMotionToken(enemySkillEffect);
-  const backgroundStage = clamp(currentStage, 1, 3);
-  const backgroundPath = backgroundStage === 3
-    ? 'assets/backgrounds/combat-stage-3-eclipse-sanctum.png'
-    : `assets/backgrounds/combat-stage-${backgroundStage}.webp`;
-  const combatBackgroundImage = isStage3PublicSafeMode && backgroundStage === 3
-    ? stage3PublicSafeBackgroundCss
-    : `url("${assetPath(backgroundPath)}")`;
+  const combatBackgroundImage = getStageBackgroundCss(currentStage);
   const stageClassName = [
     'combat-stage',
     `stage-${currentStage}`,

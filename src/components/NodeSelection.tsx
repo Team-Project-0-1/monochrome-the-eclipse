@@ -70,23 +70,15 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndic
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.12),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.05)_0,transparent_28%)]" />
       <div className="pointer-events-none absolute left-6 right-6 top-16 h-px bg-gradient-to-r from-transparent via-cyan-200/40 to-transparent" />
 
-      <div className="relative z-10 mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <div className="mb-2 inline-flex items-center gap-2 rounded-md border border-cyan-300/30 bg-cyan-950/40 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-100">
-            <RadioTower className="h-3.5 w-3.5" />
-            {currentTurn}층 신호
-          </div>
-          <h2 className="text-2xl font-black text-white sm:text-3xl">다음 신호를 고르세요</h2>
-          <p className="mt-1 max-w-2xl text-sm leading-relaxed text-slate-300">
-            {allSameType && commonMeta
-              ? `이번 층의 경로는 모두 ${commonMeta.label} 신호입니다. 위험과 보상은 같고, 진입 각도(경로 이름)만 다릅니다.`
-              : '같은 전투라도 경로에 따라 체력, 보상, 빌드 방향이 달라집니다. 지금 필요한 것은 생존, 성장, 변수 중 무엇인지 판단하세요.'}
-          </p>
-        </div>
-        <div className="flex items-center gap-2 rounded-md border border-white/10 bg-black/30 px-3 py-2 text-xs text-slate-300">
-          <Sparkles className="h-4 w-4 text-amber-200" />
-          선택 즉시 다음 장면으로 진입합니다.
-        </div>
+      <div className="relative z-10 mb-3 flex items-center justify-between gap-3">
+        <h2 className="flex items-center gap-2 text-lg font-black text-white sm:text-xl">
+          <RadioTower className="h-4 w-4 text-cyan-200" />
+          {currentTurn}층 · 다음 신호 선택
+        </h2>
+        <span className="hidden items-center gap-1.5 text-xs font-semibold text-slate-300/90 sm:inline-flex">
+          <Sparkles className="h-3.5 w-3.5 text-amber-200" />
+          카드에 마우스를 올리면 감각 정보가 열립니다
+        </span>
       </div>
 
       {allSameType && commonMeta ? (
@@ -142,16 +134,7 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndic
                 </div>
 
                 <h3 className="text-xl font-black text-white">{meta.label}</h3>
-                {allSameType ? (
-                  <div className="mt-2 flex-1" aria-hidden />
-                ) : (
-                  <p className="route-node-description mt-2 flex-1 text-sm leading-relaxed text-white/75">{meta.description}</p>
-                )}
-                {!allSameType ? (
-                  <p className="mt-3 rounded-md border border-white/10 bg-black/20 px-2.5 py-2 text-xs font-semibold leading-relaxed text-white/70">
-                    {meta.senseHint}
-                  </p>
-                ) : null}
+                <div className="mt-2 flex-1" aria-hidden />
 
                 <div className="route-node-meta mt-4 grid grid-cols-2 gap-2 text-xs">
                   <div className="rounded-md border border-white/10 bg-black/25 px-2.5 py-2">
@@ -169,6 +152,11 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndic
                 <div className="mt-3 flex items-center justify-between text-xs font-bold text-white/80">
                   <span>{meta.routeHint} · {meta.stake}</span>
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </div>
+
+                <div className="route-node-detail">
+                  <p className="route-node-detail-sense">{meta.senseHint}</p>
+                  {!allSameType ? <p className="route-node-detail-desc">{meta.description}</p> : null}
                 </div>
               </div>
             </motion.button>

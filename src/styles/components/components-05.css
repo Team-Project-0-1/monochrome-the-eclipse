@@ -410,7 +410,6 @@
 .screen-card-header p,
 .menu-command-panel p,
 .exploration-route-hero p,
-.route-node-description,
 .shop-compare-panel p,
 .event-story-panel p,
 .rest-story p,
@@ -636,6 +635,136 @@
 .menu-run-strip > div {
   background: rgba(244, 241, 231, 0.045) !important;
   border-color: rgba(244, 241, 231, 0.14) !important;
+}
+
+/* ============================================================
+   허브 시각 재구성 (Hub redesign) — 탐험 슬라이스
+   cr- !important 레이어를 .exploration-screen 스코프(특이도 0,2,x)로
+   덮어 다른 화면 누수 0. 배경 가시화 + 글래스 패널.
+   ============================================================ */
+
+/* 1) 스테이지 아트 + 얇은 스크림 (전투 배경을 탐험에서 재사용; --exploration-bg-image는 JSX 인라인) */
+.exploration-screen {
+  background-image:
+    linear-gradient(180deg, rgba(2, 6, 23, 0.28), rgba(2, 6, 23, 0.62) 72%, rgba(2, 6, 23, 0.85)),
+    var(--exploration-bg-image, none) !important;
+  background-position: center top, center 16% !important;
+  background-repeat: no-repeat, no-repeat !important;
+  background-size: cover, cover !important;
+}
+
+/* 2) 신호 보드는 투명 — 노드 카드가 스테이지 배경 위에 떠 보이게 */
+.exploration-screen .route-signal-board {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* 3) 사이드/푸터 패널 글래스 (비-transform 요소라 backdrop-filter 정상 동작) */
+.exploration-screen .game-card-panel,
+.exploration-screen .entity-status-card,
+.exploration-screen .resource-display,
+.exploration-screen .mini-map,
+.exploration-screen .mini-map-panel {
+  /* 0.6: 배경이 블러로 비치되 어두운 백킹을 충분히 확보해 텍스트 대비 안전
+     (선행 0.94 불투명 패널의 대비-안전 결정 존중 — reference-css-color-overlay-cascade) */
+  background: rgba(9, 12, 20, 0.6) !important;
+  border-color: rgba(244, 241, 231, 0.16) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  backdrop-filter: blur(12px) saturate(1.1);
+}
+
+/* 4) 노드 카드: 타입 색 정체성 유지 + 반투명화(카드는 motion-transform이라 blur 대신 알파로 배경 투과) */
+.exploration-screen .route-node-card {
+  background: linear-gradient(150deg, rgba(67, 16, 22, 0.62), rgba(11, 13, 19, 0.8)) !important;
+}
+
+.exploration-screen .route-node-card:nth-child(2) {
+  background: linear-gradient(150deg, rgba(40, 30, 13, 0.62), rgba(11, 13, 19, 0.8)) !important;
+}
+
+.exploration-screen .route-node-card:nth-child(3) {
+  background: linear-gradient(150deg, rgba(18, 43, 49, 0.62), rgba(11, 13, 19, 0.8)) !important;
+}
+
+/* 5) 노드 카드 호버 강조 (시각적 임팩트) */
+.exploration-screen .route-node-card:not(.is-route-locked):hover {
+  border-color: rgba(244, 241, 231, 0.5) !important;
+  box-shadow: 0 0 0 1px rgba(244, 241, 231, 0.16), 0 24px 50px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 6) 호버/포커스 시 감각 정보 공개 (점진적 공개 — 평소엔 카드를 비워 한눈에 비교) */
+.route-node-detail {
+  position: absolute;
+  inset-inline: 0.55rem;
+  bottom: 0.55rem;
+  border: 1px solid rgba(244, 241, 231, 0.16);
+  border-radius: 0.5rem;
+  background: rgba(6, 8, 14, 0.94);
+  padding: 0.55rem 0.7rem;
+  opacity: 0;
+  transform: translateY(0.4rem);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+  z-index: var(--z-stage-bg-raised);
+}
+
+.route-node-card:hover .route-node-detail,
+.route-node-card:focus-within .route-node-detail {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.route-node-detail-sense {
+  color: rgba(244, 241, 231, 0.92);
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.route-node-detail-desc {
+  color: rgba(244, 241, 231, 0.66);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  margin-top: 0.35rem;
+}
+
+/* 7) 모바일/터치: 호버가 없으므로 노드 상세를 인라인 상시 표시(데스크톱은 위 호버 오버레이 유지).
+   터치 사용자가 감각 정보를 잃지 않도록 — 코드리뷰 지적 반영. 767px는 프로젝트 모바일 브레이크포인트. */
+@media (max-width: 767px) {
+  .route-node-detail {
+    position: static;
+    inset: auto;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    margin-top: 0.6rem;
+  }
+}
+
+/* ============================================================
+   허브 전파 — shop / event / rest / altar 글래스 패널
+   배경 이미지는 이미 있으니 패널을 반투명화해 비치게 한다.
+   각 화면 스코프(특이도 0,2,x)로 cr- !important 불투명을 덮음 → combat 무영향.
+   ============================================================ */
+.shop-screen .shop-header,
+.shop-screen .shop-resource-strip,
+.shop-screen .game-card-panel,
+.shop-screen .shop-compare-panel,
+.event-screen .event-story-panel,
+.event-screen .event-choice-panel,
+.event-screen .game-card-panel,
+.rest-screen .rest-choice-panel,
+.rest-screen .rest-status-card,
+.memory-altar-screen .memory-altar-intro,
+.memory-altar-screen .memory-upgrade-card,
+.memory-altar-screen .game-card-panel,
+.memory-altar-screen .resource-display {
+  /* 0.6: 대비 안전과 배경 가시성 균형(exploration 글래스와 동일 기준) */
+  background: rgba(9, 12, 20, 0.6) !important;
+  border-color: rgba(244, 241, 231, 0.16) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(1.08);
+  backdrop-filter: blur(12px) saturate(1.08);
 }
 
 .entity-status-card {

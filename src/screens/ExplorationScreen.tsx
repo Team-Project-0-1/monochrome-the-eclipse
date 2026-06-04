@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, ArrowLeft, MapPinned, Package, RadioTower, Route, ShieldAlert } from 'lucide-react';
+import { Activity, ArrowLeft, MapPinned, Package, RadioTower, ShieldAlert } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
 import CharacterStatus from '../components/CharacterStatus';
 import ResourceDisplay from '../components/ResourceDisplay';
@@ -12,6 +12,7 @@ import { getNodeTypeCounts } from '../utils/nodePresentation';
 import { STAGE_TURNS } from '../constants';
 import { stageData } from '../data/dataStages';
 import { getAvailableRouteNodeIndices } from '../utils/gameLogic';
+import { getStageBackgroundCss } from '../utils/stageBackground';
 
 const routePressureText = (counts: Record<string, number>) => {
   if ((counts[NodeType.BOSS] ?? 0) > 0) return '보스 신호가 열렸습니다. 지금 빌드가 이 층의 결론을 감당해야 합니다.';
@@ -40,6 +41,7 @@ export const ExplorationScreen = () => {
   const nodeCounts = getNodeTypeCounts(currentNodes);
   const progressPercent = Math.min(100, Math.round((currentTurn / STAGE_TURNS) * 100));
   const stageInfo = stageData[currentStage as keyof typeof stageData];
+  const stageBackground = getStageBackgroundCss(currentStage);
 
   if (!player) {
     return (
@@ -56,8 +58,10 @@ export const ExplorationScreen = () => {
     : '진입 전';
 
   return (
-    <div className="exploration-screen relative min-h-screen overflow-x-hidden bg-gray-950 p-3 text-white sm:p-5">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(34,211,238,0.16),transparent_30%),radial-gradient(circle_at_85%_12%,rgba(248,113,113,0.14),transparent_28%),linear-gradient(180deg,rgba(15,23,42,0.92),rgba(3,7,18,1))]" />
+    <div
+      className="exploration-screen relative min-h-screen overflow-x-hidden bg-gray-950 p-3 text-white sm:p-5"
+      style={{ '--exploration-bg-image': stageBackground } as React.CSSProperties}
+    >
       <div className="pointer-events-none absolute inset-x-0 top-24 h-px bg-gradient-to-r from-transparent via-cyan-200/35 to-transparent" />
 
       <div className="exploration-layout relative z-10 grid min-h-[calc(100vh-1.5rem)] grid-cols-1 gap-4 sm:min-h-[calc(100vh-2.5rem)]">
@@ -152,17 +156,8 @@ export const ExplorationScreen = () => {
             />
           </div>
 
-          <div className="exploration-footer grid gap-3 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
+          <div className="exploration-footer">
             <MiniMap nodes={stageNodes} currentTurn={currentTurn} path={path} availableNodeIndices={availableNodeIndices} />
-            <Panel className="exploration-route-read p-3" tone="gold">
-              <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-yellow-100">
-                <Route className="h-4 w-4" />
-                경로 해석
-              </div>
-              <p className="text-sm leading-relaxed text-slate-300">
-                전투를 피하기만 하면 성장 속도가 느려지고, 보상만 쫓으면 체력이 먼저 무너집니다. 좋은 런은 위험을 피하는 것이 아니라 감당 가능한 위험을 고르는 데서 시작됩니다.
-              </p>
-            </Panel>
           </div>
         </main>
       </div>

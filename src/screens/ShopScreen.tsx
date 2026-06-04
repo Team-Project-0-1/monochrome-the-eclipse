@@ -165,7 +165,7 @@ export const ShopScreen = () => {
       <div
         className="shop-scene-bg"
         style={{
-          backgroundImage: `linear-gradient(90deg,rgba(2,6,23,0.20),rgba(2,6,23,0.58) 52%,rgba(2,6,23,0.94)),linear-gradient(180deg,rgba(2,6,23,0.08),rgba(2,6,23,0.90)),${assetCssUrl('assets/backgrounds/shop-merchant.png')}`,
+          backgroundImage: `linear-gradient(90deg,rgba(2,6,23,0.12),rgba(2,6,23,0.34) 52%,rgba(2,6,23,0.62)),linear-gradient(180deg,rgba(2,6,23,0.05),rgba(2,6,23,0.66)),${assetCssUrl('assets/backgrounds/shop-merchant.png')}`,
         }}
       />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_70%,rgba(250,204,21,0.12),transparent_28%),radial-gradient(circle_at_76%_18%,rgba(34,211,238,0.08),transparent_26%)]" />
