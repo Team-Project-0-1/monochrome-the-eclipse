@@ -97,22 +97,22 @@ export const ExplorationScreen = () => {
                 <h1 className="text-3xl font-black leading-tight text-white sm:text-4xl">
                   {stageInfo?.name ?? '미확인 구역'}
                 </h1>
-                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300">
+                <p className="mt-1.5 line-clamp-2 max-w-2xl text-xs leading-relaxed text-slate-400">
                   {stageInfo?.description ?? '구역 정보를 불러오는 중입니다.'} {player.name}의 {sensoryProfile} 신호가 다음 선택지를 읽어냅니다.
                 </p>
               </div>
-              <div className="route-stat-grid grid min-w-0 gap-2 text-sm sm:grid-cols-3 xl:w-[560px]">
-                <div className="border-l border-cyan-300/35 pl-3">
-                  <div className="text-[11px] uppercase tracking-[0.16em] text-slate-500">층</div>
-                  <div className="truncate font-bold text-white">{currentTurn}/{STAGE_TURNS}</div>
+              <div className="route-stat-grid flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1.5 text-xs xl:justify-end">
+                <div className="flex items-baseline gap-1.5 border-l border-cyan-300/35 pl-2.5">
+                  <span className="text-[10px] uppercase tracking-[0.16em] text-slate-500">층</span>
+                  <span className="route-stat-value font-bold text-white">{currentTurn}/{STAGE_TURNS}</span>
                 </div>
-                <div className="border-l border-cyan-300/35 pl-3">
-                  <div className="text-[11px] uppercase tracking-[0.16em] text-slate-500">위협</div>
-                  <div className="route-stat-value font-bold text-cyan-100">{stageInfo?.theme ?? '미확인 신호'}</div>
+                <div className="flex items-baseline gap-1.5 border-l border-cyan-300/35 pl-2.5">
+                  <span className="text-[10px] uppercase tracking-[0.16em] text-slate-500">위협</span>
+                  <span className="route-stat-value font-bold text-cyan-100">{stageInfo?.theme ?? '미확인 신호'}</span>
                 </div>
-                <div className="border-l border-cyan-300/35 pl-3">
-                  <div className="text-[11px] uppercase tracking-[0.16em] text-slate-500">무기</div>
-                  <div className="route-stat-value font-bold text-slate-100">{weaponProfile}</div>
+                <div className="flex items-baseline gap-1.5 border-l border-cyan-300/35 pl-2.5">
+                  <span className="text-[10px] uppercase tracking-[0.16em] text-slate-500">무기</span>
+                  <span className="route-stat-value font-bold text-slate-100">{weaponProfile}</span>
                 </div>
               </div>
             </div>
@@ -136,12 +136,11 @@ export const ExplorationScreen = () => {
                   </div>
                 ) : null}
               </div>
-              <div className="route-pressure-card rounded-md border border-yellow-200/20 bg-yellow-950/18 px-3 py-2 text-yellow-50">
-                <div className="mb-1 flex items-center gap-2 font-bold">
-                  <ShieldAlert className="h-4 w-4" />
-                  현재 압력
-                </div>
-                <p className="route-pressure-copy leading-relaxed text-yellow-100/80">{routePressureText(nodeCounts)}</p>
+              <div className="route-pressure-card flex items-start gap-2 text-yellow-100/90">
+                <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-yellow-300" />
+                <p className="route-pressure-copy text-xs leading-relaxed">
+                  <span className="font-bold text-yellow-200">현재 압력 · </span>{routePressureText(nodeCounts)}
+                </p>
               </div>
             </div>
           </Panel>

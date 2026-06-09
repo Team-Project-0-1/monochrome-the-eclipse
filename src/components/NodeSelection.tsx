@@ -103,6 +103,7 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndic
               disabled={selectedNode !== null || !isAvailable}
               aria-disabled={!isAvailable}
               data-route-available={isAvailable ? 'true' : 'false'}
+              data-node-type={node.type}
               data-testid={`route-node-${index + 1}`}
               animate={isSelected ? { scale: 1.05, opacity: 0, y: -12 } : { scale: 1, opacity: 1, y: 0 }}
               transition={{ duration: 0.42, ease: 'easeInOut' }}

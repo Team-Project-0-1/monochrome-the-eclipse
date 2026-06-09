@@ -341,7 +341,6 @@
 }
 
 .game-card-panel[data-card-tone="red"],
-.route-node-card,
 .combat-command-strip {
   border-color: rgba(245, 111, 111, 0.3) !important;
 }
@@ -587,13 +586,21 @@
 }
 
 .exploration-route-hero {
-  padding: 1.2rem !important;
+  padding: 0.95rem 1.05rem !important;
 }
 
-.exploration-route-hero h1,
+/* 위계: 상단 히어로(스테이지명)를 강등하고 선택 카드를 주인공으로.
+   기존엔 히어로 h1과 보드 h2가 둘 다 2.35rem라 카드와 경쟁 → 분리해 축소
+   (데스크톱 기준; 모바일/태블릿 media 오버라이드는 보존해 타 화면 무영향). */
+.exploration-route-hero h1 {
+  color: var(--cr-bone) !important;
+  font-size: 1.5rem !important;
+  line-height: 1.14 !important;
+}
+
 .route-signal-board h2 {
   color: var(--cr-bone) !important;
-  font-size: 2.35rem !important;
+  font-size: 1.8rem !important;
 }
 
 .route-signal-board {
@@ -604,23 +611,12 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+/* 카드 구조 기본값 + 중립 폴백 배경(타입 규칙이 없을 때만 적용; 실제론 아래
+   .exploration-screen 타입 규칙(0,3,0)이 항상 이김). 색은 더 이상 위치로 안 정함. */
 .route-node-card {
-  background:
-    linear-gradient(145deg, rgba(67, 16, 22, 0.92), rgba(17, 19, 26, 0.96)) !important;
+  background: linear-gradient(150deg, rgba(24, 28, 36, 0.62), rgba(11, 13, 19, 0.8)) !important;
   min-height: 18rem !important;
   padding: 1rem !important;
-}
-
-.route-node-card:nth-child(2) {
-  background:
-    linear-gradient(145deg, rgba(22, 26, 34, 0.96), rgba(40, 30, 13, 0.92)) !important;
-  border-color: rgba(243, 201, 78, 0.32) !important;
-}
-
-.route-node-card:nth-child(3) {
-  background:
-    linear-gradient(145deg, rgba(18, 43, 49, 0.92), rgba(17, 19, 26, 0.96)) !important;
-  border-color: rgba(114, 239, 255, 0.3) !important;
 }
 
 .route-node-card h3 {
@@ -674,17 +670,41 @@
   backdrop-filter: blur(12px) saturate(1.1);
 }
 
-/* 4) 노드 카드: 타입 색 정체성 유지 + 반투명화(카드는 motion-transform이라 blur 대신 알파로 배경 투과) */
-.exploration-screen .route-node-card {
+/* 4) 노드 카드: 타입(data-node-type) 기반 기능색 — 위치(nth-child)가 아니라 노드 타입이
+   색을 구동한다(신호등 위험 의미론: red 위험 / gold 유의 / cyan 안전 / slate 미확인).
+   배경은 알파로 스테이지 아트를 투과시키고(카드는 motion-transform이라 blur 대신 알파),
+   테두리는 cr 색 토큰 계열. red 계열은 COMBAT<MINIBOSS<BOSS 강도 램프(테두리 알파+글로우). */
+.exploration-screen .route-node-card[data-node-type="COMBAT"] {
   background: linear-gradient(150deg, rgba(67, 16, 22, 0.62), rgba(11, 13, 19, 0.8)) !important;
+  border-color: rgba(245, 111, 111, 0.34) !important;
 }
 
-.exploration-screen .route-node-card:nth-child(2) {
-  background: linear-gradient(150deg, rgba(40, 30, 13, 0.62), rgba(11, 13, 19, 0.8)) !important;
+.exploration-screen .route-node-card[data-node-type="MINIBOSS"] {
+  background: linear-gradient(150deg, rgba(85, 18, 24, 0.66), rgba(11, 13, 19, 0.82)) !important;
+  border-color: rgba(245, 111, 111, 0.55) !important;
+  box-shadow: 0 0 0 1px rgba(245, 111, 111, 0.12), 0 18px 40px rgba(0, 0, 0, 0.45) !important;
 }
 
-.exploration-screen .route-node-card:nth-child(3) {
-  background: linear-gradient(150deg, rgba(18, 43, 49, 0.62), rgba(11, 13, 19, 0.8)) !important;
+.exploration-screen .route-node-card[data-node-type="BOSS"] {
+  background: linear-gradient(150deg, rgba(102, 16, 22, 0.72), rgba(9, 10, 14, 0.85)) !important;
+  border-color: rgba(245, 111, 111, 0.78) !important;
+  box-shadow: 0 0 0 1px rgba(245, 111, 111, 0.22), 0 0 28px rgba(245, 111, 111, 0.18), 0 18px 44px rgba(0, 0, 0, 0.5) !important;
+}
+
+.exploration-screen .route-node-card[data-node-type="EVENT"] {
+  background: linear-gradient(150deg, rgba(48, 38, 12, 0.62), rgba(11, 13, 19, 0.8)) !important;
+  border-color: rgba(243, 201, 78, 0.4) !important;
+}
+
+.exploration-screen .route-node-card[data-node-type="SHOP"],
+.exploration-screen .route-node-card[data-node-type="REST"] {
+  background: linear-gradient(150deg, rgba(15, 40, 46, 0.62), rgba(11, 13, 19, 0.8)) !important;
+  border-color: rgba(114, 239, 255, 0.36) !important;
+}
+
+.exploration-screen .route-node-card[data-node-type="UNKNOWN"] {
+  background: linear-gradient(150deg, rgba(24, 28, 36, 0.62), rgba(11, 13, 19, 0.8)) !important;
+  border-color: rgba(148, 163, 184, 0.34) !important;
 }
 
 /* 5) 노드 카드 호버 강조 (시각적 임팩트) */
