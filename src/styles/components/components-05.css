@@ -601,6 +601,8 @@
 .route-signal-board h2 {
   color: var(--cr-bone) !important;
   font-size: 1.8rem !important;
+  /* 스크림 완화로 노출된 플로팅 제목 방어: 다크 배경엔 무영향, 밝은 스테이지 아트 위에서만 보호. */
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
 }
 
 .route-signal-board {
@@ -642,7 +644,7 @@
 /* 1) 스테이지 아트 + 얇은 스크림 (전투 배경을 탐험에서 재사용; --exploration-bg-image는 JSX 인라인) */
 .exploration-screen {
   background-image:
-    linear-gradient(180deg, rgba(2, 6, 23, 0.28), rgba(2, 6, 23, 0.62) 72%, rgba(2, 6, 23, 0.85)),
+    linear-gradient(180deg, rgba(2, 6, 23, 0.18), rgba(2, 6, 23, 0.42) 72%, rgba(2, 6, 23, 0.7)),
     var(--exploration-bg-image, none) !important;
   background-position: center top, center 16% !important;
   background-repeat: no-repeat, no-repeat !important;
