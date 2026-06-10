@@ -43,6 +43,10 @@ playwright-report
 !.dev.vars.example
 *.local
 
+# AI 에이전트 로컬 상태 (개인 설정·세션 상태 — 커밋 금지)
+.omc/
+.claude/settings.local.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
