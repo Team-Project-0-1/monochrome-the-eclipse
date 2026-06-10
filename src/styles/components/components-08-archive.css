@@ -115,8 +115,8 @@ body.is-reduced-motion .archive-card.is-dealt { animation: none; }
   overflow: hidden;
 }
 .archive-photo-frame > img {
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 6rem;
+  height: 6rem;
   object-fit: contain;
   filter: grayscale(0.9) contrast(1.05) brightness(1.08); /* 한랭 팔레트 — 세피아 금지 */
 }
@@ -211,4 +211,5 @@ body.is-reduced-motion .archive-card.is-dealt { animation: none; }
 /* 모바일: 카드 폭 전환 */
 @media (max-width: 767px) {
   .archive-photo-frame { min-height: 7rem; }
+  .archive-photo-frame > img { width: 4.5rem; height: 4.5rem; }
 }

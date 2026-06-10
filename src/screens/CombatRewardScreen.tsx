@@ -10,7 +10,8 @@ import { assetPath } from '../utils/assetPath';
 import { playGameSfx, playUiSound } from '../utils/sound';
 import { playerSkillUnlocks } from '../data/dataSkills';
 import { patternUpgrades } from '../data/dataUpgrades';
-import { getRewardIconPath } from '../utils/resourceAssets';
+import { getRewardIconPath, resourceIconPaths } from '../utils/resourceAssets';
+import { PatternType } from '../types';
 import EffectSummary from '../components/EffectSummary';
 import { summarizeDescription } from '../utils/effectSummary';
 import type { CombatRewardChoice } from '../utils/combatRewards';
@@ -33,6 +34,16 @@ const rewardEntryLabel = (key: string) =>
 
 // 사진별 기울기 — 손으로 책상에 놓은 느낌(균일하면 그리드로 보인다).
 const CARD_TILTS = [-1.4, 0.9, -0.6];
+
+// 사진 피사체는 전부 기존 에셋 재활용 — 스킬은 차지하는 패턴 아이콘, 비기는 각성 패턴.
+const patternIconPaths: Record<PatternType, string> = {
+  [PatternType.PAIR]: 'assets/icons/combat/pattern-pair.png',
+  [PatternType.TRIPLE]: 'assets/icons/combat/pattern-triple.png',
+  [PatternType.QUAD]: 'assets/icons/combat/pattern-quad.png',
+  [PatternType.PENTA]: 'assets/icons/combat/pattern-penta.png',
+  [PatternType.UNIQUE]: 'assets/icons/combat/pattern-unique.png',
+  [PatternType.AWAKENING]: 'assets/icons/combat/pattern-awakening.png',
+};
 
 export const CombatRewardScreen = () => {
   const pendingCombatReward = useGameStore(state => state.pendingCombatReward);
@@ -84,9 +95,15 @@ export const CombatRewardScreen = () => {
             const passiveReward = choice.passiveId && player
               ? patternUpgrades[player.class]?.[choice.passiveId]
               : null;
-            const subjectIconPath = rewardEntries.length > 0
-              ? getRewardIconPath(rewardEntries[0][0])
-              : null;
+            // 피사체 우선순위: 스킬 패턴 > 비기(각성) > 패시브(강화 결정) > 자원 > 기억 조각.
+            const subjectIconPath = skillReward
+              ? patternIconPaths[skillReward.replaces.type as PatternType]
+              : choice.secretTechniqueId
+                ? patternIconPaths[PatternType.AWAKENING]
+                : choice.passiveId
+                  ? 'assets/items/amplify-crystal.png'
+                  : (rewardEntries.length > 0 ? getRewardIconPath(rewardEntries[0][0]) : undefined)
+                    ?? resourceIconPaths.memoryPieces;
 
             return (
               <div key={choice.id} className="group relative">
@@ -100,11 +117,7 @@ export const CombatRewardScreen = () => {
                   className="w-full"
                 >
                   <div className="archive-photo-frame">
-                    {subjectIconPath ? (
-                      <img src={assetPath(subjectIconPath)} alt="" loading="lazy" />
-                    ) : (
-                      <span className="font-bold text-4xl" style={{ color: 'var(--archive-silver)' }}>※</span>
-                    )}
+                    <img src={assetPath(subjectIconPath)} alt="" loading="lazy" />
                   </div>
                   <ArchiveCaption>
                     <strong>{choice.label}</strong>
