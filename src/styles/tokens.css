@@ -661,18 +661,27 @@ body.is-reduced-motion .coin-state-pill {
 :root {
   --font-family-archive: 'Gowun Batang', 'Nanum Myeongjo', serif;
 
-  --archive-desk:        #16120d; /* 책상 표면 기저색(웜 블랙) */
-  --archive-desk-edge:   #0a0806; /* 비네팅 가장자리 */
-  --archive-lamp:        #e8d9b0; /* 스탠드 불빛(유일 광원) */
-  --archive-paper:       #d9d3c5; /* 인화지 밝은 면 */
-  --archive-paper-shade: #b6afa0; /* 인화지 그늘 */
-  --archive-ink:         #2b2823; /* 잉크/타자 텍스트 */
-  --archive-ink-soft:    #524d43;
-  --archive-silver:      #c9cdd3; /* 은염 하이라이트 */
-  --archive-stamp-ink:   #8a3a32; /* 도장 잉크(저채도 적) */
+  /* 팔레트 = 〈월식 사이안〉 — 2026-06-10 게이트 피드백으로 웜 세피아 기각.
+   * 한랭 은염 사진 톤 + 게임 기존 사이안(#72efff) 정체성으로 수렴. */
+  --archive-desk:        #090e12; /* 책상 표면 기저색(청흑) */
+  --archive-desk-edge:   #04070a; /* 비네팅 가장자리 */
+  --archive-lamp:        rgba(114, 239, 255, 0.08); /* 월광(유일 광원) */
+  --archive-paper:       #c9d3d6; /* 인화지 밝은 면(한랭 회색) */
+  --archive-paper-shade: #a3adb1; /* 인화지 그늘 */
+  --archive-ink:         #182024; /* 잉크/타자 텍스트 */
+  --archive-ink-soft:    #44525a;
+  --archive-silver:      #c9d3d6; /* 중성 은빛 — 반사 스윕/보조 하이라이트 */
+  --archive-accent:      #72efff; /* 월식 사이안 — 포커스/프레임 글로우 */
+  --archive-stamp-ink:   #1d7480; /* 도장 잉크(청록) */
   --archive-grain-opacity: 0.07;
+  --archive-frame-top:    #14211f; /* 사진 피사체 프레임 */
+  --archive-frame-bottom: #0a1012;
+  --archive-frame-glow:   rgba(114, 239, 255, 0.12);
+  --archive-note-bg-a:    #bac6c9; /* 메모지/꼬리표 종이 */
+  --archive-note-bg-b:    #9dabae;
+  --archive-tag-bg:       #bac6c9;
 
-  /* Task 4(텍스처 생성) 성공 시 url(...)로 교체. 기본은 절차적 폴백만 사용. */
+  /* 텍스처 생성 성공 시 url(...)로 교체. 기본은 절차적 폴백만 사용. */
   --archive-desk-image:  none;
   --archive-paper-image: none;
 }
