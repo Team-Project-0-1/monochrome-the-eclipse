@@ -653,3 +653,26 @@ body.is-reduced-motion .coin-state-pill {
   letter-spacing: 0.04em;
   opacity: 0.75;
 }
+
+/* =============================================================================
+ * 아카이브 아트 디렉션 토큰 — specs/2026-06-10-archive-art-direction-design.md §2
+ * "기록 보관자의 책상": 모노크롬 사진 톤. 네온 글로우 금지, 색은 잉크처럼.
+ * ========================================================================== */
+:root {
+  --font-family-archive: 'Gowun Batang', 'Nanum Myeongjo', serif;
+
+  --archive-desk:        #16120d; /* 책상 표면 기저색(웜 블랙) */
+  --archive-desk-edge:   #0a0806; /* 비네팅 가장자리 */
+  --archive-lamp:        #e8d9b0; /* 스탠드 불빛(유일 광원) */
+  --archive-paper:       #d9d3c5; /* 인화지 밝은 면 */
+  --archive-paper-shade: #b6afa0; /* 인화지 그늘 */
+  --archive-ink:         #2b2823; /* 잉크/타자 텍스트 */
+  --archive-ink-soft:    #524d43;
+  --archive-silver:      #c9cdd3; /* 은염 하이라이트 */
+  --archive-stamp-ink:   #8a3a32; /* 도장 잉크(저채도 적) */
+  --archive-grain-opacity: 0.07;
+
+  /* Task 4(텍스처 생성) 성공 시 url(...)로 교체. 기본은 절차적 폴백만 사용. */
+  --archive-desk-image:  none;
+  --archive-paper-image: none;
+}

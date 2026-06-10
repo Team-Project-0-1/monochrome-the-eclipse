@@ -7,6 +7,9 @@ import { eventData } from './data/dataEvents';
 import { detectPatterns } from './utils/gameLogic';
 import './styles/tokens.css';
 import './index.css';
+// 아카이브 아트 디렉션 디스플레이 서체(OFL). 유니코드 서브셋 분할이라 사용 글리프만 로드된다.
+import '@fontsource/gowun-batang/400.css';
+import '@fontsource/gowun-batang/700.css';
 // 손글 컴포넌트 CSS는 단일 13k줄 파일을 순서 보존 슬라이스(components-01..07)로 분할한 것.
 // import 순서 = 원본 cascade 순서이며, 이어붙이면 원본과 바이트 동일하다(재배치 없음).
 // 도메인별 분할이 아닌 순차 분할인 이유: 전투 UI 규칙이 파일 전반에 퍼져 있어 도메인
