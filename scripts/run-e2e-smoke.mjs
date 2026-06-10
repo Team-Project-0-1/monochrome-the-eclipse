@@ -553,10 +553,12 @@ const runFlow = async (baseUrl, name, viewport, instancePort, errors) => {
       enemyTier: 'normal',
       nextState: 'EXPLORATION',
       choices: [
-        { id: 'e2e_reward', label: 'E2E reward', description: 'Reward recovery path.', rewards: { echoRemnants: 1 } },
+        { id: 'e2e_reward_echo', label: '메아리 회수', description: 'Echo recovery path.', rewards: { echoRemnants: 14 } },
+        { id: 'e2e_reward_growth', label: '감각 채집', description: 'Growth resource path.', rewards: { senseFragments: 2, memoryPieces: 1 } },
+        { id: 'e2e_reward_coin', label: '예비 동전 확보', description: 'Reserve coin path.', rewards: { reserveCoin: true } },
       ],
     } }`);
-    await checkScreen(cdp, errors, name, 'reward', '.combat-reward-screen', overflows, screenshots);
+    await checkScreen(cdp, errors, name, 'reward', '.archive-reward-screen', overflows, screenshots);
   } finally {
     cdp?.close();
     await killChrome(chrome);

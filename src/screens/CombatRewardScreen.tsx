@@ -56,7 +56,7 @@ export const CombatRewardScreen = () => {
   };
 
   return (
-    <ArchiveSurface className="combat-reward-screen overflow-hidden p-4 sm:p-6">
+    <ArchiveSurface className="archive-reward-screen overflow-hidden p-4 sm:p-6">
       <section className="relative z-10 mx-auto flex min-h-[calc(100vh-2rem)] max-w-5xl flex-col justify-center gap-6">
         {/* 책상 위 기록 도장 — 배지/타이틀/설명문의 다이어제틱 대체물 */}
         <header className="flex flex-wrap items-center justify-between gap-3">
