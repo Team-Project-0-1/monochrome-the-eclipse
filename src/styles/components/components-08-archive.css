@@ -21,6 +21,7 @@
 }
 
 /* --- 필름 그레인 오버레이 (전역 통일감 핵심) --- */
+/* 그레인 위로 보여야 하는 자식은 자체 스택 컨텍스트(z-index>=1 + position)를 만들 것. pointer-events는 통과한다. */
 .archive-grain {
   position: absolute;
   inset: 0;

@@ -1,5 +1,6 @@
 import React from 'react';
 
+// 주의: JSX는 유니언 prop에 초과 속성 검사를 하지 않으므로 interactive=false에서 button 전용 속성이 컴파일 타임에 막히지 않는다(런타임에선 무시됨).
 type ArchiveCardProps = {
   children: React.ReactNode;
   className?: string;
@@ -15,19 +16,24 @@ type ArchiveCardProps = {
 // 인화지 카드. interactive=true면 카드 전체가 <button>(접근성 불변 조항).
 const ArchiveCard: React.FC<ArchiveCardProps> = ({ children, className = '', dealt = false, tilt, ...rest }) => {
   const classes = `archive-card ${dealt ? 'is-dealt' : ''} ${className}`;
-  const style = tilt !== undefined ? ({ '--archive-tilt': `${tilt}deg` } as React.CSSProperties) : undefined;
+  // 호출자 style과 tilt 변수를 병합한다(클로버링 방지). 둘 다 없으면 undefined.
+  const callerStyle = (rest as { style?: React.CSSProperties }).style;
+  const mergedStyle: React.CSSProperties | undefined =
+    tilt !== undefined || callerStyle
+      ? { ...callerStyle, ...(tilt !== undefined ? ({ '--archive-tilt': `${tilt}deg` } as React.CSSProperties) : {}) }
+      : undefined;
 
   if ('interactive' in rest && rest.interactive) {
-    const { interactive: _interactive, ...buttonProps } = rest;
+    const { interactive: _interactive, style: _style, ...buttonProps } = rest;
     return (
-      <button type="button" {...(buttonProps as React.ButtonHTMLAttributes<HTMLButtonElement>)} className={classes} style={style}>
+      <button type="button" {...(buttonProps as React.ButtonHTMLAttributes<HTMLButtonElement>)} className={classes} style={mergedStyle}>
         {children}
       </button>
     );
   }
-  const { interactive: _interactive, ...sectionProps } = rest as { interactive?: false } & React.HTMLAttributes<HTMLElement>;
+  const { interactive: _interactive, style: _style, ...sectionProps } = rest as { interactive?: false } & React.HTMLAttributes<HTMLElement>;
   return (
-    <section {...sectionProps} className={classes} style={style}>
+    <section {...sectionProps} className={classes} style={mergedStyle}>
       {children}
     </section>
   );
