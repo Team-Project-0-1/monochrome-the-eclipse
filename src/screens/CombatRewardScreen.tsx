@@ -11,6 +11,7 @@ import { playGameSfx, playUiSound } from '../utils/sound';
 import { playerSkillUnlocks } from '../data/dataSkills';
 import { patternUpgrades } from '../data/dataUpgrades';
 import { getRewardIconPath, resourceIconPaths } from '../utils/resourceAssets';
+import { getStageBackgroundCss } from '../utils/stageBackground';
 import { PatternType } from '../types';
 import EffectSummary from '../components/EffectSummary';
 import { summarizeDescription } from '../utils/effectSummary';
@@ -50,6 +51,7 @@ export const CombatRewardScreen = () => {
   const claimCombatReward = useGameStore(state => state.claimCombatReward);
   const gameOptions = useGameStore(state => state.gameOptions);
   const player = useGameStore(state => state.player);
+  const currentStage = useGameStore(state => state.currentStage);
   const [isRunStatusOpen, setIsRunStatusOpen] = useState(false);
 
   if (!pendingCombatReward) {
@@ -67,7 +69,8 @@ export const CombatRewardScreen = () => {
   };
 
   return (
-    <ArchiveSurface className="archive-reward-screen overflow-hidden p-4 sm:p-6">
+    // 전투가 끝난 그 장면 위에서 기록을 고른다 — 화면 전환으로 세계를 떠나지 않는다(슬더스 문법).
+    <ArchiveSurface scene={getStageBackgroundCss(currentStage)} className="archive-reward-screen overflow-hidden p-4 sm:p-6">
       <section className="relative z-10 mx-auto flex min-h-[calc(100vh-2rem)] max-w-5xl flex-col justify-center gap-6">
         {/* 책상 위 기록 도장 — 배지/타이틀/설명문의 다이어제틱 대체물 */}
         <header className="flex flex-wrap items-center justify-between gap-3">

@@ -20,6 +20,18 @@
   color: var(--archive-paper);
 }
 
+/* --- 장면 오버레이 모드 — 런 중 화면은 세계의 장면을 떠나지 않는다(슬더스 문법).
+       책상 텍스처 대신 전투/장소 장면을 깔고 어둡게 딤 + 비네팅. 그레인·기록물 재질은 동일. --- */
+.archive-surface.is-scene {
+  background:
+    radial-gradient(ellipse 140% 120% at 50% 50%, transparent 30%, var(--archive-desk-edge) 100%),
+    linear-gradient(180deg, rgba(4, 7, 10, 0.66), rgba(4, 7, 10, 0.86)),
+    var(--archive-scene-image, none),
+    var(--archive-desk);
+  background-size: auto, auto, cover, auto;
+  background-position: center;
+}
+
 /* --- 필름 그레인 오버레이 (전역 통일감 핵심) --- */
 /* 그레인 위로 보여야 하는 자식은 자체 스택 컨텍스트(z-index>=1 + position)를 만들 것. pointer-events는 통과한다. */
 .archive-grain {
