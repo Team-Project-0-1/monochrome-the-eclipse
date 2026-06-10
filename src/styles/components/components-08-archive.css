@@ -1,0 +1,213 @@
+/* =============================================================================
+ * 아카이브 아트 디렉션 — .archive-* 네임스페이스 전용 파일.
+ * 규칙: 기존 components-01~07의 셀렉터를 절대 참조/오버라이드하지 않는다.
+ * (신규 네임스페이스 격리로 1,415개 !important 캐스케이드와 무충돌 공존)
+ * 스펙: docs/superpowers/specs/2026-06-10-archive-art-direction-design.md
+ * ========================================================================== */
+
+/* --- 책상 표면 (화면 배경) --- */
+.archive-surface {
+  position: relative;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 18%, rgba(232, 217, 176, 0.10), transparent 60%),
+    radial-gradient(ellipse 140% 120% at 50% 50%, transparent 40%, var(--archive-desk-edge) 100%),
+    var(--archive-desk-image),
+    /* 절차적 나뭇결/펠트 노이즈 */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.05' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10 0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23w)'/%3E%3C/svg%3E"),
+    var(--archive-desk);
+  background-size: auto, auto, cover, 300px 300px, auto;
+  color: var(--archive-paper);
+}
+
+/* --- 필름 그레인 오버레이 (전역 통일감 핵심) --- */
+.archive-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: var(--archive-grain-opacity);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  animation: archive-grain-shift 1.6s steps(3) infinite;
+}
+@keyframes archive-grain-shift {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(-18px, 9px); }
+  66% { transform: translate(11px, -14px); }
+  100% { transform: translate(0, 0); }
+}
+body.is-reduced-motion .archive-grain { animation: none; }
+
+/* --- 인화지 카드 --- */
+.archive-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  border: 0;
+  border-radius: 2px;
+  padding: 0.65rem 0.65rem 0.9rem;
+  background:
+    var(--archive-paper-image),
+    /* 절차적 종이 섬유 */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.85 0 0 0 0 0.83 0 0 0 0 0.77 0 0 0 0.10 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23p)'/%3E%3C/svg%3E"),
+    linear-gradient(168deg, var(--archive-paper) 0%, var(--archive-paper-shade) 100%);
+  background-size: cover, 220px 220px, auto;
+  color: var(--archive-ink);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 10px 24px rgba(0, 0, 0, 0.55),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+/* 인터랙티브 카드(버튼)만 물리 반응 */
+button.archive-card { cursor: pointer; }
+button.archive-card:hover,
+button.archive-card:focus-visible {
+  transform: translateY(-6px) rotate(var(--archive-tilt, -1.2deg));
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.10) inset,
+    0 22px 44px rgba(0, 0, 0, 0.65),
+    0 4px 10px rgba(0, 0, 0, 0.45);
+}
+button.archive-card:focus-visible {
+  outline: 2px solid var(--archive-silver);
+  outline-offset: 3px;
+}
+/* 은빛 반사 스윕 */
+button.archive-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 30%, rgba(201, 205, 211, 0.0) 40%, rgba(201, 205, 211, 0.22) 50%, transparent 62%);
+  background-size: 240% 100%;
+  background-position: 120% 0;
+  pointer-events: none;
+  transition: background-position 0.45s ease;
+}
+button.archive-card:hover::after,
+button.archive-card:focus-visible::after { background-position: -60% 0; }
+
+/* 카드 등장: 책상 위로 떨어짐 */
+.archive-card.is-dealt { animation: archive-deal 0.42s cubic-bezier(0.2, 0.9, 0.3, 1) backwards; }
+.archive-card.is-dealt:nth-child(2) { animation-delay: 0.09s; }
+.archive-card.is-dealt:nth-child(3) { animation-delay: 0.18s; }
+@keyframes archive-deal {
+  from { opacity: 0; transform: translateY(-28px) rotate(2.5deg) scale(1.04); }
+  to   { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
+}
+body.is-reduced-motion .archive-card.is-dealt { animation: none; }
+
+/* --- 사진 피사체 영역 (카드 상단) --- */
+.archive-photo-frame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 9.5rem;
+  margin-bottom: 0.6rem;
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 42%, rgba(201, 205, 211, 0.14), transparent 75%),
+    linear-gradient(180deg, #232019, #15120d);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+.archive-photo-frame > img {
+  width: 4.5rem;
+  height: 4.5rem;
+  object-fit: contain;
+  filter: grayscale(0.85) contrast(1.05) brightness(1.1) sepia(0.12);
+}
+.archive-photo-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  opacity: 0.12;
+}
+
+/* --- 타자기 캡션 --- */
+.archive-caption {
+  font-family: var(--font-family-archive);
+  color: var(--archive-ink);
+  font-size: 0.84rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+.archive-caption strong { font-weight: 700; }
+.archive-caption-sub {
+  color: var(--archive-ink-soft);
+  font-size: 0.74rem;
+}
+
+/* --- 잉크 도장 --- */
+.archive-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border: 2px solid var(--archive-stamp-ink);
+  border-radius: 3px;
+  color: var(--archive-stamp-ink);
+  font-family: var(--font-family-archive);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  transform: rotate(-1.6deg);
+  /* 도장 잉크 얼룩 */
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.18' numOctaves='2'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='1.6' intercept='-0.12'/%3E%3C/feComponentTransfer%3E%3CfeComposite operator='in' in2='SourceGraphic'/%3E%3C/filter%3E%3Crect width='120' height='40' fill='white' filter='url(%23s)'/%3E%3C/svg%3E");
+  mask-size: cover;
+}
+
+/* --- 책상 메모지 (팁/상세) --- */
+.archive-note {
+  background: linear-gradient(176deg, #cfc8b6, #b8b09c);
+  color: var(--archive-ink);
+  font-family: var(--font-family-archive);
+  font-size: 0.76rem;
+  line-height: 1.55;
+  padding: 0.6rem 0.75rem;
+  border-radius: 1px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
+  transform: rotate(0.8deg);
+}
+
+/* --- 자원 꼬리표 (사진에 매달린 태그) --- */
+.archive-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.18rem 0.5rem;
+  background: #cfc8b6;
+  border: 1px solid rgba(43, 40, 35, 0.25);
+  border-radius: 2px;
+  color: var(--archive-ink);
+  font-family: var(--font-family-archive);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+.archive-tag > img { width: 1rem; height: 1rem; filter: grayscale(0.5) sepia(0.15); }
+
+/* --- 아카이브 고스트 버튼(상태 보기 등 비-물건 액션) --- */
+.archive-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid rgba(217, 211, 197, 0.28);
+  border-radius: 3px;
+  background: rgba(217, 211, 197, 0.06);
+  color: var(--archive-paper);
+  font-family: var(--font-family-archive);
+  font-size: 0.8rem;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.archive-tool-btn:hover { background: rgba(217, 211, 197, 0.14); }
+.archive-tool-btn:focus-visible { outline: 2px solid var(--archive-silver); outline-offset: 2px; }
+
+/* 모바일: 카드 폭 전환 */
+@media (max-width: 767px) {
+  .archive-photo-frame { min-height: 7rem; }
+}

@@ -21,6 +21,7 @@ import './styles/components/components-04.css';
 import './styles/components/components-05.css';
 import './styles/components/components-06.css';
 import './styles/components/components-07.css';
+import './styles/components/components-08-archive.css'; // 아카이브 아트 디렉션(.archive-* 격리 네임스페이스)
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
