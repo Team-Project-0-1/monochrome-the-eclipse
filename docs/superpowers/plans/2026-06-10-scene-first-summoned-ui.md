@@ -191,6 +191,7 @@ const RouteMapOverlay: React.FC = () => {
               </h2>
               <button
                 type="button"
+                autoFocus
                 onClick={() => setMapOpen(false)}
                 aria-label="지도 닫기"
                 data-testid="route-map-close"
@@ -307,16 +308,16 @@ const RunTopBar: React.FC = () => {
       </div>
 
       <nav className="run-top-bar-actions" aria-label="런 도구">
-        <button type="button" className="run-top-bar-btn" data-testid="top-bar-map-button" onClick={() => setMapOpen(true)}>
+        <button type="button" className="run-top-bar-btn" data-testid="top-bar-map-button" aria-label="지도" onClick={() => setMapOpen(true)}>
           <Map className="h-4 w-4" /><span>지도</span>
         </button>
-        <button type="button" className="run-top-bar-btn" data-testid="top-bar-deck-button" onClick={() => setInventoryOpen(true)}>
+        <button type="button" className="run-top-bar-btn" data-testid="top-bar-deck-button" aria-label="가방" onClick={() => setInventoryOpen(true)}>
           <Package className="h-4 w-4" /><span>가방</span>
         </button>
-        <button type="button" className="run-top-bar-btn" data-testid="top-bar-status-button" onClick={() => setRunStatusOpen(true)}>
+        <button type="button" className="run-top-bar-btn" data-testid="top-bar-status-button" aria-label="상태" onClick={() => setRunStatusOpen(true)}>
           <ScrollText className="h-4 w-4" /><span>상태</span>
         </button>
-        <button type="button" className="run-top-bar-btn is-muted" data-testid="top-bar-menu-button" onClick={() => setGameState(GameState.MENU)}>
+        <button type="button" className="run-top-bar-btn is-muted" data-testid="top-bar-menu-button" aria-label="메뉴" onClick={() => setGameState(GameState.MENU)}>
           <Home className="h-4 w-4" /><span>메뉴</span>
         </button>
       </nav>
@@ -328,6 +329,8 @@ export default RunTopBar;
 ```
 
 > 참고: `resourceIconPaths`는 `RunStatusModal`에서 쓰는 것과 동일(`../utils/resourceAssets`). 아이콘은 `lucide-react`에서 import.
+>
+> `aria-label`은 필수다 — 모바일 CSS가 `.run-top-bar-btn span { display: none }`으로 텍스트를 숨기는데, `display: none`은 접근성 트리에서도 이름을 제거하므로 aria-label 없이는 모바일에서 이름 없는 버튼 4개가 된다.
 
 - [ ] **Step 2: CSS 추가** — `src/styles/components/components-05.css` 끝(Task 2 블록 아래)에 추가:
 
@@ -393,7 +396,12 @@ git commit -m "feat(ui): RunTopBar — 컴팩트 필수정보 + 지도/가방/�
 - Modify: `src/screens/ExplorationScreen.tsx`
 - Modify: `src/styles/components/components-05.css` (레이아웃 1열화)
 
-- [ ] **Step 1: import 정리** — `ExplorationScreen.tsx` 상단에서 더 이상 안 쓰는 것 제거, 신규 추가. 제거: `CharacterStatus`, `ResourceDisplay`, `MiniMap`, `Panel`, `ActionButton`, `Activity`/`Package`/`ArrowLeft`(상단바로 이동). 추가:
+- [ ] **Step 1: import·셀렉터 정리** — `ExplorationScreen.tsx` 상단에서 더 이상 안 쓰는 것 제거, 신규 추가.
+  - 제거할 import: `CharacterStatus`, `ResourceDisplay`, `MiniMap`, `ActionButton`, `Activity`/`Package`/`ArrowLeft`(상단바로 이동). `Panel`·`MapPinned`·`RadioTower`·`ShieldAlert`는 히어로 Panel이 계속 쓰므로 **유지**.
+  - 레일 제거로 미사용이 되는 store 셀렉터도 제거: `resources`(현재 27행), `reserveCoins`(28행), `setInventoryOpen`(35행).
+  - **주의: tsconfig에 `noUnusedLocals`가 없어서 typecheck는 미사용 import/변수를 잡아주지 않는다 — 위 목록을 빠짐없이 수동으로 제거할 것.**
+
+  추가:
 
 ```tsx
 import RunTopBar from '../components/RunTopBar';
@@ -433,7 +441,7 @@ import RunStatusModal from '../components/RunStatusModal';
   );
 ```
 
-> 주의: `.exploration-route-hero` Panel과 `<NodeSelection .../>` 블록(현재 89–157행)은 **내용 변경 없이** `<main>` 안에 그대로 둔다. 히어로는 여전히 `Panel`을 쓰므로 `Panel` import는 유지해야 한다 — Step 1의 "제거" 목록에서 `Panel`은 빼고 유지할 것. (`ActionButton`·`CharacterStatus`·`ResourceDisplay`·`MiniMap`·`Activity`·`Package`·`ArrowLeft`만 제거.)
+> 주의: `.exploration-route-hero` Panel과 `<NodeSelection .../>` 블록(현재 90–156행)은 **내용 변경 없이** `<main>` 안에 그대로 둔다. 히어로가 쓰는 `Panel`·`MapPinned`·`RadioTower`·`ShieldAlert`·`getNodeTypeCounts`·`routePressureText` 등은 유지(Step 1의 유지/제거 목록 참조).
 
 - [ ] **Step 3: 레이아웃 CSS 1열화** — `src/styles/components/components-05.css`의 기존 규칙을 수정:
 
@@ -452,25 +460,17 @@ import RunStatusModal from '../components/RunStatusModal';
   min-height: calc(100dvh - 2rem) !important;
 }
 ```
-(이제 JSX가 `flex flex-col`이라 그리드 컬럼 불필요. `.exploration-rail`/`.exploration-footer` 규칙은 해당 요소가 사라져 무효지만 그대로 둬도 무해.)
+(이제 JSX가 `flex flex-col`이라 그리드 컬럼 불필요. 잔여 규칙은 요소가 사라지거나 display가 flex라 무효 — `components-05.css`의 `.exploration-rail`/`.exploration-footer`뿐 아니라 **`components-03.css` 372·397·507행의 `.exploration-layout` 2열 그리드 미디어쿼리와 `tokens.css` 616행의 `.exploration-footer` 규칙도 동일하게 무해**. 전부 이번 슬라이스에선 건드리지 않고 후속 계획(C/상단 바 App 승격)에서 일괄 정리.)
 
 - [ ] **Step 4: 빌드 + 전체 체크**
 
 Run: `npm run check`
 Expected: 통과(252+ 테스트, typecheck, build, dist 예산, no-e2e-hooks). 실패 시 미사용 import(예: 안 지운 `MiniMap`) 또는 JSX 누락 점검.
 
-- [ ] **Step 5: 시각 캡처(평상시 + 지도 열림)** — 캡처 스크립트로 상단 바·풀폭·지도 오버레이 확인. `.tmp/ui-review-capture.mjs`의 desktop 블록에 지도-열림 캡처 한 줄 추가(reachExploration 직후):
+- [ ] **Step 5: 시각 캡처(평상시)** — 별도 캡처 스크립트는 만들지 않는다(과거 `.tmp/ui-review-capture.mjs`는 일회용 산출물로 **현재 저장소에 존재하지 않음**). e2e 스모크의 `checkScreen`이 화면마다 스크린샷을 `output/e2e/`에 저장하므로 그것을 활용한다.
 
-```js
-  await ev(`window.__gameStore.getState().setMapOpen(true)`);
-  await sleep(400);
-  await shoot(cdp, 'ui-review-desktop-map-open.png');
-  await ev(`window.__gameStore.getState().setMapOpen(false)`);
-  await sleep(250);
-```
-
-Run: `node .tmp/ui-review-capture.mjs`
-Expected: `output/e2e/ui-review-desktop-resting.png`(상단 바 + 풀폭, 사이드/미니맵 없음), `ui-review-desktop-map-open.png`(전체 지도 오버레이 — 노드가 크게 보임), `ui-review-mobile-resting.png`(상단 바 아이콘만) 생성. 사람이 육안 확인.
+Run: `npm run e2e`
+Expected: `"ok": true`(exploration 단계는 `.exploration-screen` 셀렉터만 확인하므로 이 시점에도 통과). `output/e2e/desktop-exploration.png`(상단 바 + 풀폭, 사이드 레일·콩알 미니맵 없음)과 `output/e2e/mobile-exploration.png`(상단 바 아이콘만) 육안 확인. 지도-열림 캡처는 Task 5에서 e2e 플로우에 함께 추가된다.
 
 - [ ] **Step 6: Commit**
 
@@ -489,18 +489,21 @@ git commit -m "feat(ui): 탐험 씬-우선화 — 상단 바 + 지도/상태 오
 - [ ] **Step 1: 탐험 단계에 상단 바/지도 검증 추가** — `run-e2e-smoke.mjs`의 desktop/mobile 공통 플로우에서 exploration 화면 확인 직후(현재 `await checkScreen(... 'exploration', '.exploration-screen' ...)` 다음 줄)에 삽입:
 
 ```js
-    // 호출형 지도: 상단 바 버튼 → 오버레이 표시 → 닫기
+    // 호출형 지도: 상단 바 버튼 → 오버레이 표시 → 캡처 → 닫기
     await waitForSelector(cdp, '[data-testid="run-top-bar"]', { timeout: 8000, label: 'run top bar' });
     await clickSelector(cdp, '[data-testid="top-bar-map-button"]');
     await waitForSelector(cdp, '[data-testid="route-map-overlay"]', { timeout: 8000, label: 'route map overlay' });
+    screenshots.push(await capture(cdp, name, 'exploration-map-open'));
     await clickSelector(cdp, '[data-testid="route-map-close"]');
     await waitForCondition(cdp, `!document.querySelector('[data-testid="route-map-overlay"]')`, { timeout: 5000, label: 'map overlay closed' });
 ```
 
+> `screenshots`/`capture`/`name`은 삽입 지점(`runFlow` 내부, 현재 471행 `checkScreen(... 'exploration' ...)` 직후)에서 이미 스코프에 있다 — Task 4 Step 5에서 못 찍은 지도-열림 시각 캡처가 여기서 desktop/mobile 양쪽으로 생성된다.
+
 - [ ] **Step 2: e2e 실행**
 
 Run: `npm run e2e`
-Expected: 출력 JSON `"ok": true`, errors 빈 배열. desktop+mobile 양쪽에서 지도 열림/닫힘 통과. (실패 시 testid 오타 또는 오버레이 미마운트 점검.)
+Expected: 출력 JSON `"ok": true`, errors 빈 배열. desktop+mobile 양쪽에서 지도 열림/닫힘 통과, `output/e2e/desktop-exploration-map-open.png`·`mobile-exploration-map-open.png` 생성(전체 지도 오버레이 — 노드가 크게 보임) → 육안 확인. (실패 시 testid 오타 또는 오버레이 미마운트 점검.)
 
 - [ ] **Step 3: 최종 전체 체크**
 
@@ -536,8 +539,9 @@ git commit -m "test(e2e): 탐험 상단 바 지도 오버레이 열기/닫기 �
 **3. 타입/이름 일관성:** `isMapOpen`/`setMapOpen`, `isRunStatusOpen`/`setRunStatusOpen`(Task 1) = RunTopBar/RouteMapOverlay/ExplorationScreen(Task 2–4)에서 동일 사용 ✅. data-testid: `run-top-bar`/`top-bar-map-button`/`route-map-overlay`/`route-map-close`(Task 3) = e2e(Task 5)에서 동일 ✅.
 
 **알려진 잔여 위험(실행자 주의):**
-- ExplorationScreen import 정리 시 `Panel`은 **유지**(히어로가 사용). 미사용 import는 `noUnusedLocals`로 typecheck가 잡아줌.
-- `.exploration-rail`/`.exploration-footer` 잔여 CSS는 무해하지만, 후속 정리 대상.
+- ExplorationScreen 정리 시 `Panel`은 **유지**(히어로가 사용). **tsconfig에 `noUnusedLocals`가 없으므로 typecheck는 미사용 import·변수를 잡아주지 않는다** — Task 4 Step 1의 제거 목록(import + `resources`/`reserveCoins`/`setInventoryOpen` 셀렉터)을 수동으로 빠짐없이 적용할 것.
+- 잔여 CSS는 무해하지만 후속 정리 대상: `components-05.css`의 `.exploration-rail`/`.exploration-footer`, `components-03.css` 372·397·507행의 `.exploration-layout` 2열 그리드 미디어쿼리, `tokens.css` 616행의 `.exploration-footer`.
+- 모바일 상단 바는 아이콘만 보이므로(`span` display:none) 버튼 `aria-label`(Task 3) 누락 시 접근성 회귀 — 코드 블록에 이미 포함되어 있으니 그대로 옮길 것.
 - 사이드 레일 제거로 `CharacterStatus`의 상태효과 표시가 탐험에서 사라짐 — 탐험 중엔 상태효과가 거의 없고 [상태] 버튼(RunStatusModal)으로 전체 확인 가능하므로 수용. 검토자가 반대하면 상단 바에 상태 칩 추가로 보완.
 
 ## Execution Handoff
