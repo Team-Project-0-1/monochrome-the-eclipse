@@ -528,7 +528,6 @@ const runFlow = async (baseUrl, name, viewport, instancePort, errors) => {
     // --- Deep screens via store toggle (each from a fresh run) ---
     const deepScreens = [
       { step: 'shop', state: 'SHOP', selector: '.shop-screen' },
-      { step: 'rest', state: 'REST', selector: '.rest-screen' },
       { step: 'memory-altar', state: 'MEMORY_ALTAR', selector: '.memory-altar-screen' },
     ];
 
@@ -538,6 +537,12 @@ const runFlow = async (baseUrl, name, viewport, instancePort, errors) => {
       await setGameState(cdp, `{ gameState: '${state}' }`);
       await checkScreen(cdp, errors, name, step, selector, overflows, screenshots);
     }
+
+    // REST: 부상 상태로 진입해야 "현상액 속 떠오르는 회복량"(readout) 연출이 보인다(만피면 disabled 경로 — 스펙 §3.3).
+    await resetToMenu(cdp);
+    await seedRun(cdp);
+    await setGameState(cdp, `(s => ({ gameState: 'REST', player: { ...s.player, currentHp: Math.max(1, Math.floor(s.player.maxHp * 0.45)) } }))`);
+    await checkScreen(cdp, errors, name, 'rest', '.archive-rest-screen', overflows, screenshots);
 
     // EVENT requires currentEvent + player; eventPhase 'choice' for the chooser.
     await resetToMenu(cdp);
