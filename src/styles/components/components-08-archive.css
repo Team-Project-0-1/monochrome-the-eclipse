@@ -220,8 +220,113 @@ body.is-reduced-motion .archive-card.is-dealt { animation: none; }
 .archive-tool-btn:hover { background: rgba(201, 211, 214, 0.14); }
 .archive-tool-btn:focus-visible { outline: 2px solid var(--archive-accent); outline-offset: 2px; }
 
+/* --- 휴식(암실): 현상 트레이 = HP 상태. scene 딤 위에 직접 놓이므로 밝은 텍스트. --- */
+.archive-tray {
+  position: relative;
+  z-index: 2; /* 그레인 위 */
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 9rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(6, 12, 14, 0.6);
+  border: 1px solid rgba(114, 239, 255, 0.25);
+  border-radius: 3px;
+  color: var(--archive-paper);
+  font-family: var(--font-family-archive);
+}
+.archive-tray-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--archive-accent);
+}
+.archive-tray strong { font-size: 1.4rem; font-weight: 700; line-height: 1; }
+.archive-tray strong small { font-size: 0.8rem; color: rgba(201, 211, 214, 0.7); }
+.archive-tray-gauge {
+  height: 0.3rem;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.archive-tray-gauge > i {
+  display: block;
+  height: 100%;
+  background: var(--archive-accent);
+}
+
+/* --- 미니 권장 도장 (캡션 옆 소형 스탬프) --- */
+.archive-stamp-mini {
+  margin-left: 0.4rem;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  border-width: 1.5px;
+  vertical-align: middle;
+}
+
+/* --- 비활성 폴라로이드 (회복 불가 등) — 물리 반응·반사 스윕 제거 --- */
+button.archive-card:disabled { cursor: not-allowed; opacity: 0.55; filter: grayscale(0.3); }
+button.archive-card:disabled:hover,
+button.archive-card:disabled:focus-visible {
+  transform: none;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 10px 24px rgba(0, 0, 0, 0.55),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+}
+button.archive-card:disabled::after { display: none; }
+
+/* --- 휴식(암실): 폴라로이드 사진면 — 밝은 은염 인화. 어두운 암실 위에서 대비로 떠오른다.
+       (보상의 어두운 .archive-photo-frame과 구분: 휴식 선택지는 폴라로이드다 — 스펙 §3.3) --- */
+.archive-polaroid {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 9.5rem;
+  margin-bottom: 0.6rem;
+  background:
+    radial-gradient(ellipse 82% 72% at 50% 40%, #5f696e, #262d31 94%); /* 은염 사진톤 — 밝은 카드 프레임과 대비 */
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+.archive-polaroid > img {
+  width: 4rem;
+  height: 4rem;
+  object-fit: contain;
+  filter: grayscale(0.85) contrast(1.08) brightness(1.15); /* 피사체 — 어두운 사진면 위 밝은 주제, 세피아 금지 */
+}
+/* 사진 입자 */
+.archive-polaroid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  opacity: 0.1;
+}
+
+/* 현상되어 떠오르는 결과 수치 (회복: 현재 → 회복 후) */
+.archive-develop-readout {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-family-archive);
+  color: var(--archive-paper); /* 어두운 사진면 위 — 밝은 수치 */
+}
+.archive-develop-readout .from { font-size: 1rem; color: rgba(201, 211, 214, 0.75); }
+.archive-develop-readout .arrow { margin: 0 0.35rem; color: var(--archive-accent); font-weight: 700; }
+.archive-develop-readout .to { font-size: 2rem; font-weight: 700; line-height: 1; color: #eef3f4; }
+
 /* 모바일: 카드 폭 전환 */
 @media (max-width: 767px) {
   .archive-photo-frame { min-height: 7rem; }
   .archive-photo-frame > img { width: 4.5rem; height: 4.5rem; }
+  .archive-polaroid { min-height: 7rem; }
+  .archive-polaroid > img { width: 3.25rem; height: 3.25rem; }
 }
