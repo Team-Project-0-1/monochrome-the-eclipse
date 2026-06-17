@@ -555,6 +555,88 @@ button.archive-card:disabled::after { display: none; }
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
 }
 
+/* --- 메뉴(일식 표지): scene 기본 딤이 강해 일식 정체성을 죽이므로 메뉴 전용으로 완화. --- */
+.archive-menu-screen.is-scene {
+  background:
+    radial-gradient(ellipse 150% 130% at 50% 28%, transparent 42%, var(--archive-desk-edge) 100%),
+    linear-gradient(180deg, rgba(4, 7, 10, 0.32), rgba(4, 7, 10, 0.6)),
+    var(--archive-scene-image, none),
+    var(--archive-desk);
+  background-size: auto, auto, cover, auto;
+  background-position: center, center, center 32%, center;
+}
+
+/* --- 행동 물건 카드 (계속하기=서류철 / 새 탐험=새 필름) --- */
+.archive-menu-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.9rem 1.1rem;
+  font-family: var(--font-family-archive);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--archive-ink);
+  background: linear-gradient(168deg, var(--archive-paper) 0%, var(--archive-paper-shade) 100%);
+  border: 1px solid rgba(20, 33, 31, 0.35);
+  border-radius: 3px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.archive-menu-action:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.55); }
+.archive-menu-action:focus-visible { outline: 2px solid var(--archive-accent); outline-offset: 2px; }
+.archive-menu-action.is-primary {
+  color: var(--archive-paper);
+  background: var(--archive-stamp-ink);
+  border-color: var(--archive-stamp-ink);
+}
+
+/* --- 책상 dock (상태·기록·옵션 캐비닛) — 어두운 기록판 --- */
+.archive-menu-dock {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(6, 12, 14, 0.72);
+  border: 1px solid rgba(114, 239, 255, 0.2);
+  border-radius: 4px;
+  backdrop-filter: blur(3px);
+  color: var(--archive-paper);
+}
+
+/* --- 옵션 토글 (on=청록 도장 채움) --- */
+.archive-menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  min-height: 2.5rem;
+  padding: 0 0.6rem;
+  font-family: var(--font-family-archive);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--archive-paper);
+  background: rgba(6, 12, 14, 0.5);
+  border: 1px solid rgba(114, 239, 255, 0.22);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+.archive-menu-toggle[aria-pressed='true'] {
+  background: var(--archive-accent);
+  color: #04222b;
+  border-color: var(--archive-accent);
+}
+.archive-menu-toggle:hover { background: rgba(12, 22, 26, 0.78); }
+.archive-menu-toggle:focus-visible { outline: 2px solid var(--archive-accent); outline-offset: 2px; }
+/* 손글 .archive-menu-toggle은 Tailwind 뒤 cascade라 justify-content:center가 .justify-between을 이긴다.
+   양끝 정렬이 필요한 버튼(튜토리얼)은 이 변형으로 명시 — Tailwind 의존 금지. */
+.archive-menu-toggle.is-spread { justify-content: space-between; }
+
 /* 모바일: 카드 폭 전환 */
 @media (max-width: 767px) {
   .archive-photo-frame { min-height: 7rem; }
