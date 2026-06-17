@@ -414,6 +414,147 @@ button.archive-card:disabled::after { display: none; }
 .archive-stamp.is-blocked { color: var(--archive-ink-soft); border-color: var(--archive-ink-soft); }
 .archive-stamp.is-owned { color: var(--archive-ink); border-color: var(--archive-ink); opacity: 0.7; }
 
+/* --- 이벤트(발견된 기록): 책상 위 편지/사진 기록물. scene 딤 위 인화지 본문. --- */
+.archive-record {
+  position: relative;
+  z-index: 2;
+  padding: 1.5rem 1.6rem;
+  background:
+    linear-gradient(172deg, var(--archive-note-bg-a), var(--archive-note-bg-b));
+  border: 1px solid rgba(20, 33, 31, 0.4);
+  border-radius: 3px;
+  color: var(--archive-ink);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  font-family: var(--font-family-archive);
+}
+.archive-record-location {
+  margin-top: 0.6rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--archive-ink-soft);
+}
+.archive-record-title {
+  margin-top: 0.3rem;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--archive-ink);
+}
+.archive-record-body {
+  margin-top: 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--archive-ink);
+}
+/* 화자 대사 = 사진 뒷면에 쓴 글(들여쓴 손글씨 톤) */
+.archive-record-dialogue {
+  margin-top: 1.1rem;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--archive-stamp-ink);
+}
+.archive-record-dialogue span {
+  display: block;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--archive-stamp-ink);
+}
+.archive-record-dialogue strong { font-weight: 700; font-style: italic; }
+/* 기록 하단 스탯 꼬리표 줄 */
+.archive-record-stats {
+  margin-top: 1.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* --- 여백의 연필 주석 = 선택지. 가벼운 손글씨 톤(폴라로이드보다 약함). --- */
+.archive-margin-notes {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.archive-margin-note {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.7rem 0.85rem;
+  font-family: var(--font-family-archive);
+  color: var(--archive-paper);
+  background: rgba(6, 12, 14, 0.55);
+  border: 1px solid rgba(114, 239, 255, 0.22);
+  border-left: 3px solid var(--archive-accent);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+.archive-margin-note:hover { background: rgba(12, 22, 26, 0.78); border-left-color: #a8f6ff; }
+.archive-margin-note:focus-visible { outline: 2px solid var(--archive-accent); outline-offset: 2px; }
+.archive-margin-note:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  border-left-color: var(--archive-ink-soft);
+}
+.archive-margin-note-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.archive-margin-note-text { font-size: 1rem; font-weight: 700; }
+.archive-margin-note-odds {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--archive-accent);
+}
+.archive-margin-note-req {
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: rgba(201, 211, 214, 0.8);
+}
+.archive-margin-note:disabled .archive-margin-note-req { color: #e2a0a0; }
+.archive-margin-note-meta {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.9rem;
+  font-size: 0.72rem;
+  color: rgba(201, 211, 214, 0.75);
+}
+
+/* --- 결과 도장 — 기록 위에 찍힌 큰 스탬프 --- */
+.archive-result-stamp {
+  display: inline-block;
+  margin: 0 auto;
+  padding: 0.4rem 1.4rem;
+  font-family: var(--font-family-archive);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--archive-stamp-ink);
+  border: 3px solid var(--archive-stamp-ink);
+  border-radius: 4px;
+  transform: rotate(-4deg);
+}
+
+/* --- 코인플립 프레임 — EventCoinFlip은 어두운 배경 전제(밝은 텍스트/코인)라
+       밝은 인화지(.archive-record) 대신 어두운 박스 위에 둬 대비를 보존한다. --- */
+.archive-coinflip-frame {
+  position: relative;
+  z-index: 2;
+  padding: 1.4rem 1.5rem;
+  background: rgba(6, 12, 14, 0.82);
+  border: 1px solid rgba(114, 239, 255, 0.25);
+  border-radius: 4px;
+  color: var(--archive-paper);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+}
+
 /* 모바일: 카드 폭 전환 */
 @media (max-width: 767px) {
   .archive-photo-frame { min-height: 7rem; }
