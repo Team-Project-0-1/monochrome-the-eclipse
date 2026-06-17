@@ -529,6 +529,10 @@ const runFlow = async (baseUrl, name, viewport, instancePort, errors) => {
     const deepScreens = [
       { step: 'shop', state: 'SHOP', selector: '.archive-shop-screen' },
       { step: 'memory-altar', state: 'MEMORY_ALTAR', selector: '.archive-altar-screen' },
+      // 엔딩 3종(RunResultScreen 공유) — e2e 사각지대였던 결과 화면 회귀 가드. seedRun의 player/path로 보고서 렌더.
+      { step: 'game-over', state: 'GAME_OVER', selector: '.archive-result-screen' },
+      { step: 'victory', state: 'VICTORY', selector: '.archive-result-screen' },
+      { step: 'stage-clear', state: 'STAGE_CLEAR', selector: '.archive-result-screen' },
     ];
 
     for (const { step, state, selector } of deepScreens) {
