@@ -548,7 +548,7 @@ const runFlow = async (baseUrl, name, viewport, instancePort, errors) => {
     await resetToMenu(cdp);
     await seedRun(cdp);
     await setGameState(cdp, `{ gameState: 'EVENT', currentEvent: window.__eventData.event_supplies, eventPhase: 'choice' }`);
-    await checkScreen(cdp, errors, name, 'event', '.event-screen', overflows, screenshots);
+    await checkScreen(cdp, errors, name, 'event', '.archive-event-screen', overflows, screenshots);
 
     // REWARD requires pendingCombatReward (drives the choice grid).
     await resetToMenu(cdp);
