@@ -50,6 +50,8 @@ export const initialTutorialFlags: TutorialFlags = {
 
 export interface UiSlice {
   isInventoryOpen: boolean;
+  isMapOpen: boolean;
+  isRunStatusOpen: boolean;
   skillReplacementState: SkillReplacementState | null;
   combatEffects: CombatEffect[];
   playerHit: number;
@@ -58,6 +60,8 @@ export interface UiSlice {
   gameOptions: GameOptions;
   tutorialFlags: TutorialFlags;
   setInventoryOpen: (isOpen: boolean) => void;
+  setMapOpen: (isOpen: boolean) => void;
+  setRunStatusOpen: (isOpen: boolean) => void;
   setSkillReplacementState: (state: SkillReplacementState | null) => void;
   removeCombatEffect: (id: number) => void;
   showTooltip: (content: TooltipContent, rect: DOMRect) => void;
@@ -70,6 +74,8 @@ export interface UiSlice {
 
 export const createUiSlice: StateCreator<GameStore, [], [], UiSlice> = (set, get, api) => ({
   isInventoryOpen: false,
+  isMapOpen: false,
+  isRunStatusOpen: false,
   skillReplacementState: null,
   combatEffects: [],
   playerHit: 0,
@@ -78,6 +84,8 @@ export const createUiSlice: StateCreator<GameStore, [], [], UiSlice> = (set, get
   gameOptions: initialGameOptions,
   tutorialFlags: initialTutorialFlags,
   setInventoryOpen: (isOpen) => set({ isInventoryOpen: isOpen }),
+  setMapOpen: (isOpen) => set({ isMapOpen: isOpen }),
+  setRunStatusOpen: (isOpen) => set({ isRunStatusOpen: isOpen }),
   setSkillReplacementState: (state) => set({ skillReplacementState: state }),
   removeCombatEffect: (id) => set(state => ({
     combatEffects: state.combatEffects.filter(e => e.id !== id)

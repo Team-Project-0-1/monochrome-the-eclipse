@@ -81,3 +81,19 @@ describe('uiSlice — transient UI state', () => {
     expect(store.getState().skillReplacementState).toBeNull();
   });
 });
+
+describe('uiSlice 호출형 UI 토글', () => {
+  it('setMapOpen이 isMapOpen을 토글한다', () => {
+    expect(store.getState().isMapOpen).toBe(false);
+    store.getState().setMapOpen(true);
+    expect(store.getState().isMapOpen).toBe(true);
+    store.getState().setMapOpen(false);
+    expect(store.getState().isMapOpen).toBe(false);
+  });
+
+  it('setRunStatusOpen이 isRunStatusOpen을 토글한다', () => {
+    expect(store.getState().isRunStatusOpen).toBe(false);
+    store.getState().setRunStatusOpen(true);
+    expect(store.getState().isRunStatusOpen).toBe(true);
+  });
+});
