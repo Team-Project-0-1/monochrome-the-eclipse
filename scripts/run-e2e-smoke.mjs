@@ -550,6 +550,10 @@ const runFlow = async (baseUrl, name, viewport, instancePort, errors) => {
     await setGameState(cdp, `{ gameState: 'EVENT', currentEvent: window.__eventData.event_supplies, eventPhase: 'choice' }`);
     await checkScreen(cdp, errors, name, 'event', '.archive-event-screen', overflows, screenshots);
 
+    // EVENT result 페이즈 — choice 캡처가 안 건드리는 신규 CSS(결과 도장·변동 꼬리표·계속 버튼) 회귀 방지.
+    await setGameState(cdp, `{ gameState: 'EVENT', currentEvent: window.__eventData.event_supplies, eventPhase: 'result', eventResultData: { type: 'result', payload: { baseMessage: '보급품을 확보했다. 경고등은 꺼졌다.' } }, eventDisplayItems: [{ label: '에코', value: 12 }, { label: '체력', value: -5 }] }`);
+    await checkScreen(cdp, errors, name, 'event-result', '.archive-event-screen', overflows, screenshots);
+
     // REWARD requires pendingCombatReward (drives the choice grid).
     await resetToMenu(cdp);
     await seedRun(cdp);
