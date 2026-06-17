@@ -378,7 +378,7 @@ const capture = async (cdp, name, step) => {
 // between deep-screen toggles so each screen is reached from a clean run.
 const resetToMenu = async (cdp) => {
   await evaluate(cdp, `window.__gameStore.getState().resetGame(true)`);
-  await waitForSelector(cdp, '.menu-screen', { timeout: 8000 });
+  await waitForSelector(cdp, '.archive-menu-screen', { timeout: 8000 });
 };
 
 // Create a fresh WARRIOR run (player + stageNodes + resources) so the deep
@@ -461,7 +461,7 @@ const runFlow = async (baseUrl, name, viewport, instancePort, errors) => {
     await navigate(cdp, baseUrl);
 
     // --- Natural entry: MENU -> CHARACTER_SELECT -> EXPLORATION -> COMBAT ---
-    await checkScreen(cdp, errors, name, 'menu', '.menu-screen', overflows, screenshots);
+    await checkScreen(cdp, errors, name, 'menu', '.archive-menu-screen', overflows, screenshots);
 
     await clickSelector(cdp, '[data-testid="start-run-button"]');
     await checkScreen(cdp, errors, name, 'character', '[data-testid="character-card-warrior"]', overflows, screenshots);
