@@ -468,7 +468,7 @@ const runFlow = async (baseUrl, name, viewport, instancePort, errors) => {
 
     await clickSelector(cdp, '[data-testid="character-card-warrior"]');
     await clickSelector(cdp, '[data-testid="start-with-character"]:not([disabled])');
-    await checkScreen(cdp, errors, name, 'exploration', '.exploration-screen', overflows, screenshots);
+    await checkScreen(cdp, errors, name, 'exploration', '.archive-exploration-screen', overflows, screenshots);
 
     // 호출형 지도: 상단 바 버튼 → 오버레이 표시 → 캡처 → 닫기
     await waitForSelector(cdp, '[data-testid="run-top-bar"]', { timeout: 8000, label: 'run top bar' });

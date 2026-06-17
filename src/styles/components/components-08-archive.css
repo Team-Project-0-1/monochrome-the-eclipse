@@ -844,6 +844,214 @@ button.archive-card:disabled::after { display: none; }
 }
 body.is-reduced-motion .combat-screen::after { animation: none; }
 
+/* --- 탐험(네거티브 콘택트 시트, §3.5): 스테이지 장면 딤 위 필름 인덱스. --- */
+/* 루트는 .archive-exploration-screen(ArchiveSurface가 .is-scene와 함께 부여).
+   레거시 .exploration-screen 스코프 규칙(components-03/05)과 분리됨 — 클린 슬레이트. */
+
+/* 콘택트 시트 — 노드(프레임)가 놓이는 무대. scene 딤 위라 자체 스택 컨텍스트. */
+.archive-contact-sheet {
+  position: relative;
+  z-index: 2;
+}
+/* 콘택트 시트 머리말 도장 줄 */
+.archive-contact-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+/* 같은 유형 다중 노드일 때 공통 브리핑 = 시트 여백 캡션(밝은 글씨, 어두운 딤 위) */
+.archive-contact-brief {
+  margin-bottom: 1.1rem;
+  padding: 0.7rem 0.85rem;
+  background: rgba(6, 12, 14, 0.55);
+  border: 1px solid rgba(114, 239, 255, 0.18);
+  border-left: 3px solid var(--archive-accent);
+  border-radius: 2px;
+  color: var(--archive-paper);
+  font-family: var(--font-family-archive);
+}
+.archive-contact-brief p { font-size: 0.82rem; line-height: 1.55; }
+.archive-contact-brief p + p { margin-top: 0.45rem; color: rgba(201, 211, 214, 0.78); }
+
+/* 필름 프레임 = 노드 카드. 기존 motion.button에 입힌다(애니메이션·data 속성 보존).
+   네거티브 콘택트 시트의 한 컷: 어두운 셀룰로이드 + 좌측 색인 띠(기능색 grease-pencil). */
+.archive-film-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 14rem;
+  padding: 0.85rem 0.9rem 0.9rem 1.05rem;
+  text-align: left;
+  color: var(--archive-paper);
+  background:
+    linear-gradient(168deg, rgba(18, 24, 27, 0.92), rgba(8, 12, 14, 0.95));
+  border: 1px solid rgba(201, 211, 214, 0.14);
+  border-left: 3px solid var(--archive-ink-soft); /* 색인 띠 기본(기능색 변형이 덮음) */
+  border-radius: 2px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+/* 셀룰로이드 입자 */
+.archive-film-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+.archive-film-frame > * { position: relative; z-index: 1; }
+button.archive-film-frame { cursor: pointer; }
+button.archive-film-frame:hover,
+button.archive-film-frame:focus-visible {
+  border-color: rgba(201, 211, 214, 0.4);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.6);
+}
+button.archive-film-frame:focus-visible {
+  outline: 2px solid var(--archive-accent);
+  outline-offset: 2px;
+}
+
+/* 기능색 = 좌측 색인 띠(grease-pencil) + 신호 도장. 채도 낮춘 잉크, 글로우 없음. */
+.archive-film-frame[data-node-type="COMBAT"]   { border-left-color: var(--archive-ink-danger); }
+.archive-film-frame[data-node-type="MINIBOSS"] { border-left-color: var(--archive-ink-danger); border-left-width: 5px; }
+.archive-film-frame[data-node-type="BOSS"]     { border-left-color: var(--archive-ink-danger); border-left-width: 7px; }
+.archive-film-frame[data-node-type="EVENT"]    { border-left-color: var(--archive-ink-volatile); }
+.archive-film-frame[data-node-type="SHOP"],
+.archive-film-frame[data-node-type="REST"]     { border-left-color: var(--archive-stamp-ink); }
+.archive-film-frame[data-node-type="UNKNOWN"]  { border-left-color: var(--archive-ink-soft); }
+
+/* 잠긴 경로 프레임 — 물리 반응 제거, 탈색 */
+.archive-film-frame.is-route-locked {
+  cursor: not-allowed;
+  filter: grayscale(0.6);
+  opacity: 0.6;
+}
+.archive-film-frame.is-route-locked:hover,
+.archive-film-frame.is-route-locked:focus-visible {
+  transform: none;
+  border-color: rgba(201, 211, 214, 0.14);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+}
+.archive-film-lock {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  z-index: 2;
+  padding: 0.15rem 0.5rem;
+  font-family: var(--font-family-archive);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  color: var(--archive-paper);
+  background: rgba(6, 12, 14, 0.85);
+  border: 1px solid rgba(201, 211, 214, 0.3);
+  border-radius: 2px;
+}
+
+/* 프레임 인덱스 번호 + 라우트명(필름 가장자리 각인 톤) */
+.archive-film-index {
+  font-family: var(--font-family-archive);
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(201, 211, 214, 0.55);
+}
+
+/* 위험/보상 꼬리표 줄 = 필름 하단 데이터 스트립 */
+.archive-route-meta {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+.archive-route-meta > div {
+  padding: 0.45rem 0.55rem;
+  background: rgba(6, 12, 14, 0.45);
+  border: 1px solid rgba(201, 211, 214, 0.12);
+  border-radius: 2px;
+}
+.archive-route-meta-key {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(201, 211, 214, 0.5);
+}
+.archive-route-meta-val { font-weight: 700; color: var(--archive-paper); }
+
+/* 호버/포커스 시 감각 정보 공개(progressive disclosure, 03 .route-node-detail 대체) */
+.archive-film-detail {
+  position: absolute;
+  inset-inline: 0.6rem;
+  bottom: 0.6rem;
+  z-index: 3;
+  padding: 0.55rem 0.65rem;
+  background: rgba(4, 8, 10, 0.92);
+  border: 1px solid rgba(114, 239, 255, 0.22);
+  border-radius: 2px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+  pointer-events: none;
+}
+button.archive-film-frame:hover .archive-film-detail,
+button.archive-film-frame:focus-within .archive-film-detail,
+button.archive-film-frame:focus-visible .archive-film-detail {
+  opacity: 1;
+  transform: translateY(0);
+}
+.archive-film-detail-sense {
+  font-family: var(--font-family-archive);
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: rgba(201, 211, 214, 0.92);
+}
+.archive-film-detail-desc {
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: rgba(201, 211, 214, 0.66);
+}
+body.is-reduced-motion .archive-film-detail { transition: none; }
+
+/* 라우트 히어로 압력 메모지 = 책상 모서리 청록 메모(웜 yellow 제거) */
+.archive-route-pressure {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+/* 상단 바 = 책상 가장자리 도구. 콘택트 시트 무대 위 stacking 보장(구조·testid 불변). */
+.archive-exploration-screen .run-top-bar {
+  position: relative;
+  z-index: 2;
+}
+
+/* 지도 오버레이(콘택트 시트 위 그리스펜슬 표시) — 웜 yellow 톤을 월식 사이안/중성으로 중화(§2.2).
+   geometry는 레거시 유지, 색만 archive 스코프로 덮는다. RouteMapOverlay가 fixed여도
+   .archive-exploration-screen 자손이라 매칭됨. */
+.archive-exploration-screen .mini-map-board {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(114, 239, 255, 0.1), transparent 44%),
+    linear-gradient(180deg, rgba(6, 12, 14, 0.7), rgba(4, 8, 10, 0.85));
+}
+.archive-exploration-screen .mini-map-path {
+  filter: drop-shadow(0 0 6px rgba(114, 239, 255, 0.14));
+}
+.archive-exploration-screen .mini-map-turn-zone {
+  background: linear-gradient(180deg, rgba(114, 239, 255, 0.12), rgba(114, 239, 255, 0.03));
+}
+.archive-exploration-screen .mini-map-turn-label.is-current {
+  color: var(--archive-accent);
+}
+/* MiniMap 머리말 카운터(text-yellow-400 Tailwind)도 사이안으로 — h3 우측 span */
+.archive-exploration-screen .mini-map-panel h3 .text-yellow-400,
+.archive-exploration-screen .mini-map-panel .text-yellow-400 {
+  color: var(--archive-accent) !important;
+}
+
 /* 모바일: 카드 폭 전환 */
 @media (max-width: 767px) {
   .archive-photo-frame { min-height: 7rem; }
@@ -859,5 +1067,14 @@ body.is-reduced-motion .combat-screen::after { animation: none; }
     border-radius: 4px;
     background: rgba(6, 12, 14, 0.78);
     backdrop-filter: blur(3px);
+  }
+  /* 모바일: 필름 프레임 최소높이 축소 + 호버 detail은 정적 표시(터치 사용자가 감각 정보를 잃지 않게) */
+  .archive-film-frame { min-height: 11rem; }
+  .archive-film-detail {
+    position: static;
+    inset: auto;
+    opacity: 1;
+    transform: none;
+    margin-top: 0.6rem;
   }
 }

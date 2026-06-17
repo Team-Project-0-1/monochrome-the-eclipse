@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { AlertTriangle, ArrowRight, RadioTower, Sparkles } from 'lucide-react';
+import { AlertTriangle, ArrowRight } from 'lucide-react';
 import { StageNode, NodeType } from '../types';
 import type { PlayerCharacter } from '../types';
 import NodeIcon from './NodeIcon';
 import { getNodePresentation } from '../utils/nodePresentation';
 import { useGameStore } from '../store/gameStore';
 import { playGameSfx, playUiSound } from '../utils/sound';
+import ArchiveStamp from './archive/ArchiveStamp';
 
 interface NodeSelectionProps {
   nodes: StageNode[];
@@ -66,29 +67,22 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndic
   };
 
   return (
-    <section className="route-signal-board relative w-full overflow-hidden rounded-lg border border-white/10 bg-gray-950/80 p-4 shadow-2xl shadow-black/30 backdrop-blur-md sm:p-5">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.12),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.05)_0,transparent_28%)]" />
-      <div className="pointer-events-none absolute left-6 right-6 top-16 h-px bg-gradient-to-r from-transparent via-cyan-200/40 to-transparent" />
-
-      <div className="relative z-10 mb-3 flex items-center justify-between gap-3">
-        <h2 className="flex items-center gap-2 text-lg font-black text-white sm:text-xl">
-          <RadioTower className="h-4 w-4 text-cyan-200" />
-          {currentTurn}층 · 다음 신호 선택
-        </h2>
-        <span className="hidden items-center gap-1.5 text-xs font-semibold text-slate-300/90 sm:inline-flex">
-          <Sparkles className="h-3.5 w-3.5 text-amber-200" />
-          카드에 마우스를 올리면 감각 정보가 열립니다
+    <section className="archive-contact-sheet w-full">
+      <div className="archive-contact-head">
+        <ArchiveStamp>{currentTurn}층 인덱스 — 다음 프레임을 고른다</ArchiveStamp>
+        <span className="hidden text-xs text-slate-300/80 sm:inline">
+          프레임에 마우스를 올리면 감각 기록이 떠오릅니다
         </span>
       </div>
 
       {allSameType && commonMeta ? (
-        <div className="route-common-brief relative z-10 mb-4 rounded-lg border border-white/10 bg-black/25 p-3 sm:p-4">
-          <p className="text-sm leading-relaxed text-white/80">{commonMeta.description}</p>
-          <p className="mt-2 rounded-md border border-white/10 bg-black/20 px-2.5 py-2 text-xs font-semibold leading-relaxed text-white/70">{commonMeta.senseHint}</p>
+        <div className="archive-contact-brief">
+          <p>{commonMeta.description}</p>
+          <p>{commonMeta.senseHint}</p>
         </div>
       ) : null}
 
-      <div className="relative z-10 grid gap-3 md:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-3">
         {nodes.map((node, index) => {
           const meta = getNodePresentation(node, index, player);
           const isSelected = selectedNode?.id === node.id;
@@ -108,57 +102,44 @@ const NodeSelection: React.FC<NodeSelectionProps> = ({ nodes, availableNodeIndic
               animate={isSelected ? { scale: 1.05, opacity: 0, y: -12 } : { scale: 1, opacity: 1, y: 0 }}
               transition={{ duration: 0.42, ease: 'easeInOut' }}
               whileHover={selectedNode || !isAvailable ? undefined : { y: -3 }}
-              className={`route-node-card group relative min-h-[230px] overflow-hidden rounded-lg border p-4 text-left shadow-lg transition-all duration-200 ${!isAvailable ? 'is-route-locked' : ''} disabled:cursor-wait ${meta.className}`}
+              className={`archive-film-frame group ${!isAvailable ? 'is-route-locked' : ''} disabled:cursor-wait`}
             >
-              <div className={`absolute inset-x-4 top-0 h-px bg-gradient-to-r ${meta.lineClassName}`} />
-              <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-white/10 blur-2xl transition-opacity group-hover:opacity-80" />
-              {!isAvailable ? <div className="route-node-lock-badge">경로 잠김</div> : null}
+              {!isAvailable ? <div className="archive-film-lock">경로 잠김</div> : null}
 
-              <div className="relative flex h-full flex-col">
-                <div className="mb-4 flex items-start justify-between gap-3">
-                  <div>
-                    <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/55">
-                      경로 {String(index + 1).padStart(2, '0')}
-                    </div>
-                    <div className="mt-1 text-sm font-bold text-white">{meta.routeName}</div>
-                  </div>
-                  <div className={`rounded-md border border-white/15 bg-black/30 p-2 ${meta.iconClassName}`}>
-                    <NodeIcon type={node.type} size="lg" />
-                  </div>
+              <div className="mb-3 flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="archive-film-index">프레임 {String(index + 1).padStart(2, '0')} · {meta.routeName}</div>
+                  <h3 className="mt-1 text-lg font-black text-white">{meta.label}</h3>
                 </div>
+                <span className="shrink-0 text-slate-200/80"><NodeIcon type={node.type} size="lg" /></span>
+              </div>
 
-                <div className="mb-3 flex items-center gap-2">
-                  <span className="rounded bg-white/10 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white/80">
-                    {meta.signal}
-                  </span>
-                  {isDanger ? <AlertTriangle className="h-4 w-4 text-current opacity-80" /> : null}
+              <div className="mb-3 flex items-center gap-2">
+                <ArchiveStamp className="archive-stamp-mini">{meta.signal}</ArchiveStamp>
+                {isDanger ? <AlertTriangle className="h-4 w-4 text-slate-200/70" /> : null}
+              </div>
+
+              <div className="archive-route-meta">
+                <div>
+                  <div className="archive-route-meta-key">위험</div>
+                  <div className="archive-route-meta-val">{meta.risk}</div>
+                  <RatingMeter level={meta.riskLevel} label="위험도" />
                 </div>
-
-                <h3 className="text-xl font-black text-white">{meta.label}</h3>
-                <div className="mt-2 flex-1" aria-hidden />
-
-                <div className="route-node-meta mt-4 grid grid-cols-2 gap-2 text-xs">
-                  <div className="rounded-md border border-white/10 bg-black/25 px-2.5 py-2">
-                    <div className="text-white/45">위험</div>
-                    <div className="font-bold text-white">{meta.risk}</div>
-                    <RatingMeter level={meta.riskLevel} label="위험도" />
-                  </div>
-                  <div className="rounded-md border border-white/10 bg-black/25 px-2.5 py-2">
-                    <div className="text-white/45">기대 보상</div>
-                    <div className="font-bold text-white">{meta.reward}</div>
-                    <RatingMeter level={meta.rewardLevel} label="보상" />
-                  </div>
+                <div>
+                  <div className="archive-route-meta-key">기대 보상</div>
+                  <div className="archive-route-meta-val">{meta.reward}</div>
+                  <RatingMeter level={meta.rewardLevel} label="보상" />
                 </div>
+              </div>
 
-                <div className="mt-3 flex items-center justify-between text-xs font-bold text-white/80">
-                  <span>{meta.routeHint} · {meta.stake}</span>
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </div>
+              <div className="mt-3 flex items-center justify-between text-xs font-bold text-slate-200/80">
+                <span className="truncate">{meta.routeHint} · {meta.stake}</span>
+                <ArrowRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-1" />
+              </div>
 
-                <div className="route-node-detail">
-                  <p className="route-node-detail-sense">{meta.senseHint}</p>
-                  {!allSameType ? <p className="route-node-detail-desc">{meta.description}</p> : null}
-                </div>
+              <div className="archive-film-detail">
+                <p className="archive-film-detail-sense">{meta.senseHint}</p>
+                {!allSameType ? <p className="archive-film-detail-desc">{meta.description}</p> : null}
               </div>
             </motion.button>
           );
