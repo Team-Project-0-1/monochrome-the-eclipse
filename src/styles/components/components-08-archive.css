@@ -829,6 +829,21 @@ button.archive-card:disabled::after { display: none; }
   mix-blend-mode: screen;
 }
 
+/* --- 전투 톤 정합(§3.10): 전투는 기준점이라 재설계 없이 필름 그레인만 얹어 전 화면 질감 통일.
+   가독성 우선 — 무대 레벨(z 9, 스프라이트/HUD 아래)에 매우 옅게. 레거시 .combat-* 무수정(이 규칙은 cascade 끝). --- */
+.combat-screen { position: relative; }
+.combat-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9;
+  opacity: 0.05;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  animation: archive-grain-shift 1.6s steps(3) infinite;
+}
+body.is-reduced-motion .combat-screen::after { animation: none; }
+
 /* 모바일: 카드 폭 전환 */
 @media (max-width: 767px) {
   .archive-photo-frame { min-height: 7rem; }
