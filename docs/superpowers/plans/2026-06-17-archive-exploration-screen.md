@@ -767,26 +767,51 @@ EOF
 
 ---
 
-## Task 6: 상단 바 + 지도 오버레이 톤 가벼운 정합 (§3.5 "책상 가장자리 도구")
+## Task 6: 상단 바 stacking + 지도 오버레이 웜톤 제거 (§3.5 "책상 가장자리 도구" + §2.2 웜톤 금지)
 
 **Files:**
 - Modify: `src/styles/components/components-08-archive.css` (탐험 블록에 append)
 
-**맥락:** RunTopBar(`.run-top-bar*`)·RouteMapOverlay 카드는 data-testid/구조 유지(개명 안 함). 레거시 `.exploration-screen` 스코프가 아니므로 자체 components-0x 규칙으로 살아있음 — 굳이 재작성하지 않고, 아카이브 무대 위에서 위화감만 줄이는 가벼운 톤 보정만 한다. **회귀 위험 최소화: 새 규칙은 `.archive-exploration-screen` 스코프 + 낮은 특이성으로 보정.**
+**맥락:** RunTopBar(`.run-top-bar*`)·RouteMapOverlay·MiniMap은 data-testid/구조 유지(개명 안 함, 지도 geometry 재작성은 회귀 표면이 큼). 레거시 bare `.mini-map-*`/`.run-top-bar*` 규칙은 root 개명에도 **살아남는다**(advisor 함정 #2). MiniMap은 **웜 yellow 톤**(`text-yellow-400`, `#facc15`, `rgba(250,204,21,…)`)을 쓰는데 이는 §2.2 불변(웜톤 금지) 위반이고, e2e가 `exploration-map-open`을 **양 뷰포트** 캡처(`run-e2e-smoke.mjs:475-477`)하므로 Task 7 육안에서 반드시 잡힌다 → **웜톤 중화가 필수.**
 
-- [ ] **Step 1: 상단 바 + 지도 카드 톤 보정 추가**
+**중요(스코프 닿음 확인):** RouteMapOverlay는 `fixed inset-0`이지만 fixed는 *레이아웃*만 바꾸지 DOM 조상은 그대로다 — `<ArchiveSurface className="archive-exploration-screen">` 안에서 렌더되므로 `.archive-exploration-screen .mini-map-*` 자손 셀렉터가 매칭된다(특이성 0,3,0 > bare 0,2,0, 08은 cascade 끝). **MiniMap은 RouteMapOverlay 단독 사용**(grep 확인 — RunStatusModal 등 미사용)이라 cross-screen 회귀 없음. MiniMap.tsx 직접 수정 대신 **archive 스코프 CSS 오버라이드**로 처리(레거시 무수정, 시리즈 패턴).
+
+- [ ] **Step 1: 상단 바 stacking + 지도 웜톤 중화 추가**
 
 `components-08-archive.css`의 탐험 블록(Task 2에서 추가한 영역) 끝에 추가:
 
 ```css
-/* 상단 바 = 책상 가장자리 도구. 콘택트 시트 무대 위에서 톤만 한랭화(구조·testid 불변). */
+/* 상단 바 = 책상 가장자리 도구. 콘택트 시트 무대 위 stacking 보장(구조·testid 불변). */
 .archive-exploration-screen .run-top-bar {
   position: relative;
   z-index: 2;
 }
+
+/* 지도 오버레이(콘택트 시트 위 그리스펜슬 표시) — 웜 yellow 톤을 월식 사이안/중성으로 중화(§2.2).
+   geometry는 레거시 유지, 색만 archive 스코프로 덮는다. RouteMapOverlay가 fixed여도
+   .archive-exploration-screen 자손이라 매칭됨. */
+.archive-exploration-screen .mini-map-board {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(114, 239, 255, 0.1), transparent 44%),
+    linear-gradient(180deg, rgba(6, 12, 14, 0.7), rgba(4, 8, 10, 0.85));
+}
+.archive-exploration-screen .mini-map-path {
+  filter: drop-shadow(0 0 6px rgba(114, 239, 255, 0.14));
+}
+.archive-exploration-screen .mini-map-turn-zone {
+  background: linear-gradient(180deg, rgba(114, 239, 255, 0.12), rgba(114, 239, 255, 0.03));
+}
+.archive-exploration-screen .mini-map-turn-label.is-current {
+  color: var(--archive-accent);
+}
+/* MiniMap 머리말 카운터(text-yellow-400 Tailwind)도 사이안으로 — h3 우측 span */
+.archive-exploration-screen .mini-map-panel h3 .text-yellow-400,
+.archive-exploration-screen .mini-map-panel .text-yellow-400 {
+  color: var(--archive-accent) !important;
+}
 ```
 
-> 지도 오버레이 카드(`.route-map-overlay-card`)는 fixed 오버레이라 `.archive-exploration-screen` 하위가 아닐 수 있음(RouteMapOverlay는 `fixed inset-0`). 스코프가 안 닿으면 이 Task에서 건드리지 않는다 — MiniMap/오버레이 재작업은 범위 밖(파일 구조 §의 "유지" 결정). 본 Step은 상단 바 stacking만 보장.
+> 주의: `.text-yellow-400`는 Tailwind 유틸이라 `!important`로 덮어야 안전(Tailwind 생성 순서 의존 제거). 나머지 `.mini-map-*`는 손글 클래스라 특이성+cascade로 충분(`!important` 불요).
 
 - [ ] **Step 2: 빌드 + 커밋**
 
@@ -796,7 +821,10 @@ Expected: PASS
 ```bash
 git add src/styles/components/components-08-archive.css
 git commit -m "$(cat <<'EOF'
-feat(archive): 탐험 상단 바 stacking 톤 정합 (§3.5)
+feat(archive): 탐험 상단 바 stacking + 지도 오버레이 웜톤 제거 (§3.5, §2.2)
+
+지도 미니맵의 yellow 톤을 월식 사이안으로 중화(archive 스코프 오버라이드,
+MiniMap.tsx 무수정). geometry 레거시 유지.
 
 Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
 EOF
@@ -830,7 +858,7 @@ Expected: 출력 끝의 결과 JSON/요약에서 `ok: true`(에러 0, 오버플�
 - [ ] 필름 프레임 노드 3장이 콘택트 시트 위에 정상 배치(좌측 정렬 뭉침·겹침 없음, 가로 오버플로 없음)
 - [ ] 기능색 위계 보존: COMBAT/BOSS = 적갈 색인 띠(BOSS가 더 두꺼움), SHOP/REST = 청록, EVENT = 탁한 황, 글로우 없음
 - [ ] 상단 바(HP/자원/도구 버튼) 정상, scene 딤 위에서 가독
-- [ ] 지도 오버레이가 열린 상태로 정상 렌더(map-open 캡처)
+- [ ] 지도 오버레이가 열린 상태로 정상 렌더(map-open 캡처), **웜 yellow 톤 0** — 미니맵 보드/경로/현재 층 라벨/카운터가 전부 사이안/중성(§2.2 웜톤 금지). 데스크톱·모바일 둘 다 확인.
 - [ ] 텍스트 대비: 밝은 글씨가 어두운 콘택트 시트 딤 위에서 읽힘(트랩 #10)
 - [ ] 스테이지 배경이 딤 처리되어 보임(scene 연속성), 책상 텍스처 아님
 
@@ -847,8 +875,8 @@ dev에서 옵션 reducedMotion ON 시 필름 detail 트랜지션·그레인 애�
 **1. 스펙 커버리지:**
 - §3.5 장면(콘택트 시트) → Task 5 ArchiveSurface scene ✅
 - 노드=필름 프레임 → Task 2 CSS + Task 4 마크업 ✅
-- 지도=그리스펜슬(부분: 오버레이 유지, 톤만) → Task 6 (MiniMap 재작성은 명시적 범위 밖) ✅
-- 상단 바=책상 도구(톤 정합) → Task 6 ✅
+- 지도=그리스펜슬(오버레이 geometry 유지 + 웜톤→사이안 중화) → Task 6 (MiniMap geometry 재작성은 명시적 범위 밖, 색 중화는 §2.2 불변이라 필수) ✅
+- 상단 바=책상 도구(stacking 정합) → Task 6 ✅
 - 기능색 위계 보존 → Task 1 토큰 + Task 2 data-attr + Task 3 네온 제거 ✅
 - 씬-우선 구조 불변 → 모든 Task가 동작/store/testid 보존 ✅
 - §2.2 네온/웜 제거 → Task 3(Tailwind 네온 제거) + 루트 개명(`!important` 네온 분리) ✅
