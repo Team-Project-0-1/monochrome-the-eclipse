@@ -637,6 +637,87 @@ button.archive-card:disabled::after { display: none; }
    양끝 정렬이 필요한 버튼(튜토리얼)은 이 변형으로 명시 — Tailwind 의존 금지. */
 .archive-menu-toggle.is-spread { justify-content: space-between; }
 
+/* --- 캐릭터 선택(인사 기록): 인물 카드 = 포트레이트 사진 + 타자 프로필. 책상 텍스처 위. --- */
+.archive-dossier-card {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 17rem;
+  text-align: left;
+  overflow: hidden;
+  border: 1px solid rgba(20, 33, 31, 0.5);
+  border-radius: 3px;
+  background: var(--archive-frame-bottom, #14211f);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.archive-dossier-card > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 24%;
+  filter: grayscale(0.55) contrast(1.06);
+}
+.archive-dossier-card.is-locked > img { filter: grayscale(1) brightness(0.7); }
+/* 좌측 어둠 → 타자 프로필 가독 */
+.archive-dossier-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(94deg, rgba(6, 12, 14, 0.92) 0%, rgba(6, 12, 14, 0.62) 48%, rgba(6, 12, 14, 0.12) 100%);
+}
+.archive-dossier-card:hover { transform: translateY(-3px); border-color: var(--archive-accent); }
+.archive-dossier-card.is-active {
+  transform: translateY(-3px);
+  border-color: var(--archive-accent);
+  box-shadow: 0 0 0 2px var(--archive-accent), 0 16px 34px rgba(0, 0, 0, 0.55);
+}
+.archive-dossier-card:focus-visible { outline: 2px solid var(--archive-accent); outline-offset: 2px; }
+.archive-dossier-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+  min-height: 17rem;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.1rem;
+  font-family: var(--font-family-archive);
+  color: var(--archive-paper);
+}
+.archive-dossier-name { font-size: 1.5rem; font-weight: 700; line-height: 1.1; color: #eef3f4; }
+.archive-dossier-title { margin-top: 0.15rem; font-size: 0.8rem; color: rgba(201, 211, 214, 0.8); }
+/* 타자 프로필 꼬리표 줄 (HP/무기/시그니처/스킬) */
+.archive-dossier-row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.archive-dossier-chip {
+  font-family: var(--font-family-archive);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.18rem 0.45rem;
+  border-radius: 2px;
+  background: rgba(6, 12, 14, 0.55);
+  border: 1px solid rgba(114, 239, 255, 0.22);
+  color: var(--archive-paper);
+}
+.archive-dossier-chip.is-skill { color: #04222b; background: var(--archive-accent); border-color: var(--archive-accent); }
+.archive-dossier-locked { font-size: 0.85rem; font-weight: 700; color: #e2a0a0; }
+
+/* --- 집어 든 파일 (우측 상세) — 책상 위 펼친 한 장 --- */
+.archive-dossier-detail {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  border: 1px solid rgba(114, 239, 255, 0.25);
+  border-radius: 4px;
+  background: rgba(6, 12, 14, 0.72);
+  backdrop-filter: blur(3px);
+  color: var(--archive-paper);
+}
+
 /* 모바일: 카드 폭 전환 */
 @media (max-width: 767px) {
   .archive-photo-frame { min-height: 7rem; }
