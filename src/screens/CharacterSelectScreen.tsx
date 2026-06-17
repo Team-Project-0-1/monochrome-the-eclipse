@@ -6,6 +6,7 @@ import { Zap, Target, ShieldCheck, Ghost, Cpu } from "lucide-react";
 import ArchiveSurface from '../components/archive/ArchiveSurface';
 import ArchiveStamp from '../components/archive/ArchiveStamp';
 import ArchiveCaption from '../components/archive/ArchiveCaption';
+import { assetCssUrl } from '../utils/assetPath';
 import EffectSummary from '../components/EffectSummary';
 import SandboxPanel from '../components/dev/SandboxPanel';
 
@@ -52,7 +53,7 @@ export const CharacterSelectScreen = () => {
 
   return (
     // 인사 기록 파일 — 책상 위에서 출정자 한 명을 집어 든다(런 밖 화면, 책상 텍스처).
-    <ArchiveSurface className="archive-character-select-screen overflow-y-auto px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
+    <ArchiveSurface scene={assetCssUrl('assets/backgrounds/character-select-archive.png')} className="archive-character-select-screen overflow-y-auto px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
