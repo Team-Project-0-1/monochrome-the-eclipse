@@ -718,6 +718,54 @@ button.archive-card:disabled::after { display: none; }
   color: var(--archive-paper);
 }
 
+/* --- 기억 제단(색인 카드 캐비닛): 업그레이드 = 서랍 속 색인 카드(밝은 종이 + 좌측 색인 탭). --- */
+.archive-index-card {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.1rem 1rem 1.4rem;
+  background: linear-gradient(176deg, var(--archive-note-bg-a), var(--archive-note-bg-b));
+  border: 1px solid rgba(20, 33, 31, 0.35);
+  border-left: 4px solid var(--archive-stamp-ink); /* 색인 탭 */
+  border-radius: 3px;
+  color: var(--archive-ink);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+  font-family: var(--font-family-archive);
+}
+.archive-index-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 4px;
+  background: rgba(29, 116, 128, 0.16);
+  border: 1px solid var(--archive-stamp-ink);
+  color: var(--archive-stamp-ink);
+}
+.archive-index-card-name { font-size: 1.2rem; font-weight: 700; color: var(--archive-ink); }
+.archive-index-card-desc { margin-top: 0.2rem; font-size: 0.85rem; line-height: 1.5; color: var(--archive-ink-soft); }
+.archive-index-card-delta {
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--archive-ink);
+}
+.archive-index-card-delta .to { color: var(--archive-stamp-ink); }
+.archive-index-card .archive-buy-btn { width: auto; min-width: 7rem; margin-top: 0; }
+
+/* 모바일: 색인 카드 1열 적층 */
+@media (max-width: 639px) {
+  .archive-index-card { grid-template-columns: auto minmax(0, 1fr); }
+  .archive-index-card .archive-buy-btn { grid-column: 1 / -1; width: 100%; }
+}
+
 /* 모바일: 카드 폭 전환 */
 @media (max-width: 767px) {
   .archive-photo-frame { min-height: 7rem; }
