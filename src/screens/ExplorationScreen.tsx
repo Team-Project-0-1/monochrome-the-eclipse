@@ -1,12 +1,13 @@
 import React from 'react';
-import { MapPinned, RadioTower, ShieldAlert } from 'lucide-react';
+import { ShieldAlert } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
 import NodeSelection from '../components/NodeSelection';
 import RunTopBar from '../components/RunTopBar';
 import RouteMapOverlay from '../components/RouteMapOverlay';
 import RunStatusModal from '../components/RunStatusModal';
+import ArchiveSurface from '../components/archive/ArchiveSurface';
+import ArchiveStamp from '../components/archive/ArchiveStamp';
 import { NodeType } from '../types';
-import Panel from '../components/ui/Panel';
 import { getNodeTypeCounts } from '../utils/nodePresentation';
 import { STAGE_TURNS } from '../constants';
 import { stageData } from '../data/dataStages';
@@ -38,7 +39,6 @@ export const ExplorationScreen = () => {
   const nodeCounts = getNodeTypeCounts(currentNodes);
   const progressPercent = Math.min(100, Math.round((currentTurn / STAGE_TURNS) * 100));
   const stageInfo = stageData[currentStage as keyof typeof stageData];
-  const stageBackground = getStageBackgroundCss(currentStage);
 
   if (!player) {
     return (
@@ -49,81 +49,55 @@ export const ExplorationScreen = () => {
   }
 
   const sensoryProfile = player.signature ?? '감각 동기화';
-  const weaponProfile = player.weapon ?? '전투 준비';
   const currentPath = path.length > 0
     ? path.map(step => `${step.turn}층-${step.nodeIndex + 1}`).join(' / ')
     : '진입 전';
 
   return (
-    <div
-      className="exploration-screen relative min-h-screen overflow-x-hidden bg-gray-950 p-3 text-white sm:p-5"
-      style={{ '--exploration-bg-image': stageBackground } as React.CSSProperties}
+    // 네거티브 콘택트 시트 — 스테이지 장면 딤 위에서 다음 프레임을 고른다(런 중 화면, 슬더스 문법).
+    <ArchiveSurface
+      scene={getStageBackgroundCss(currentStage)}
+      className="archive-exploration-screen overflow-x-hidden p-3 sm:p-5"
     >
-      <div className="pointer-events-none absolute inset-x-0 top-24 h-px bg-gradient-to-r from-transparent via-cyan-200/35 to-transparent" />
-
-      <div className="exploration-layout relative z-10 mx-auto flex min-h-[calc(100vh-1.5rem)] w-full max-w-5xl flex-col gap-4 sm:min-h-[calc(100vh-2.5rem)]">
+      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-1.5rem)] w-full max-w-5xl flex-col gap-4 sm:min-h-[calc(100vh-2.5rem)]">
         <RunTopBar />
 
-        <main className="exploration-main order-1 flex min-w-0 flex-col gap-4">
-          <Panel className="exploration-route-hero overflow-hidden p-4 sm:p-5" tone="neutral">
-            <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-              <div className="min-w-0">
-                <div className="mb-2 inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">
-                  <MapPinned className="h-3.5 w-3.5 text-cyan-200" />
-                  스테이지 {currentStage} · 경로
-                </div>
-                <h1 className="text-3xl font-black leading-tight text-white sm:text-4xl">
-                  {stageInfo?.name ?? '미확인 구역'}
-                </h1>
-                <p className="mt-1.5 line-clamp-2 max-w-2xl text-xs leading-relaxed text-slate-400">
-                  {stageInfo?.description ?? '구역 정보를 불러오는 중입니다.'} {player.name}의 {sensoryProfile} 신호가 다음 선택지를 읽어냅니다.
-                </p>
-              </div>
-              <div className="route-stat-grid flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1.5 text-xs xl:justify-end">
-                <div className="flex items-baseline gap-1.5 border-l border-cyan-300/35 pl-2.5">
-                  <span className="text-[10px] uppercase tracking-[0.16em] text-slate-500">층</span>
-                  <span className="route-stat-value font-bold text-white">{currentTurn}/{STAGE_TURNS}</span>
-                </div>
-                <div className="flex items-baseline gap-1.5 border-l border-cyan-300/35 pl-2.5">
-                  <span className="text-[10px] uppercase tracking-[0.16em] text-slate-500">위협</span>
-                  <span className="route-stat-value font-bold text-cyan-100">{stageInfo?.theme ?? '미확인 신호'}</span>
-                </div>
-                <div className="flex items-baseline gap-1.5 border-l border-cyan-300/35 pl-2.5">
-                  <span className="text-[10px] uppercase tracking-[0.16em] text-slate-500">무기</span>
-                  <span className="route-stat-value font-bold text-slate-100">{weaponProfile}</span>
-                </div>
-              </div>
+        <main className="order-1 flex min-w-0 flex-col gap-4">
+          {/* 콘택트 시트 라벨 — 키커/대형 타이틀/설명문단의 다이어제틱 대체물. 정보는 보존. */}
+          <header className="archive-contact-sheet flex flex-col gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <ArchiveStamp>스테이지 {currentStage} · {stageInfo?.name ?? '미확인 구역'}</ArchiveStamp>
+              <span className="text-xs font-bold text-cyan-100">{progressPercent}%</span>
             </div>
 
-            <div className="mt-4 grid gap-3 border-t border-white/10 pt-3 text-xs text-slate-400 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-center">
-              <div className="min-w-0">
-                <div className="mb-2 flex items-center justify-between gap-3">
-                  <span className="inline-flex min-w-0 items-center gap-2">
-                    <RadioTower className="h-4 w-4 shrink-0 text-cyan-200" />
-                    <span className="truncate">현재 경로: {currentPath}</span>
-                  </span>
-                  <span className="font-bold text-cyan-100">{progressPercent}%</span>
-                </div>
-                <div className="h-2 overflow-hidden rounded-full bg-white/10">
-                  <div className="h-full rounded-full bg-cyan-200" style={{ width: `${progressPercent}%` }} />
-                </div>
-                {import.meta.env.DEV ? (
-                  <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-500">
-                    <span>Seed: {routeSeed ?? '미기록'}</span>
-                    <span>생성 로그 {routeGenerationLog.length}건</span>
-                  </div>
-                ) : null}
-              </div>
-              <div className="route-pressure-card flex items-start gap-2 text-yellow-100/90">
-                <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-yellow-300" />
-                <p className="route-pressure-copy text-xs leading-relaxed">
-                  <span className="font-bold text-yellow-200">현재 압력 · </span>{routePressureText(nodeCounts)}
-                </p>
-              </div>
-            </div>
-          </Panel>
+            <p className="max-w-2xl text-xs leading-relaxed text-slate-300/85">
+              {stageInfo?.description ?? '구역 정보를 불러오는 중입니다.'} {player.name}의 {sensoryProfile} 신호가 다음 프레임을 읽어냅니다.
+            </p>
 
-          <div className="flex flex-1 items-center">
+            <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+              <div className="h-full rounded-full bg-cyan-200/80" style={{ width: `${progressPercent}%` }} />
+            </div>
+            <div className="flex items-center justify-between text-[11px] text-slate-400">
+              <span className="truncate">현재 경로: {currentPath}</span>
+              <span>{currentTurn}/{STAGE_TURNS} 층</span>
+            </div>
+
+            <div className="archive-route-pressure text-slate-200/85">
+              <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-cyan-200" />
+              <p className="text-xs leading-relaxed">
+                <span className="font-bold text-cyan-100">현재 압력 · </span>{routePressureText(nodeCounts)}
+              </p>
+            </div>
+
+            {import.meta.env.DEV ? (
+              <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-500">
+                <span>Seed: {routeSeed ?? '미기록'}</span>
+                <span>생성 로그 {routeGenerationLog.length}건</span>
+              </div>
+            ) : null}
+          </header>
+
+          <div className="flex flex-1 items-start">
             <NodeSelection
               nodes={currentNodes}
               availableNodeIndices={availableNodeIndices}
@@ -137,6 +111,6 @@ export const ExplorationScreen = () => {
 
       <RouteMapOverlay />
       <RunStatusModal isOpen={isRunStatusOpen} onClose={() => setRunStatusOpen(false)} />
-    </div>
+    </ArchiveSurface>
   );
 };

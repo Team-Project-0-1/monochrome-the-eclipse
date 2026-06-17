@@ -7,7 +7,7 @@ import { spawn, spawnSync } from 'node:child_process';
 // ---------------------------------------------------------------------------
 // 탐험 노드 카드 "호버 상세 오버레이"(:focus-within) 단일 캡처용 개발 도구.
 // run-e2e-smoke.mjs의 정적 캡처로는 호버 상태가 안 잡히므로, 노드를 focus시켜
-// .route-node-detail이 떠 있는 상태를 찍는다. 의존성 0 (Node 내장 fetch/WebSocket).
+// .archive-film-detail이 떠 있는 상태를 찍는다. 의존성 0 (Node 내장 fetch/WebSocket).
 //   SNAP_SKIP_BUILD=1 이면 기존 dist 재사용(직전 `npm run e2e`의 VITE_E2E 빌드).
 // ---------------------------------------------------------------------------
 const root = process.cwd();
@@ -109,7 +109,7 @@ await ev(`(() => { try { localStorage.clear(); } catch {} })()`);
 await nav(baseUrl);
 await waitFor(`window.__gameStore`, '__gameStore hook');
 await ev(`window.__gameStore.getState().selectCharacter('WARRIOR')`); // → EXPLORATION
-await waitFor(`document.querySelector('.exploration-screen')`, 'exploration screen');
+await waitFor(`document.querySelector('.archive-exploration-screen')`, 'exploration screen');
 await ev(`(() => { const n = document.querySelectorAll('.tutorial-coachmark-close'); const e = n[n.length - 1]; if (e) e.click(); return !!e; })()`);
 await sleep(400);
 // SNAP_MIXED=1: 현재 층 노드를 서로 다른 타입으로 바꿔 !allSameType 분기 강제
@@ -126,7 +126,7 @@ if (mixed) {
   await sleep(300);
 }
 
-// 노드 카드를 focus → :focus-within으로 .route-node-detail 오버레이 노출
+// 노드 카드를 focus → :focus-within으로 .archive-film-detail 오버레이 노출
 const focused = await ev(`(() => { const b = document.querySelector('[data-testid="route-node-1"]'); if (b) { b.focus(); return true; } return false; })()`);
 if (!focused) console.error('WARN: route-node-1 not found');
 await sleep(500);
@@ -134,8 +134,8 @@ await sleep(500);
 const activeTestid = await ev(`document.activeElement && document.activeElement.getAttribute('data-testid')`);
 const detail = await ev(`(() => {
   const card = document.querySelector('[data-testid="route-node-1"]');
-  const d = card && card.querySelector('.route-node-detail');
-  if (!d) return { error: 'no .route-node-detail' };
+  const d = card && card.querySelector('.archive-film-detail');
+  if (!d) return { error: 'no .archive-film-detail' };
   const cr = card.getBoundingClientRect(); const dr = d.getBoundingClientRect();
   return { opacity: getComputedStyle(d).opacity, cardH: Math.round(cr.height), detailH: Math.round(dr.height),
     overflowTopPx: +(cr.top - dr.top).toFixed(1), overflowBottomPx: +(dr.bottom - cr.bottom).toFixed(1) };
