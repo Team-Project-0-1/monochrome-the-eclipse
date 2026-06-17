@@ -1,8 +1,8 @@
 import React from 'react';
-import { ArrowRight, HeartPulse, RotateCcw, Sparkles, Trophy } from 'lucide-react';
+import { ArrowRight, RotateCcw, Sparkles, Trophy } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
-import ActionButton from './ui/ActionButton';
-import Panel from './ui/Panel';
+import ArchiveSurface from './archive/ArchiveSurface';
+import ArchiveStamp from './archive/ArchiveStamp';
 import { assetCssUrl, assetPath } from '../utils/assetPath';
 import { playUiSound } from '../utils/sound';
 import { MAX_RESERVE_COINS } from '../constants';
@@ -27,30 +27,10 @@ interface RunResultScreenProps {
   onSecondary?: () => void;
 }
 
-const toneClasses: Record<RunResultScreenProps['tone'], {
-  eyebrow: string;
-  accent: string;
-  ring: string;
-  icon: React.ElementType;
-}> = {
-  'stage-clear': {
-    eyebrow: 'Layer Secured',
-    accent: 'text-emerald-200',
-    ring: 'border-emerald-300/30 bg-emerald-950/20',
-    icon: Trophy,
-  },
-  victory: {
-    eyebrow: 'Eclipse Broken',
-    accent: 'text-yellow-200',
-    ring: 'border-yellow-300/35 bg-yellow-950/20',
-    icon: Sparkles,
-  },
-  defeat: {
-    eyebrow: 'Run Ended',
-    accent: 'text-red-200',
-    ring: 'border-red-300/35 bg-red-950/20',
-    icon: RotateCcw,
-  },
+const toneMeta: Record<RunResultScreenProps['tone'], { eyebrow: string; icon: React.ElementType; warn: boolean }> = {
+  'stage-clear': { eyebrow: '층 확보', icon: Trophy, warn: false },
+  victory: { eyebrow: '이클립스 종결', icon: Sparkles, warn: false },
+  defeat: { eyebrow: '런 종료', icon: RotateCcw, warn: true },
 };
 
 const RunResultScreen: React.FC<RunResultScreenProps> = ({
@@ -71,16 +51,14 @@ const RunResultScreen: React.FC<RunResultScreenProps> = ({
   const path = useGameStore(state => state.path);
   const metaProgress = useGameStore(state => state.metaProgress);
   const gameOptions = useGameStore(state => state.gameOptions);
-  const classes = toneClasses[tone];
-  const Icon = classes.icon;
+  const meta = toneMeta[tone];
+  const Icon = meta.icon;
 
   const routeText = path.length > 0
     ? path.slice(-5).map(step => `${step.turn}-${step.nodeIndex + 1}`).join(' / ')
     : '기록 없음';
 
   const summary = React.useMemo(() => summarizeRunHistory(metaProgress.runHistory), [metaProgress.runHistory]);
-  // The hook for the just-ended run pushes a record before this screen mounts,
-  // so the latest entry is this run.
   const thisRun = summary.lastRun;
   const showDefeatCause = tone === 'defeat' && thisRun?.outcome === 'death';
 
@@ -108,120 +86,85 @@ const RunResultScreen: React.FC<RunResultScreenProps> = ({
   };
 
   return (
-    <main
-      className="relative min-h-screen overflow-hidden bg-gray-950 p-4 text-white sm:p-6"
-      style={{
-        backgroundImage: `linear-gradient(180deg,rgba(2,6,23,0.24),rgba(2,6,23,0.92)),${assetCssUrl('assets/backgrounds/lobby-eclipse.png')}`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-      }}
-    >
-      <div className="absolute inset-0 bg-black/48" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_52%_18%,rgba(255,255,255,0.16),transparent_24%),linear-gradient(180deg,transparent,rgba(0,0,0,0.72))]" />
-
-      <section className="relative z-10 mx-auto grid min-h-[calc(100vh-2rem)] max-w-6xl gap-4 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-center">
+    // 사건 종결 보고서 — 일식 위에서 이번 런을 정산한다(일식 정체성 보존, 메뉴와 일관).
+    // defeat=빛에 타버린 필름(§3.9 장면 구분): is-defeat가 흰빛 번짐 오버레이를 켠다.
+    <ArchiveSurface scene={assetCssUrl('assets/backgrounds/lobby-eclipse.png')} className={`archive-result-screen overflow-y-auto p-4 sm:p-6 ${tone === 'defeat' ? 'is-defeat' : ''}`}>
+      <section className="relative z-10 mx-auto grid min-h-[calc(100vh-2rem)] max-w-6xl items-center gap-5 lg:grid-cols-[minmax(0,1fr)_24rem]">
         <div className="min-w-0">
-          <div className={`mb-5 inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.2em] ${classes.ring}`}>
-            <Icon className={`h-4 w-4 ${classes.accent}`} />
-            {classes.eyebrow}
-          </div>
-          <h1 className="font-orbitron text-[clamp(2.7rem,8vw,6.75rem)] font-black leading-none text-white drop-shadow-[0_3px_7px_rgba(0,0,0,0.65)]">
+          <ArchiveStamp className={meta.warn ? 'is-warn' : ''}>
+            <span className="inline-flex items-center gap-1.5"><Icon className="h-3.5 w-3.5" />{meta.eyebrow}</span>
+          </ArchiveStamp>
+          <h1 className="mt-4 text-[clamp(2.4rem,7vw,5.5rem)] font-bold leading-none text-white drop-shadow-[0_3px_7px_rgba(0,0,0,0.65)]" style={{ fontFamily: 'var(--font-family-archive)' }}>
             {title}
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-200 sm:text-lg">{subtitle}</p>
 
+          {/* 결재란 — 보고서 하단 행동 */}
           <div className="mt-7 flex flex-wrap gap-3">
-            <ActionButton onClick={handlePrimary} disabled={primaryDisabled} variant={tone === 'defeat' ? 'danger' : 'primary'} className="px-6">
+            <button type="button" className="archive-buy-btn" style={{ width: 'auto', minWidth: '9rem', marginTop: 0 }} disabled={primaryDisabled} onClick={handlePrimary}>
               {primaryLabel}
               <ArrowRight className="h-4 w-4" />
-            </ActionButton>
+            </button>
             {secondaryLabel && onSecondary ? (
-              <ActionButton onClick={handleSecondary} variant="ghost" className="px-6">
-                {secondaryLabel}
-              </ActionButton>
+              <button type="button" className="archive-tool-btn" onClick={handleSecondary}>{secondaryLabel}</button>
             ) : null}
           </div>
         </div>
 
-        <Panel className="p-4 sm:p-5" tone={tone === 'defeat' ? 'red' : tone === 'victory' ? 'gold' : 'cyan'}>
-          <div className="mb-4 flex items-center gap-4">
-            <div className="relative h-24 w-24 overflow-hidden rounded-lg border border-white/10 bg-black/35">
+        {/* 사건 종결 보고서 — 어두운 양식 + 타자 통계 */}
+        <div className="archive-report">
+          <div className="archive-report-runner">
+            <div className="archive-report-portrait">
               {player?.portraitSrc ? (
-                <img src={assetPath(player.portraitSrc)} alt="" className="h-full w-full object-cover object-top" loading="lazy" decoding="async" />
+                <img src={assetPath(player.portraitSrc)} alt="" loading="lazy" decoding="async" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-3xl font-black text-white/40">?</div>
               )}
             </div>
             <div className="min-w-0">
-              <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">Runner</div>
-              <div className="truncate text-2xl font-black text-white">{player?.name ?? '기록 없음'}</div>
-              <div className="truncate text-sm text-slate-300">{player?.weapon ?? '무기 미기록'}</div>
+              <div className="archive-report-label">Runner</div>
+              <div className="archive-report-runner-name truncate">{player?.name ?? '기록 없음'}</div>
+              <div className="archive-report-runner-sub truncate">{player?.weapon ?? '무기 미기록'}</div>
             </div>
           </div>
 
-          <div className="grid gap-2 text-sm">
-            <div className="flex items-center justify-between rounded-md border border-white/10 bg-white/5 px-3 py-2">
-              <span className="inline-flex items-center gap-2 text-slate-300"><HeartPulse className="h-4 w-4 text-lime-200" />HP</span>
-              <strong>{player ? `${player.currentHp}/${player.maxHp}` : '-'}</strong>
-            </div>
-            <div className="flex items-center justify-between rounded-md border border-white/10 bg-white/5 px-3 py-2">
-              <span className="inline-flex items-center gap-2 text-slate-300">
-                <img className="resource-display-icon-img" src={assetPath(resourceIconPaths.echoRemnants)} alt="" loading="lazy" />
-                에코
-              </span>
-              <strong>{resources.echoRemnants}</strong>
-            </div>
-            <div className="flex items-center justify-between rounded-md border border-white/10 bg-white/5 px-3 py-2">
-              <span className="inline-flex items-center gap-2 text-slate-300">
-                <img className="resource-display-icon-img" src={assetPath(resourceIconPaths.senseFragments)} alt="" loading="lazy" />
-                감각 조각
-              </span>
-              <strong>{resources.senseFragments}</strong>
-            </div>
-            <div className="flex items-center justify-between rounded-md border border-white/10 bg-white/5 px-3 py-2">
-              <span className="inline-flex items-center gap-2 text-slate-300">
-                <img className="resource-display-icon-img" src={assetPath(resourceIconPaths.memoryPieces)} alt="" loading="lazy" />
-                기억 조각
-              </span>
-              <strong>{resources.memoryPieces}</strong>
-            </div>
+          <div className="archive-dossier-row mt-4">
+            <span className="archive-tag">HP <strong>{player ? `${player.currentHp}/${player.maxHp}` : '-'}</strong></span>
+            <span className="archive-tag"><img src={assetPath(resourceIconPaths.echoRemnants)} alt="" loading="lazy" />에코 <strong>{resources.echoRemnants}</strong></span>
+            <span className="archive-tag"><img src={assetPath(resourceIconPaths.senseFragments)} alt="" loading="lazy" />감각 <strong>{resources.senseFragments}</strong></span>
+            <span className="archive-tag"><img src={assetPath(resourceIconPaths.memoryPieces)} alt="" loading="lazy" />기억 <strong>{resources.memoryPieces}</strong></span>
           </div>
 
-          <div className="mt-4 rounded-md border border-white/10 bg-black/28 p-3 text-xs leading-relaxed text-slate-300">
-            <div className="mb-1 font-bold uppercase tracking-[0.16em] text-slate-500">런 기록</div>
-            <p>스테이지 {currentStage} · {currentTurn}층 · 최근 경로: {routeText}</p>
-            <p className="mt-1">예비 동전 {reserveCoins.length}/{MAX_RESERVE_COINS} · 최고 도달 층 {metaProgress.highestStage} · 누적 에코 {metaProgress.totalEchoCollected}</p>
-
+          <p className="archive-report-line">
+            <span className="archive-report-label">런 기록</span><br />
+            스테이지 {currentStage} · {currentTurn}층 · 최근 경로: {routeText}<br />
+            예비 동전 {reserveCoins.length}/{MAX_RESERVE_COINS} · 최고 도달 층 {metaProgress.highestStage} · 누적 에코 {metaProgress.totalEchoCollected}
             {showDefeatCause ? (
-              <p className="mt-2 text-slate-200">
-                패배 원인: <strong>{thisRun?.deathCause ? deathCauseLabels[thisRun.deathCause] : '미상'}</strong>
+              <>
+                <br />패배 원인: <strong>{thisRun?.deathCause ? deathCauseLabels[thisRun.deathCause] : '미상'}</strong>
                 {thisRun?.lastEnemyName ? (
-                  <> · 마지막 적: <strong>{thisRun.lastEnemyName}</strong>
-                    {thisRun.lastEnemyTier ? ` (${formatTier(thisRun.lastEnemyTier as EnemyCharacter['tier'])})` : ''}
-                  </>
+                  <> · 마지막 적: <strong>{thisRun.lastEnemyName}</strong>{thisRun.lastEnemyTier ? ` (${formatTier(thisRun.lastEnemyTier as EnemyCharacter['tier'])})` : ''}</>
                 ) : null}
-              </p>
+              </>
             ) : null}
-          </div>
+          </p>
 
           {summary.total > 0 ? (
-            <div className="mt-3 rounded-md border border-white/10 bg-black/28 p-3 text-xs leading-relaxed text-slate-300">
-              <div className="mb-1 font-bold uppercase tracking-[0.16em] text-slate-500">최근 기록 (최대 {summary.total}런)</div>
+            <p className="archive-report-line">
+              <span className="archive-report-label">최근 기록 (최대 {summary.total}런)</span><br />
               {currentWinrate ? (
-                <p>이 캐릭터 승률: <strong>{currentWinrate.winrate}%</strong> ({currentWinrate.wins}승 {currentWinrate.losses}패)</p>
+                <>이 캐릭터 승률: <strong>{currentWinrate.winrate}%</strong> ({currentWinrate.wins}승 {currentWinrate.losses}패)</>
               ) : (
-                <p>이 캐릭터의 최근 기록이 없습니다.</p>
+                <>이 캐릭터의 최근 기록이 없습니다.</>
               )}
               {topDeathStages.length > 0 ? (
-                <p className="mt-1">
-                  최다 사망 스테이지: {topDeathStages.map(item => `${item.stage}스테이지 (${item.count})`).join(' · ')}
-                </p>
+                <><br />최다 사망 스테이지: {topDeathStages.map(item => `${item.stage}스테이지 (${item.count})`).join(' · ')}</>
               ) : null}
-            </div>
+            </p>
           ) : null}
-        </Panel>
+        </div>
       </section>
-    </main>
+    </ArchiveSurface>
   );
 };
 
