@@ -766,6 +766,69 @@ button.archive-card:disabled::after { display: none; }
   .archive-index-card .archive-buy-btn { grid-column: 1 / -1; width: 100%; }
 }
 
+/* --- 결과(사건 종결 보고서): 일식 위 어두운 보고서 패널 + 타자 통계. --- */
+.archive-report {
+  position: relative;
+  z-index: 2;
+  padding: 1.2rem 1.3rem;
+  background: rgba(6, 12, 14, 0.82);
+  border: 1px solid rgba(114, 239, 255, 0.22);
+  border-radius: 4px;
+  backdrop-filter: blur(3px);
+  color: var(--archive-paper);
+  font-family: var(--font-family-archive);
+}
+.archive-report-runner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(114, 239, 255, 0.16);
+}
+.archive-report-portrait {
+  width: 5rem;
+  height: 5rem;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  border: 1px solid rgba(114, 239, 255, 0.22);
+  background: rgba(6, 12, 14, 0.6);
+}
+.archive-report-portrait > img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.archive-report-runner-name { font-size: 1.4rem; font-weight: 700; color: #eef3f4; }
+.archive-report-runner-sub { font-size: 0.85rem; color: rgba(201, 211, 214, 0.75); }
+/* 타자 통계 줄 */
+.archive-report-line {
+  margin-top: 0.9rem;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: rgba(201, 211, 214, 0.88);
+}
+.archive-report-line strong { color: var(--archive-paper); font-weight: 700; }
+.archive-report-label {
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--archive-accent);
+}
+
+/* 경고(패배) 도장 변형 */
+.archive-stamp.is-warn { color: #d98a78; border-color: #b4513f; }
+
+/* 게임오버 = "빛에 타버린 필름"(§3.9 장면 구분) — 보고서 위 흰빛 번짐 오버레이.
+   그레인(z-index:1) 위, 콘텐츠(z-10) 아래. pointer 통과. */
+.archive-result-screen.is-defeat::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 40% at 50% 26%, rgba(255, 248, 236, 0.26), transparent 62%),
+    radial-gradient(circle at 50% 24%, rgba(255, 252, 245, 0.4), transparent 12%);
+  mix-blend-mode: screen;
+}
+
 /* 모바일: 카드 폭 전환 */
 @media (max-width: 767px) {
   .archive-photo-frame { min-height: 7rem; }
