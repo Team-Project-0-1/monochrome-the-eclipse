@@ -6,7 +6,7 @@ import { MEMORY_UPGRADE_DATA, MAX_RESERVE_COINS } from '../constants';
 import ArchiveSurface from '../components/archive/ArchiveSurface';
 import ArchiveStamp from '../components/archive/ArchiveStamp';
 import ArchiveCaption from '../components/archive/ArchiveCaption';
-import { assetPath } from '../utils/assetPath';
+import { assetCssUrl, assetPath } from '../utils/assetPath';
 import { resourceIconPaths } from '../utils/resourceAssets';
 import { playGameSfx, playUiSound } from '../utils/sound';
 
@@ -34,8 +34,9 @@ export const MemoryAltarScreen = () => {
   };
 
   return (
-    // 색인 카드 캐비닛 — 책상 위 서랍에서 영구 성장을 꺼내 도장을 찍는다(런 밖 화면, 책상 텍스처).
-    <ArchiveSurface className="archive-altar-screen overflow-y-auto p-4 sm:p-6">
+    // 색인 카드 캐비닛 — 서랍에서 영구 성장을 꺼내 도장을 찍는다. 배경은 조율 야영(rest-tuning-camp)
+    // scene: '기억의 제단'=기억 조각 조율/성장이라 소리굽쇠·일식 모티프가 직결(desk-surface 폐기, 사용자 요청).
+    <ArchiveSurface scene={assetCssUrl('assets/backgrounds/rest-tuning-camp.png')} className="archive-altar-screen overflow-y-auto p-4 sm:p-6">
       <div className="relative z-10 mx-auto grid min-h-[calc(100dvh-2rem)] sm:min-h-[calc(100dvh-3rem)] w-full max-w-6xl items-start gap-5 lg:grid-cols-[18rem_minmax(0,1fr)]">
         <aside className="flex flex-col gap-4">
           <div className="archive-note">
