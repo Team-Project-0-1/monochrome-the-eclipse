@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ChevronDown, ChevronRight, Eye, Gauge, HelpCircle, Keyboard, SlidersHorizontal, Volume2, Zap } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
-import ActionButton from '../components/ui/ActionButton';
+import ArchiveSurface from '../components/archive/ArchiveSurface';
+import ArchiveStamp from '../components/archive/ArchiveStamp';
 import { assetCssUrl } from '../utils/assetPath';
 import { playUiSound } from '../utils/sound';
 import { summarizeRunHistory } from '../utils/runStats';
@@ -100,24 +101,15 @@ export const MenuScreen = () => {
   }, [hasRun, resumeGame, startNewGame]);
 
   return (
-    <div
-      className="menu-screen relative min-h-screen overflow-hidden px-4 py-5 text-white sm:p-8"
-      style={{
-        backgroundImage: assetCssUrl('assets/backgrounds/lobby-eclipse.png'),
-        backgroundSize: 'cover',
-        backgroundPosition: 'center 32%',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
-      <div className="menu-scrim" />
-
-      <div className="menu-content relative z-10">
-        <section className="menu-command-panel flex max-w-4xl flex-col justify-center">
-          <div className="menu-eyebrow">
-            <Gauge className="h-4 w-4" />
-            {APP_RELEASE_LABEL}
-          </div>
-          <h1 className="font-orbitron text-[clamp(2.65rem,8.8vw,7.5rem)] font-black leading-none text-white drop-shadow-[0_2px_5px_rgba(0,0,0,0.55)]">
+    // 일식 표지 — 책상 위에서 다음 기록을 펼친다. 일식 무대는 정체성이라 scene으로 보존(사용자 결정).
+    <ArchiveSurface scene={assetCssUrl('assets/backgrounds/lobby-eclipse.png')} className="archive-menu-screen overflow-hidden px-4 py-6 sm:p-8">
+      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-3rem)] max-w-5xl items-center gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        {/* 표지 블록 — 로고타입은 정체성이라 유지 */}
+        <section className="flex flex-col justify-center">
+          <ArchiveStamp className="self-start">
+            <span className="inline-flex items-center gap-1.5"><Gauge className="h-3.5 w-3.5" />{APP_RELEASE_LABEL}</span>
+          </ArchiveStamp>
+          <h1 className="font-orbitron mt-4 text-[clamp(2.65rem,8.8vw,7.5rem)] font-black leading-none text-white drop-shadow-[0_2px_5px_rgba(0,0,0,0.55)]">
             MONOCHROME
           </h1>
           <p className="font-orbitron mt-2 text-xl font-bold text-gray-300 drop-shadow-md md:text-3xl">
@@ -128,27 +120,23 @@ export const MenuScreen = () => {
             현재 범위는 {APP_RELEASE_SCOPE}이며, 경로를 고르고 자원을 확보해 중심부로 진입하세요.
           </p>
 
-          <div className="menu-action-row">
+          {/* 행동 물건 — 서류철(이어하기) / 새 필름(새 탐험) */}
+          <div className="mt-7 flex flex-col gap-3 sm:max-w-md">
             {hasRun ? (
-              <ActionButton
-                onClick={resumeGame}
-                variant="primary"
-                className="menu-primary-action px-7 py-4 text-lg shadow-2xl shadow-black/40 hover:scale-[1.02]"
-                data-testid="continue-run-button"
-              >
-                계속하기
-                <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </ActionButton>
+              <button type="button" className="archive-menu-action is-primary" onClick={resumeGame} data-testid="continue-run-button">
+                <span>계속하기 — 진행 중인 기록</span>
+                <ChevronRight className="h-5 w-5" />
+              </button>
             ) : null}
-            <ActionButton
+            <button
+              type="button"
+              className={`archive-menu-action ${hasRun ? '' : 'is-primary'}`}
               onClick={startNewGame}
-              variant={hasRun ? 'ghost' : 'primary'}
-              className="menu-primary-action px-7 py-4 text-lg shadow-2xl shadow-black/40 hover:scale-[1.02]"
               data-testid="start-run-button"
             >
-              새 탐험
-              <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </ActionButton>
+              <span>새 탐험 — 새 필름을 끼운다</span>
+              <ChevronRight className="h-5 w-5" />
+            </button>
             <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
               <Keyboard className="h-4 w-4" />
               Enter · {hasRun ? '계속하기' : '새 탐험'}
@@ -156,35 +144,30 @@ export const MenuScreen = () => {
           </div>
         </section>
 
-        <section className="menu-status-dock">
-          <div className="menu-run-strip">
+        {/* 책상 dock — 상태 꼬리표 + 최근 기록 + 옵션 캐비닛 */}
+        <section className="archive-menu-dock">
+          <div className="flex flex-wrap gap-2">
             {[
               ['진행', hasRun ? '저장됨' : '대기'],
               ['경로', routeStatus],
               ['모드', '동전 전투'],
               ['범위', APP_RELEASE_SCOPE],
             ].map(([label, value]) => (
-              <div key={label} className="rounded-md border border-white/8 bg-white/5 px-3 py-2">
-                <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">{label}</div>
-                <div className="mt-1 text-sm font-black text-white">{value}</div>
-              </div>
+              <span key={label} className="archive-tag">{label} <strong>{value}</strong></span>
             ))}
           </div>
 
           {runSummary.total > 0 ? (
-            <div className="menu-run-stats rounded-md border border-white/8 bg-white/5 px-3 py-2 text-xs leading-relaxed text-slate-300">
-              <span className="font-bold uppercase tracking-[0.16em] text-slate-500">최근 기록</span>
-              <span className="ml-2 text-slate-200">최근 {runSummary.total}런 · 승률 {runSummary.overall.winrate}% ({runSummary.overall.wins}승 {runSummary.overall.losses}패)</span>
-              {topDeathStage !== null ? <span className="ml-2 text-slate-400">· 최다 사망 {topDeathStage}스테이지</span> : null}
+            <div className="archive-note text-xs leading-relaxed">
+              <span className="archive-tray-label">최근 기록</span>
+              <div className="mt-1">최근 {runSummary.total}런 · 승률 {runSummary.overall.winrate}% ({runSummary.overall.wins}승 {runSummary.overall.losses}패)
+              {topDeathStage !== null ? ` · 최다 사망 ${topDeathStage}스테이지` : ''}</div>
             </div>
           ) : null}
 
-          <div className="menu-accessibility-dock rounded-lg border border-cyan-300/20 bg-cyan-950/16 p-3 backdrop-blur-md">
-            <div className="mb-2 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-100">
-              <Eye className="h-4 w-4" />
-              옵션
-            </div>
-            <div className="menu-option-grid grid gap-2">
+          <div>
+            <div className="archive-tray-label mb-2 inline-flex items-center gap-2"><Eye className="h-4 w-4" />옵션</div>
+            <div className="grid grid-cols-2 gap-2">
               {optionButtons.map(({ key, label, icon: Icon }) => (
                 <button
                   key={key}
@@ -199,11 +182,7 @@ export const MenuScreen = () => {
                     toggleGameOption(key);
                   }}
                   aria-pressed={gameOptions[key]}
-                  className={`inline-flex min-h-10 items-center justify-center gap-1 rounded-md border px-2 text-xs font-bold transition-colors ${
-                    gameOptions[key]
-                      ? 'border-cyan-200 bg-cyan-100 text-gray-950'
-                      : 'border-white/10 bg-white/5 text-slate-300 hover:bg-white/10'
-                  }`}
+                  className="archive-menu-toggle"
                 >
                   <Icon className="h-3.5 w-3.5" />
                   {label}
@@ -214,13 +193,10 @@ export const MenuScreen = () => {
             <button
               type="button"
               onClick={replayTutorial}
-              className="menu-tutorial-replay mt-3 inline-flex w-full min-h-10 items-center justify-between gap-2 rounded-md border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold text-slate-200 transition-colors hover:bg-white/10"
+              className="archive-menu-toggle is-spread mt-3 w-full"
               title="모든 화면의 튜토리얼 코치마크를 다시 표시합니다."
             >
-              <span className="inline-flex items-center gap-2">
-                <HelpCircle className="h-4 w-4 text-cyan-200" />
-                튜토리얼 다시 보기
-              </span>
+              <span className="inline-flex items-center gap-2"><HelpCircle className="h-4 w-4 text-cyan-200" />튜토리얼 다시 보기</span>
               <span className="text-[10px] font-semibold text-slate-400">전 화면</span>
             </button>
 
@@ -232,10 +208,7 @@ export const MenuScreen = () => {
                 aria-controls="menu-audio-mix-panel"
                 className="flex w-full items-center justify-between gap-2 text-[11px] font-bold uppercase tracking-[0.18em] text-cyan-100"
               >
-                <span className="inline-flex items-center gap-2">
-                  <SlidersHorizontal className="h-4 w-4" />
-                  사운드 믹스
-                </span>
+                <span className="inline-flex items-center gap-2"><SlidersHorizontal className="h-4 w-4" />사운드 믹스</span>
                 <ChevronDown className={`h-4 w-4 transition-transform ${showAudioMix ? 'rotate-180' : ''}`} />
               </button>
               {showAudioMix ? (
@@ -262,6 +235,6 @@ export const MenuScreen = () => {
           </div>
         </section>
       </div>
-    </div>
+    </ArchiveSurface>
   );
 };
