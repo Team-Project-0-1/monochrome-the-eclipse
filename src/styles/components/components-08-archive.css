@@ -43,11 +43,14 @@
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
   animation: archive-grain-shift 1.6s steps(3) infinite;
 }
+/* noise 텍스처만 시프트(background-position) — transform: translate는 inset:0 요소를
+   부모(overflow 없는 .archive-surface) 밖으로 밀어 스크롤바를 주기적으로 토글(깜빡임)시켰다.
+   background-position은 요소 크기·위치 불변이라 오버플로 0, 그레인 흔들림 효과는 동일. */
 @keyframes archive-grain-shift {
-  0% { transform: translate(0, 0); }
-  33% { transform: translate(-18px, 9px); }
-  66% { transform: translate(11px, -14px); }
-  100% { transform: translate(0, 0); }
+  0% { background-position: 0 0; }
+  33% { background-position: -18px 9px; }
+  66% { background-position: 11px -14px; }
+  100% { background-position: 0 0; }
 }
 body.is-reduced-motion .archive-grain { animation: none; }
 
