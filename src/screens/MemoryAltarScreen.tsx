@@ -1,11 +1,12 @@
 import React from 'react';
-import { ArrowRight, HeartPulse, Landmark, Shield, Swords } from 'lucide-react';
+import { ArrowRight, HeartPulse, Shield, Swords } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
 import { MemoryUpgradeType } from '../types';
-import { MEMORY_UPGRADE_DATA } from '../constants';
-import ResourceDisplay from '../components/ResourceDisplay';
-import ActionButton from '../components/ui/ActionButton';
-import { assetCssUrl, assetPath } from '../utils/assetPath';
+import { MEMORY_UPGRADE_DATA, MAX_RESERVE_COINS } from '../constants';
+import ArchiveSurface from '../components/archive/ArchiveSurface';
+import ArchiveStamp from '../components/archive/ArchiveStamp';
+import ArchiveCaption from '../components/archive/ArchiveCaption';
+import { assetPath } from '../utils/assetPath';
 import { resourceIconPaths } from '../utils/resourceAssets';
 import { playGameSfx, playUiSound } from '../utils/sound';
 
@@ -33,34 +34,36 @@ export const MemoryAltarScreen = () => {
   };
 
   return (
-    <main className="memory-altar-screen relative min-h-screen overflow-hidden bg-gray-950 p-3 text-white sm:p-6">
-      <div
-        className="memory-altar-scene-bg"
-        style={{
-          backgroundImage: `linear-gradient(180deg, rgba(2,6,23,0.10), rgba(2,6,23,0.74)), ${assetCssUrl('assets/backgrounds/rest-tuning-camp.png')}`,
-        }}
-      />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_26%_22%,rgba(96,165,250,0.18),transparent_28%),radial-gradient(circle_at_76%_18%,rgba(168,85,247,0.14),transparent_25%),linear-gradient(180deg,rgba(15,23,42,0.18),rgba(2,6,23,0.55))]" />
-      <div className="relative z-10 mx-auto grid min-h-[calc(100dvh-1.5rem)] w-full max-w-6xl gap-4 lg:grid-cols-[18rem_minmax(0,1fr)]">
-        <aside className="grid content-start gap-3">
-          <div className="memory-altar-intro rounded-lg border border-blue-300/20 bg-blue-950/18 p-4 backdrop-blur-md">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-md border border-blue-200/30 bg-blue-950/30 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-blue-100">
-              <Landmark className="h-4 w-4" />
-              기억의 제단
-            </div>
-            <h1 className="font-orbitron text-3xl font-black text-white">기억의 제단</h1>
-            <p className="mt-3 text-sm leading-relaxed text-slate-300">
-              휴식 중 모은 기억 조각을 영구 성장으로 전환합니다. 지금 강화한 능력은 다음 런에도 남습니다.
-            </p>
+    // 색인 카드 캐비닛 — 책상 위 서랍에서 영구 성장을 꺼내 도장을 찍는다(런 밖 화면, 책상 텍스처).
+    <ArchiveSurface className="archive-altar-screen overflow-y-auto p-4 sm:p-6">
+      <div className="relative z-10 mx-auto grid min-h-[calc(100dvh-2rem)] w-full max-w-6xl items-start gap-5 lg:grid-cols-[18rem_minmax(0,1fr)]">
+        <aside className="flex flex-col gap-4">
+          <div className="archive-note">
+            <ArchiveStamp className="mb-3 inline-block">기억의 제단</ArchiveStamp>
+            <ArchiveCaption sub>휴식 중 모은 기억 조각을 영구 성장으로 전환합니다. 지금 강화한 능력은 다음 런에도 남습니다.</ArchiveCaption>
           </div>
-          <ResourceDisplay resources={resources} reserveCoins={reserveCoins} />
-          <ActionButton onClick={leaveAltar} variant="ghost" className="w-full">
+
+          <div className="archive-purse" role="group" aria-label="보유 자원">
+            {[
+              { imagePath: resourceIconPaths.memoryPieces, label: '기억', value: resources.memoryPieces },
+              { imagePath: resourceIconPaths.echoRemnants, label: '에코', value: resources.echoRemnants },
+              { imagePath: resourceIconPaths.senseFragments, label: '감각', value: resources.senseFragments },
+              { imagePath: resourceIconPaths.reserveCoin, label: '예비 동전', value: `${reserveCoins.length}/${MAX_RESERVE_COINS}` },
+            ].map(({ imagePath, label, value }) => (
+              <span key={label} className="archive-tag">
+                <img src={assetPath(imagePath)} alt="" loading="lazy" />
+                {label} <strong>{value}</strong>
+              </span>
+            ))}
+          </div>
+
+          <button type="button" className="archive-tool-btn" onClick={leaveAltar}>
             돌아가기
             <ArrowRight className="h-4 w-4" />
-          </ActionButton>
+          </button>
         </aside>
 
-        <section className="grid content-center gap-3">
+        <section className="grid content-start gap-3">
           {Object.entries(MEMORY_UPGRADE_DATA).map(([key, data]) => {
             const upgradeKey = key as MemoryUpgradeType;
             const currentLevel = player.memoryUpgrades[upgradeKey];
@@ -69,48 +72,42 @@ export const MemoryAltarScreen = () => {
             const Icon = upgradeIcons[upgradeKey];
 
             return (
-              <article key={key} className="memory-upgrade-card rounded-lg border border-white/10 bg-black/34 p-4 backdrop-blur-md">
-                <div className="grid gap-4 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-md border border-blue-200/20 bg-blue-300/10 text-blue-100">
-                    <Icon className="h-6 w-6" />
+              <article key={key} className="archive-index-card">
+                <span className="archive-index-card-icon">
+                  <Icon className="h-6 w-6" />
+                </span>
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="archive-index-card-name">{data.name}</span>
+                    <ArchiveStamp className="archive-stamp-mini">Lv. {currentLevel}</ArchiveStamp>
                   </div>
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h2 className="text-xl font-black text-white">{data.name}</h2>
-                      <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-xs font-bold text-slate-300">Lv. {currentLevel}</span>
-                    </div>
-                    <p className="mt-1 text-sm leading-relaxed text-slate-300">{data.description}</p>
-                    <p className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-slate-400">
-                      <span>현재 <span className="text-slate-200">+{currentLevel * data.effect}</span></span>
-                      <ArrowRight className="h-3 w-3 text-blue-300/70" aria-hidden />
-                      <span>강화 후 <span className="text-blue-200">+{(currentLevel + 1) * data.effect}</span></span>
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playUiSound(gameOptions.soundEnabled, canBuy ? 'confirm' : 'deny');
-                      if (canBuy) {
-                        playGameSfx(gameOptions.soundEnabled, 'rewardItem');
-                        handleMemoryUpgrade(upgradeKey);
-                      }
-                    }}
-                    disabled={!canBuy}
-                    className={`memory-upgrade-button inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-4 font-black transition-colors ${
-                      canBuy
-                        ? 'contrast-button-light bg-blue-200 text-gray-950 hover:bg-blue-100'
-                        : 'contrast-button-disabled cursor-not-allowed bg-slate-700 text-slate-300'
-                    }`}
-                  >
-                    <img className="currency-button-icon-img" src={assetPath(resourceIconPaths.memoryPieces)} alt="" loading="lazy" />
-                    {cost} 기억
-                  </button>
+                  <p className="archive-index-card-desc">{data.description}</p>
+                  <p className="archive-index-card-delta">
+                    <span>현재 +{currentLevel * data.effect}</span>
+                    <ArrowRight className="h-3 w-3" aria-hidden />
+                    <span className="to">강화 후 +{(currentLevel + 1) * data.effect}</span>
+                  </p>
                 </div>
+                <button
+                  type="button"
+                  className="archive-buy-btn"
+                  disabled={!canBuy}
+                  onClick={() => {
+                    playUiSound(gameOptions.soundEnabled, canBuy ? 'confirm' : 'deny');
+                    if (canBuy) {
+                      playGameSfx(gameOptions.soundEnabled, 'rewardItem');
+                      handleMemoryUpgrade(upgradeKey);
+                    }
+                  }}
+                >
+                  <img src={assetPath(resourceIconPaths.memoryPieces)} alt="" loading="lazy" />
+                  {cost} 기억
+                </button>
               </article>
             );
           })}
         </section>
       </div>
-    </main>
+    </ArchiveSurface>
   );
 };
