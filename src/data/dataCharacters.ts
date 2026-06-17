@@ -17,7 +17,7 @@ export const getCharacterMaxHp = (baseHp: number, maxHpUpgradeLevel: number): nu
 
 export const characterData = {
   [CharacterClass.WARRIOR]: {
-    name: "김훈희",
+    name: "공명자",
     title: "공명파의 기술자",
     weapon: "소리 굽쇠",
     signature: "청각 / 증폭",
@@ -34,7 +34,7 @@ export const characterData = {
     innatePassives: ["전투 시작 시 증폭을 2 얻습니다."],
   },
   [CharacterClass.ROGUE]: {
-    name: "신제우",
+    name: "추적자",
     title: "잔향을 추적하는 자",
     weapon: "추적 권총",
     signature: "후각 / 추적",
@@ -51,7 +51,7 @@ export const characterData = {
     innatePassives: ["전투 시작 시 첫 번째 동전은 반드시 앞면이 됩니다."],
   },
   [CharacterClass.TANK]: {
-    name: "곽장환",
+    name: "격투가",
     title: "철벽으로 버티는 자",
     weapon: "경량 버클러 / 강화 육체",
     signature: "촉각 / 반격",
@@ -68,7 +68,7 @@ export const characterData = {
     innatePassives: ["전투 시작 시 공격과 방어를 3 얻습니다."],
   },
   [CharacterClass.MAGE]: {
-    name: "박재석",
+    name: "영매사",
     title: "마력의 시야를 보는 자",
     weapon: "지팡이 / 점성학",
     signature: "영적 / 저주",
