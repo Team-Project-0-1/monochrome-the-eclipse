@@ -1980,3 +1980,33 @@
   position: absolute;
   right: 0.55rem;
 }
+
+/* ============================================================
+   호출형 UI — 지도 오버레이 (씬 우선 모델 A+B)
+   ============================================================ */
+.route-map-overlay {
+  z-index: var(--z-modal-backdrop);
+  background: rgba(2, 4, 8, 0.66);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.route-map-overlay-card {
+  z-index: var(--z-modal);
+  background: rgba(9, 12, 20, 0.94) !important;
+}
+
+/* 오버레이 안에서는 미니맵 자체 패널 테두리를 없애고 노드를 크게 — "콩알" 문제 해소 */
+.route-map-overlay .mini-map-panel {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  backdrop-filter: none !important;
+}
+.route-map-overlay .mini-map-node {
+  min-width: 2rem;
+  min-height: 2rem;
+}
+.route-map-overlay .mini-map-board {
+  min-height: 48vh;
+}
