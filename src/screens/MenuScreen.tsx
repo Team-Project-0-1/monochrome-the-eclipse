@@ -103,7 +103,7 @@ export const MenuScreen = () => {
   return (
     // 일식 표지 — 책상 위에서 다음 기록을 펼친다. 일식 무대는 정체성이라 scene으로 보존(사용자 결정).
     <ArchiveSurface scene={assetCssUrl('assets/backgrounds/lobby-eclipse.png')} className="archive-menu-screen overflow-hidden px-4 py-6 sm:p-8">
-      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-3rem)] max-w-5xl items-center gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
+      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-3rem)] sm:min-h-[calc(100vh-4rem)] max-w-5xl items-center gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
         {/* 표지 블록 — 로고타입은 정체성이라 유지 */}
         <section className="flex flex-col justify-center">
           <ArchiveStamp className="self-start">

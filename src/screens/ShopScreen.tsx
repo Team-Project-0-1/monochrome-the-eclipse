@@ -162,7 +162,7 @@ export const ShopScreen = () => {
   return (
     // 수집상의 진열대 — 상점 장면 위에서 물건을 고른다(런 중 화면, 슬더스 문법).
     <ArchiveSurface scene={assetCssUrl('assets/backgrounds/shop-merchant.png')} className="archive-shop-screen p-4 sm:p-6">
-      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-2rem)] max-w-5xl flex-col gap-5">
+      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-3rem)] max-w-5xl flex-col gap-5">
         {/* 수집상 도장 + 도구 버튼 — 키커/타이틀의 다이어제틱 대체물 */}
         <header className="flex flex-wrap items-center justify-between gap-3">
           <ArchiveStamp>수집상 — 진열대</ArchiveStamp>

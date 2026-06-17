@@ -71,7 +71,7 @@ export const CombatRewardScreen = () => {
   return (
     // 전투가 끝난 그 장면 위에서 기록을 고른다 — 화면 전환으로 세계를 떠나지 않는다(슬더스 문법).
     <ArchiveSurface scene={getStageBackgroundCss(currentStage)} className="archive-reward-screen overflow-hidden p-4 sm:p-6">
-      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-2rem)] max-w-5xl flex-col justify-center gap-6">
+      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-3rem)] max-w-5xl flex-col justify-center gap-6">
         {/* 책상 위 기록 도장 — 배지/타이틀/설명문의 다이어제틱 대체물 */}
         <header className="flex flex-wrap items-center justify-between gap-3">
           <ArchiveStamp>「{pendingCombatReward.enemyName}」의 기록 — 하나를 보관한다</ArchiveStamp>

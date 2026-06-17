@@ -35,7 +35,7 @@ export const EventScreen = () => {
   return (
     // 발견된 기록 — 책상 위 편지/사진 한 장 위에서 다음 선택을 읽는다(런 중 화면, 슬더스 문법).
     <ArchiveSurface scene={sceneBackgroundImage} className="archive-event-screen p-4 sm:p-6">
-      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-2rem)] max-w-4xl flex-col justify-center gap-5">
+      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-3rem)] max-w-4xl flex-col justify-center gap-5">
         {eventPhase === 'choice' && (
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
             {/* 발견된 기록물 — 편지/사진 본문 */}

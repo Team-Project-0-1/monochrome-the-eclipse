@@ -63,7 +63,7 @@ export const RestScreen = () => {
   return (
     // 암실(현상실) — 야영 장면 위에서 다음 한 수를 현상한다(런 중 화면, 슬더스 문법).
     <ArchiveSurface scene={assetCssUrl('assets/backgrounds/rest-camp.png')} className="archive-rest-screen overflow-hidden p-4 sm:p-6">
-      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-2rem)] max-w-4xl flex-col justify-center gap-6">
+      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-3rem)] max-w-4xl flex-col justify-center gap-6">
         {/* 정비 기록 도장 + 현상값 트레이 — 키커/타이틀/설명문/HP 카드의 다이어제틱 대체물 */}
         <header className="flex flex-wrap items-center justify-between gap-3">
           <ArchiveStamp>안전 공명대 — 정비 기록</ArchiveStamp>
