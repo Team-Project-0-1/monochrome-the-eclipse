@@ -470,6 +470,14 @@ const runFlow = async (baseUrl, name, viewport, instancePort, errors) => {
     await clickSelector(cdp, '[data-testid="start-with-character"]:not([disabled])');
     await checkScreen(cdp, errors, name, 'exploration', '.exploration-screen', overflows, screenshots);
 
+    // 호출형 지도: 상단 바 버튼 → 오버레이 표시 → 캡처 → 닫기
+    await waitForSelector(cdp, '[data-testid="run-top-bar"]', { timeout: 8000, label: 'run top bar' });
+    await clickSelector(cdp, '[data-testid="top-bar-map-button"]');
+    await waitForSelector(cdp, '[data-testid="route-map-overlay"]', { timeout: 8000, label: 'route map overlay' });
+    screenshots.push(await capture(cdp, name, 'exploration-map-open'));
+    await clickSelector(cdp, '[data-testid="route-map-close"]');
+    await waitForCondition(cdp, `!document.querySelector('[data-testid="route-map-overlay"]')`, { timeout: 5000, label: 'map overlay closed' });
+
     // Turn-1 nodes are all guaranteed COMBAT, so route-node-1 enters combat.
     await clickSelector(cdp, '[data-testid="route-node-1"]');
     await checkScreen(cdp, errors, name, 'combat', '.combat-screen', overflows, screenshots);

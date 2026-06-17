@@ -1,13 +1,12 @@
 import React from 'react';
-import { Activity, ArrowLeft, MapPinned, Package, RadioTower, ShieldAlert } from 'lucide-react';
+import { MapPinned, RadioTower, ShieldAlert } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
-import CharacterStatus from '../components/CharacterStatus';
-import ResourceDisplay from '../components/ResourceDisplay';
-import MiniMap from '../components/MiniMap';
 import NodeSelection from '../components/NodeSelection';
-import { GameState, NodeType } from '../types';
+import RunTopBar from '../components/RunTopBar';
+import RouteMapOverlay from '../components/RouteMapOverlay';
+import RunStatusModal from '../components/RunStatusModal';
+import { NodeType } from '../types';
 import Panel from '../components/ui/Panel';
-import ActionButton from '../components/ui/ActionButton';
 import { getNodeTypeCounts } from '../utils/nodePresentation';
 import { STAGE_TURNS } from '../constants';
 import { stageData } from '../data/dataStages';
@@ -24,17 +23,15 @@ const routePressureText = (counts: Record<string, number>) => {
 
 export const ExplorationScreen = () => {
   const player = useGameStore(state => state.player);
-  const resources = useGameStore(state => state.resources);
-  const reserveCoins = useGameStore(state => state.reserveCoins);
   const stageNodes = useGameStore(state => state.stageNodes);
   const currentStage = useGameStore(state => state.currentStage);
   const currentTurn = useGameStore(state => state.currentTurn);
   const routeSeed = useGameStore(state => state.routeSeed);
   const routeGenerationLog = useGameStore(state => state.routeGenerationLog);
   const path = useGameStore(state => state.path);
-  const setInventoryOpen = useGameStore(state => state.setInventoryOpen);
-  const setGameState = useGameStore(state => state.setGameState);
   const selectNode = useGameStore(state => state.selectNode);
+  const isRunStatusOpen = useGameStore(state => state.isRunStatusOpen);
+  const setRunStatusOpen = useGameStore(state => state.setRunStatusOpen);
 
   const currentNodes = stageNodes[currentTurn - 1] || [];
   const availableNodeIndices = getAvailableRouteNodeIndices(currentTurn, path, currentNodes.length);
@@ -64,27 +61,8 @@ export const ExplorationScreen = () => {
     >
       <div className="pointer-events-none absolute inset-x-0 top-24 h-px bg-gradient-to-r from-transparent via-cyan-200/35 to-transparent" />
 
-      <div className="exploration-layout relative z-10 grid min-h-[calc(100vh-1.5rem)] grid-cols-1 gap-4 sm:min-h-[calc(100vh-2.5rem)]">
-        <aside className="exploration-rail order-2 flex min-w-0 flex-col gap-4">
-          <CharacterStatus character={player} isPlayer={true} />
-          <ResourceDisplay resources={resources} reserveCoins={reserveCoins} />
-          <Panel className="p-3" tone="cyan">
-            <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100">
-              <Activity className="h-4 w-4" />
-              장비
-            </div>
-            <div className="flex flex-col gap-2">
-              <ActionButton onClick={() => setInventoryOpen(true)} variant="primary" className="w-full" data-testid="open-inventory-button">
-                <Package className="h-5 w-5" />
-                가방 열기
-              </ActionButton>
-              <ActionButton onClick={() => setGameState(GameState.MENU)} variant="ghost" className="w-full">
-                <ArrowLeft className="h-5 w-5" />
-                메인 메뉴
-              </ActionButton>
-            </div>
-          </Panel>
-        </aside>
+      <div className="exploration-layout relative z-10 mx-auto flex min-h-[calc(100vh-1.5rem)] w-full max-w-5xl flex-col gap-4 sm:min-h-[calc(100vh-2.5rem)]">
+        <RunTopBar />
 
         <main className="exploration-main order-1 flex min-w-0 flex-col gap-4">
           <Panel className="exploration-route-hero overflow-hidden p-4 sm:p-5" tone="neutral">
@@ -154,12 +132,11 @@ export const ExplorationScreen = () => {
               player={player}
             />
           </div>
-
-          <div className="exploration-footer">
-            <MiniMap nodes={stageNodes} currentTurn={currentTurn} path={path} availableNodeIndices={availableNodeIndices} />
-          </div>
         </main>
       </div>
+
+      <RouteMapOverlay />
+      <RunStatusModal isOpen={isRunStatusOpen} onClose={() => setRunStatusOpen(false)} />
     </div>
   );
 };
