@@ -104,8 +104,8 @@ export const MenuScreen = () => {
     // 일식 표지 — 책상 위에서 다음 기록을 펼친다. 일식 무대는 정체성이라 scene으로 보존(사용자 결정).
     <ArchiveSurface scene={assetCssUrl('assets/backgrounds/lobby-eclipse.png')} className="archive-menu-screen overflow-hidden px-4 py-6 sm:p-8">
       <div className="relative z-10 mx-auto grid min-h-[calc(100vh-3rem)] sm:min-h-[calc(100vh-4rem)] max-w-5xl items-center gap-8 lg:grid-cols-[minmax(0,1fr)_22rem]">
-        {/* 표지 블록 — 로고타입은 정체성이라 유지 */}
-        <section className="flex flex-col justify-center">
+        {/* 표지 타이틀 — lg에서 2열 위 전체폭으로 올려 dock 침범(가림) 방지. 로고는 크게 유지(§3.6 표지). */}
+        <div className="lg:col-span-2">
           <ArchiveStamp className="self-start">
             <span className="inline-flex items-center gap-1.5"><Gauge className="h-3.5 w-3.5" />{APP_RELEASE_LABEL}</span>
           </ArchiveStamp>
@@ -115,7 +115,11 @@ export const MenuScreen = () => {
           <p className="font-orbitron mt-2 text-xl font-bold text-gray-300 drop-shadow-md md:text-3xl">
             THE ECLIPSE
           </p>
-          <p className="mt-6 max-w-2xl text-sm leading-relaxed text-gray-200 sm:text-base">
+        </div>
+
+        {/* 설명 + 행동 물건 — lg 좌 컬럼 */}
+        <section className="flex flex-col justify-center">
+          <p className="max-w-2xl text-sm leading-relaxed text-gray-200 sm:text-base">
             동전의 앞면과 뒷면으로 전투를 읽는 공개 프로토타입입니다.
             현재 범위는 {APP_RELEASE_SCOPE}이며, 경로를 고르고 자원을 확보해 중심부로 진입하세요.
           </p>
