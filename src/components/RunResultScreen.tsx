@@ -89,7 +89,7 @@ const RunResultScreen: React.FC<RunResultScreenProps> = ({
     // 사건 종결 보고서 — 일식 위에서 이번 런을 정산한다(일식 정체성 보존, 메뉴와 일관).
     // defeat=빛에 타버린 필름(§3.9 장면 구분): is-defeat가 흰빛 번짐 오버레이를 켠다.
     <ArchiveSurface scene={assetCssUrl('assets/backgrounds/lobby-eclipse.png')} className={`archive-result-screen overflow-y-auto p-4 sm:p-6 ${tone === 'defeat' ? 'is-defeat' : ''}`}>
-      <section className="relative z-10 mx-auto grid min-h-[calc(100vh-2rem)] max-w-6xl items-center gap-5 lg:grid-cols-[minmax(0,1fr)_24rem]">
+      <section className="relative z-10 mx-auto grid min-h-[calc(100vh-2rem)] sm:min-h-[calc(100vh-3rem)] max-w-6xl items-center gap-5 lg:grid-cols-[minmax(0,1fr)_24rem]">
         <div className="min-w-0">
           <ArchiveStamp className={meta.warn ? 'is-warn' : ''}>
             <span className="inline-flex items-center gap-1.5"><Icon className="h-3.5 w-3.5" />{meta.eyebrow}</span>

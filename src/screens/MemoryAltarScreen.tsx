@@ -36,7 +36,7 @@ export const MemoryAltarScreen = () => {
   return (
     // 색인 카드 캐비닛 — 책상 위 서랍에서 영구 성장을 꺼내 도장을 찍는다(런 밖 화면, 책상 텍스처).
     <ArchiveSurface className="archive-altar-screen overflow-y-auto p-4 sm:p-6">
-      <div className="relative z-10 mx-auto grid min-h-[calc(100dvh-2rem)] w-full max-w-6xl items-start gap-5 lg:grid-cols-[18rem_minmax(0,1fr)]">
+      <div className="relative z-10 mx-auto grid min-h-[calc(100dvh-2rem)] sm:min-h-[calc(100dvh-3rem)] w-full max-w-6xl items-start gap-5 lg:grid-cols-[18rem_minmax(0,1fr)]">
         <aside className="flex flex-col gap-4">
           <div className="archive-note">
             <ArchiveStamp className="mb-3 inline-block">기억의 제단</ArchiveStamp>
