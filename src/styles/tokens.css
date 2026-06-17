@@ -674,6 +674,8 @@ body.is-reduced-motion .coin-state-pill {
   --archive-accent:      #72efff; /* 월식 사이안 — 포커스/프레임 글로우 */
   --archive-stamp-ink:   #1d7480; /* 도장 잉크(청록) */
   --archive-grain-opacity: 0.07;
+  --archive-ink-danger:  #9c5a52; /* 탁한 적갈 — 전투/보스 위험(네온 적색의 채도 낮춘 잉크) */
+  --archive-ink-volatile:#8a7d52; /* 탁한 황 — 사건 변동(amber 네온의 흐린 잉크 대체, 웜 글로우 금지) */
   --archive-frame-top:    #14211f; /* 사진 피사체 프레임 */
   --archive-frame-bottom: #0a1012;
   --archive-frame-glow:   rgba(114, 239, 255, 0.12);
