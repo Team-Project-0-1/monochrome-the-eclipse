@@ -73,10 +73,10 @@
 
 | 캐릭터 | 시그니처 | 핵심 효과 | 입문 난이도 |
 |---|---|---|---|
-| 김훈희 (Warrior) | 청각 · 공명파의 기술자 | 증폭(AMPLIFY) / 공명(RESONANCE) | 쉬움 |
-| 신제우 (Rogue) | 후각 · 잔향을 추적하는 자 | 추적(PURSUIT) / 출혈(BLEED) | 보통 |
-| 곽장환 (Tank) | 촉각 · 철벽으로 버티는 자 | 반격(COUNTER) / 분쇄(SHATTER) | 보통 |
-| 박재석 (Mage) | 영적 · 마력의 시야를 보는 자 | 저주(CURSE) / 봉인(SEAL) | 어려움 |
+| 공명자 (Warrior) | 청각 · 공명파의 기술자 | 증폭(AMPLIFY) / 공명(RESONANCE) | 쉬움 |
+| 추적자 (Rogue) | 후각 · 잔향을 추적하는 자 | 추적(PURSUIT) / 출혈(BLEED) | 보통 |
+| 격투가 (Tank) | 촉각 · 철벽으로 버티는 자 | 반격(COUNTER) / 분쇄(SHATTER) | 보통 |
+| 영매사 (Mage) | 영적 · 마력의 시야를 보는 자 | 저주(CURSE) / 봉인(SEAL) | 어려움 |
 
 ### 한 턴에 일어나는 일
 
@@ -338,7 +338,7 @@ npm run build
 
 ## 라이선스
 
-© 2026 프로젝트 0.1% (기획 박재석 · 개발 김훈희). **All Rights Reserved**.
+© 2026 프로젝트 0.1% (기획 WinTi · 개발 TurnaboutHero). **All Rights Reserved**.
 
 이 저장소의 모든 코드·디자인·이미지·사운드·텍스트는 팀에 귀속됩니다. 사전 문서 허가 없이 복제·재배포·파생·상업적 이용을 금합니다.
 
@@ -351,6 +351,6 @@ npm run build
 
 ### 크레딧
 
-- **기획·아이디어 원안** — 박재석
-- **개발** — 김훈희
-- **밸런스** — 박재석 · 김훈희 공동
+- **기획·아이디어 원안** — WinTi
+- **개발** — TurnaboutHero
+- **밸런스** — WinTi · TurnaboutHero 공동

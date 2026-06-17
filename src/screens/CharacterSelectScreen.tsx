@@ -92,7 +92,6 @@ export const CharacterSelectScreen = () => {
                   key={classType}
                   type="button"
                   onClick={() => setActiveClass(characterClass)}
-                  onMouseEnter={() => setActiveClass(characterClass)}
                   onFocus={() => setActiveClass(characterClass)}
                   aria-pressed={isActive}
                   data-testid={`character-card-${characterClass.toLowerCase()}`}
