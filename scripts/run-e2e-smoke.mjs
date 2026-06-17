@@ -527,7 +527,7 @@ const runFlow = async (baseUrl, name, viewport, instancePort, errors) => {
 
     // --- Deep screens via store toggle (each from a fresh run) ---
     const deepScreens = [
-      { step: 'shop', state: 'SHOP', selector: '.shop-screen' },
+      { step: 'shop', state: 'SHOP', selector: '.archive-shop-screen' },
       { step: 'memory-altar', state: 'MEMORY_ALTAR', selector: '.memory-altar-screen' },
     ];
 
